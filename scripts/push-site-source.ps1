@@ -1,5 +1,6 @@
 $ErrorActionPreference = 'Stop'
-$credential = [Console]::ReadLine() | ConvertFrom-Json
+$secret = Read-Host 'Temporary hosting credential' -AsSecureString
+$credential = ConvertFrom-SecureString -SecureString $secret -AsPlainText | ConvertFrom-Json
 if ($credential.remote_url -notmatch '^https://git\.chatgpt-team\.site/') {
     throw 'Unexpected source repository host.'
 }
