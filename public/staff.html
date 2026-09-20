@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deaf Safaris live support</title>
+    <style>
+      body {
+        margin: 0;
+        background: #101621;
+        color: #f6f3ec;
+        font:
+          16px system-ui,
+          sans-serif;
+      }
+      main {
+        width: min(100% - 2rem, 52rem);
+        margin: 3rem auto;
+      }
+      form,
+      .request {
+        padding: 1rem;
+        border: 1px solid #ffffff2e;
+        border-radius: 1rem;
+        background: #292825cc;
+        box-shadow: 0 1rem 3rem #0005;
+      }
+      .request {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .request small {
+        display: block;
+        color: #cecac2;
+        margin-top: 0.35rem;
+      }
+      input,
+      button {
+        font: inherit;
+      }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0.5rem 0;
+        padding: 0.75rem;
+        border: 1px solid #ffffff3d;
+        border-radius: 0.5rem;
+        background: #0004;
+        color: #fff;
+      }
+      button {
+        padding: 0.7rem 1rem;
+        border: 0;
+        border-radius: 999px;
+        background: #29644e;
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #1e4f3c;
+      }
+      .muted {
+        color: #cecac2;
+      }
+      #status {
+        min-height: 1.4em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Live support requests</h1>
+      <p class="muted">Private staff view for Deaf Safaris.</p>
+      <form id="access">
+        <label for="code">Staff access code</label
+        ><input id="code" type="password" required /><button>Open requests</button>
+        <p id="status" class="muted"></p>
+      </form>
+      <section id="requests" hidden aria-live="polite"></section>
+    </main>
+    <script type="module" src="/staff.js"></script>
+  </body>
+</html>

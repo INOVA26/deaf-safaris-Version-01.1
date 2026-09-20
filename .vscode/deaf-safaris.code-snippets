@@ -1,0 +1,21 @@
+{
+  "Deaf Safaris section": {
+    "scope": "javascript",
+    "prefix": "ds-section",
+    "description": "Named section component; add styles in components.css and assemble in main.js.",
+    "body": [
+      "export function ${1:About}() {",
+      "  return `",
+      "    <section class=\"${2:about}\" aria-labelledby=\"${2}-heading\">",
+      "      <div class=\"container\">",
+      "        <p class=\"eyebrow\">Draft section</p>",
+      "        <h2 id=\"${2}-heading\">${3:About Deaf Safaris}</h2>",
+      "        <p>${4:Draft placeholder. Replace with approved business information.}</p>",
+      "      </div>",
+      "    </section>",
+      "  `;",
+      "}",
+      "$0",
+    ],
+  },
+}

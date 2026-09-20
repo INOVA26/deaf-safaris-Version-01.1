@@ -1,0 +1,236 @@
+@import './tokens.css';
+
+@font-face {
+  font-family: Inter;
+  src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 0;
+  margin: 0;
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  font-feature-settings:
+    'liga' 1,
+    'calt' 1;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+section[id] {
+  scroll-margin-top: calc(var(--header-height) + var(--space-5));
+}
+
+#main-content {
+  scroll-margin-top: var(--header-height);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.section-space {
+  padding-block: var(--section-space);
+}
+
+.section-space h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4.6vw, 4.5rem);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.section-space h2 em {
+  font-weight: inherit;
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+.section-space h3 {
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.text-link {
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 2.75rem;
+  font-weight: 700;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35rem;
+}
+
+.text-link:hover {
+  color: var(--color-primary-hover);
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 0.2rem solid var(--color-clay-600);
+  outline-offset: 0.25rem;
+}
+
+.container {
+  width: min(100% - var(--page-gutter) * 2, var(--content-width));
+  margin-inline: auto;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 10;
+  top: 0.75rem;
+  left: 0.75rem;
+  transform: translateY(-150%);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  color: var(--color-forest-950);
+  padding: var(--space-2) var(--space-3);
+  font-weight: 700;
+  transition: transform var(--transition-base);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  border: 0.125rem solid transparent;
+  border-radius: 999px;
+  padding: 0.625rem 1.125rem;
+  font: inherit;
+  font-weight: 750;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base),
+    transform var(--transition-base);
+}
+
+.button:hover {
+  transform: translateY(-0.125rem);
+}
+
+.button--primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.button--primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.button--secondary,
+.button--sand {
+  background: var(--color-sand-accent);
+  color: var(--color-charcoal);
+}
+
+.button--secondary:hover,
+.button--sand:hover {
+  background: var(--color-sand-hover);
+}
+
+.button--outline {
+  border-color: var(--color-primary);
+  background: var(--color-white);
+  color: var(--color-primary);
+}
+
+.button--outline:hover {
+  background: var(--color-primary-soft);
+}
+
+.button--dark {
+  gap: var(--space-3);
+  background: var(--color-primary);
+  color: var(--color-sand-50);
+}
+
+.button--dark:hover {
+  background: var(--color-primary-hover);
+}
+
+.button--quiet {
+  border-color: var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+}
+
+.button--quiet:hover {
+  background: var(--color-primary-soft);
+}
+
+.button--accent {
+  gap: var(--space-3);
+  background: var(--color-accent);
+  color: var(--color-white);
+}
+
+.button--accent:hover {
+  background: var(--color-accent-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation: none !important;
+  }
+}

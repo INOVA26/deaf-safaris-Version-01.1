@@ -1,0 +1,312 @@
+:root {
+  /* Brand roles: green actions, gold accents, and contrasting text pairs. */
+  --color-primary: #315646;
+  --color-primary-hover: #193a2c;
+  --color-primary-soft: #edf2eb;
+  --color-on-primary: #ffffff;
+  --color-secondary: #d7b46a;
+  --color-secondary-hover: #e6ca8d;
+  --color-secondary-soft: #faf3e5;
+  --color-secondary-ink: #795c22;
+  --color-on-secondary: #17201d;
+  --color-forest-950: var(--color-primary-hover);
+  --color-forest-800: var(--color-primary);
+  --color-sand-50: #fafbf8;
+  --color-sand-100: #eff2eb;
+  --color-clay-600: var(--color-secondary-ink);
+  --color-ink: #25382e;
+  --color-muted: #5c6a60;
+  --color-white: #ffffff;
+  --color-charcoal: #25382e;
+  --color-olive: var(--color-primary);
+  --color-sand-accent: var(--color-secondary);
+  --color-sand-hover: var(--color-secondary-hover);
+  --color-on-dark-muted: #dedfd5;
+  --frame-inset: clamp(0.5rem, 2vw, 1.5rem);
+  --section-space: 5rem;
+  --page-gutter: 1rem;
+  --color-line: #dce3d7;
+  --color-earth: var(--color-secondary-ink);
+  --color-dune: var(--color-secondary);
+  --color-field: #f3f5ef;
+
+  --font-sans:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  --font-display: var(--font-sans);
+  --color-accent: var(--color-primary);
+  --color-accent-hover: var(--color-primary-hover);
+  --color-glass: rgb(255 255 255 / 84%);
+  --color-glass-border: rgb(255 255 255 / 70%);
+  --shadow-glass: 0 12px 36px rgb(20 40 28 / 10%);
+  --color-photo-glass: rgb(18 30 25 / 32%);
+  --color-photo-glass-border: rgb(255 255 255 / 38%);
+  --gradient-photo-glass: linear-gradient(
+    120deg,
+    rgb(255 255 255 / 20%),
+    rgb(255 255 255 / 4%) 55%,
+    rgb(255 255 255 / 10%)
+  );
+  --shadow-photo-glass:
+    inset 0 1px 0 rgb(255 255 255 / 28%), 0 16px 48px rgb(0 0 0 / 16%);
+  --blur-photo-glass: 18px;
+  --transition-scene: 900ms ease;
+  --header-height: 4.5rem;
+  --utility-bar-height: 8rem;
+  --utility-bar-background: var(--color-primary-hover);
+  --utility-bar-text: #f2f7f3;
+  --utility-bar-muted: #c3d5cc;
+  --utility-menu-surface: #ffffff;
+  --utility-menu-selected: var(--color-primary-soft);
+  --utility-menu-border: #e1e5e2;
+  --utility-menu-hover: #f3f5f3;
+  --utility-menu-scrollbar: #bac4bd;
+
+  /* Navigation glass; scoped separately from cards and other surfaces. */
+  --nav-glass-tint: rgb(255 255 255 / 92%);
+  --nav-glass-fallback: var(--color-white);
+  --nav-selected-shadow: 0 1px 3px rgb(18 30 35 / 85%);
+  --nav-glass-border: rgb(255 255 255 / 60%);
+  --nav-glass-highlight: linear-gradient(
+    115deg,
+    rgb(255 255 255 / 32%),
+    rgb(255 255 255 / 6%) 45%,
+    rgb(255 255 255 / 20%)
+  );
+  --nav-glass-blur: 24px;
+  --nav-glass-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 72%), inset 0 -1px 0 rgb(255 255 255 / 18%),
+    0 8px 32px rgb(9 24 18 / 14%);
+  --nav-glass-shadow-scrolled:
+    inset 0 1px 0 rgb(255 255 255 / 78%), inset 0 -1px 0 rgb(255 255 255 / 18%),
+    0 12px 40px rgb(9 24 18 / 22%);
+  --nav-menu-tint: rgb(255 255 255 / 78%);
+  --nav-link-hover: rgb(41 100 73 / 8%);
+  --nav-menu-border: rgb(23 82 68 / 12%);
+  --nav-link-gap: 0.25rem;
+  --nav-dropdown-background: var(--color-white);
+  --chat-background: var(--color-primary);
+  --chat-background-hover: var(--color-primary-hover);
+  --chat-avatar-background: #e1e7d9;
+  --chat-shadow: 0 6px 20px rgb(18 35 22 / 20%);
+  /* Floating chat trigger only. */
+  --chat-trigger-size: 3.5rem;
+  --chat-trigger-fallback: #e2ece8;
+  --chat-trigger-glass: rgb(226 240 233 / 82%);
+  --chat-trigger-border: rgb(255 255 255 / 75%);
+  --chat-trigger-ink: var(--color-primary);
+  --chat-trigger-highlight: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 45%),
+    rgb(255 255 255 / 5%) 60%
+  );
+  --chat-trigger-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 80%), 0 8px 28px rgb(18 35 22 / 18%);
+  --chat-trigger-avatar: rgb(255 255 255 / 34%);
+  --chat-trigger-status: #287b53;
+  --chat-trigger-motion: 320ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Section aliases inherit the shared brand roles. */
+  --hero-background: #101010;
+  --hero-glass-fallback: #1b1e20;
+  --hero-glass-background:
+    linear-gradient(
+      135deg,
+      rgb(255 255 255 / 14%),
+      rgb(255 255 255 / 3%) 42%,
+      transparent 70%,
+      rgb(255 255 255 / 5%)
+    ),
+    rgb(0 0 0 / 38%);
+  --hero-glass-filter: blur(28px) brightness(1.2) saturate(85%);
+  --hero-glass-border: rgb(255 255 255 / 24%);
+  --hero-glass-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 18%), inset 0 -1px 0 rgb(255 255 255 / 5%),
+    0 24px 56px rgb(0 0 0 / 30%);
+  --hero-eyebrow-gap: 0.25rem;
+  --hero-actions-gap: 1.75rem;
+  --hero-ink: var(--color-ink);
+  --hero-accent: var(--color-secondary);
+  --hero-accent-light: var(--color-secondary-hover);
+  --hero-typing-color: var(--color-secondary);
+  --hero-green: var(--color-primary);
+  --hero-green-hover: var(--color-primary-hover);
+  --hero-paper: #f6f6f2;
+  --planner-surface: #ffffff;
+  --planner-track: #f0f1ef;
+  --planner-border: #dedfdd;
+  --planner-muted: #626b65;
+  --planner-hover: #e4e7e2;
+  --planner-option-hover: #f5f7f5;
+  --planner-selected: var(--color-primary-soft);
+  --planner-option-border: #c7d3cb;
+  --planner-option-radius: 0.75rem;
+  --planner-option-height: 3.25rem;
+  --planner-menu-padding: 0.625rem;
+  --planner-shadow: 0 2px 6px rgb(14 35 24 / 8%), 0 14px 36px rgb(14 35 24 / 18%);
+  --planner-field-shadow: 0 2px 5px rgb(14 35 24 / 8%), 0 5px 18px rgb(14 35 24 / 12%);
+  --planner-menu-shadow:
+    0 2px 5px rgb(14 35 24 / 4%), 0 12px 28px rgb(14 35 24 / 12%),
+    0 28px 60px rgb(14 35 24 / 8%);
+  --planner-menu-radius: 1.25rem;
+  --planner-field-radius: 999px;
+  --planner-label-size: 0.75rem;
+  --planner-value-size: 0.875rem;
+  --planner-menu-size: 0.875rem;
+  --planner-motion: 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Destination discovery only; other section typography stays unchanged. */
+  --destination-display: Georgia, 'Times New Roman', serif;
+  --destination-surface: #ffffff;
+  --destination-card: var(--color-field);
+  --destination-border: var(--color-line);
+  --destination-accent: var(--color-primary);
+  --destination-selected: var(--color-primary);
+  --destination-heading: var(--color-primary-hover);
+  --destination-badge-teal: var(--color-primary);
+  --destination-badge-purple: var(--color-primary);
+  --destination-badge-gold: var(--color-secondary-ink);
+  --destination-badge-blue: var(--color-primary);
+  --destination-badge-red: var(--color-secondary-ink);
+  --destination-badge-shadow: 0 3px 9px rgb(20 40 30 / 8%);
+  --destination-soft: var(--color-primary-soft);
+  --destination-caption: rgb(16 37 29 / 82%);
+  --destination-radius: 0;
+  --destination-photo-radius: 6px;
+  --destination-icon-size: 1rem;
+  --destination-shadow: 0 4px 16px rgb(20 40 30 / 10%);
+  --destination-motion: 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  --destination-tab-shadow:
+    0 3px 8px rgb(22 65 48 / 8%), 0 8px 20px rgb(22 65 48 / 10%);
+  --destination-tab-radius: 999px;
+  --destination-photo-fade: 850ms ease;
+  --destination-photo-duration: 6500ms;
+  --gallery-zoom-duration: 8100ms;
+  /* Supporting safari idea cards within destination discovery. */
+  --safari-idea-background: #22382d;
+  --safari-idea-surface: #2c4437;
+  --safari-idea-text: #f7f8f2;
+  --safari-idea-muted: #c2cec1;
+  --safari-idea-border: #526453;
+  --safari-idea-accent: var(--color-secondary);
+  --safari-idea-gap: 1.5rem;
+  --safari-idea-radius: var(--radius-sm);
+  /* Featured safari banner only; shared section and button styles are unchanged. */
+  --featured-base: var(--color-primary-hover);
+  --featured-overlay: linear-gradient(
+    110deg,
+    rgb(25 58 44 / 55%),
+    rgb(49 86 70 / 45%) 48%,
+    rgb(25 58 44 / 55%)
+  );
+  --featured-mint: var(--color-primary-soft);
+  --featured-sand: var(--color-secondary-soft);
+  --featured-gold: var(--color-secondary);
+  --featured-gold-hover: var(--color-secondary-hover);
+  --featured-text: #e6f1ed;
+  --featured-muted: #c8ddda;
+  --featured-glass: rgb(255 255 255 / 10%);
+  --featured-glass-hover: rgb(255 255 255 / 20%);
+  --featured-border: rgb(255 255 255 / 28%);
+  --featured-photo-shadow: 0 24px 48px rgb(7 29 27 / 22%);
+  --featured-button-shadow: 0 6px 24px rgb(215 180 106 / 12%);
+  --featured-motion: 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  --featured-background-blur: 12px;
+  --featured-crossfade: 1600ms ease-in-out;
+  --featured-copy-shade: rgb(8 35 32 / 62%);
+  /* Safari results only. */
+  --results-surface: #ffffff;
+  --results-soft: #f4f6f2;
+  --results-border: #e4e8e2;
+  --results-muted: #626b65;
+  --results-radius: 1.5rem;
+  --results-gap: 1.75rem;
+  --results-shadow: 0 4px 20px rgb(20 40 28 / 8%);
+  --hero-text: #e1e3e6;
+  --hero-muted: #ccd0d1;
+  --hero-accent-muted: #b3d8c2;
+  --hero-grid: #a5bbc1;
+  --hero-dot: #6c7478;
+  --hero-border: rgb(255 255 255 / 25%);
+  --hero-divider: rgb(255 255 255 / 11%);
+  --hero-quiet: rgb(255 255 255 / 5%);
+  --hero-quiet-hover: rgb(255 255 255 / 13%);
+  --hero-shadow: 0 24px 65px rgb(0 0 0 / 20%);
+  --hero-card: linear-gradient(140deg, #272e33f5, #141a1fee);
+  /* Visitor review card only. */
+  --review-card-green: var(--color-primary);
+  --review-card-green-hover: var(--color-primary-hover);
+  --review-card-fallback: #25382e;
+  --review-card-glass: linear-gradient(
+    120deg,
+    rgb(37 56 46 / 90%),
+    rgb(25 45 35 / 88%) 55%,
+    rgb(37 56 46 / 90%)
+  );
+  --review-card-blur: 24px;
+  --review-card-border: rgb(255 255 255 / 20%);
+  --review-card-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%), 0 24px 65px rgb(0 0 0 / 28%);
+  --review-card-text: #f6f3ec;
+  --review-card-muted: #cecac2;
+  --review-card-highlight: var(--color-white);
+  --review-card-dot: rgb(255 255 255 / 45%);
+  --review-pagination-gap: 0.25rem;
+  --review-card-divider: rgb(255 255 255 / 12%);
+  --review-card-stars: var(--color-secondary);
+  --review-card-action: var(--color-secondary);
+  --review-card-action-hover: var(--color-secondary-hover);
+  --review-title-weight: 550;
+  --review-title-shadow: 0 2px 12px rgb(0 0 0 / 35%);
+  --review-card-link: var(--review-card-highlight);
+  --review-card-hover: rgb(255 255 255 / 10%);
+  --review-card-padding: clamp(1rem, 3.6%, 1.375rem);
+  --review-card-radius: 2rem;
+  --review-image-radius: 1.375rem;
+  --hero-shade:
+    linear-gradient(
+      90deg,
+      rgb(9 11 14 / 94%),
+      rgb(16 18 21 / 78%) 40%,
+      rgb(37 40 44 / 60%)
+    ),
+    linear-gradient(
+      180deg,
+      rgb(49 53 58 / 88%),
+      rgb(29 32 36 / 32%) 38%,
+      transparent 60%,
+      rgb(4 6 8 / 35%)
+    );
+
+  --space-1: 0.5rem;
+  /* About page only. */
+  --about-paper: var(--color-white);
+  --about-warm: var(--color-field);
+  --about-ink: var(--color-primary-hover);
+  --about-muted: var(--color-muted);
+  --about-line: var(--color-line);
+  --about-gold: var(--color-secondary);
+  --about-mint: var(--color-primary-soft);
+  --about-portrait-shade: linear-gradient(transparent 60%, rgb(13 36 31 / 82%));
+  --about-shadow: 0 24px 60px rgb(28 48 34 / 12%);
+  --about-motion: 850ms cubic-bezier(0.22, 1, 0.36, 1);
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 4.5rem;
+  --space-8: 6rem;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --shadow-soft: 0 1.25rem 3.75rem rgb(13 48 40 / 12%);
+  --content-width: 80rem;
+  --transition-base: 180ms ease;
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --page-gutter: 4rem;
+  }
+}
