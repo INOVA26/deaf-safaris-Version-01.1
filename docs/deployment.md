@@ -1,5 +1,12 @@
 # Publishing Deaf Safaris
 
+Current public address: <https://deaf-safaris.piusit94.chatgpt.site>.
+Sites version 1 was published successfully on 21 September 2026 (Tanzania time)
+from commit `7851b49b91d23862bdbaf2719876a15a486e099b`. Anonymous HTTPS checks
+returned HTTP 200 for the homepage, JavaScript, CSS, founder portrait, and team
+photo. All 22 tests, lint, formatting, and the production build passed. No browser
+was connected for desktop/mobile visual verification.
+
 The source repository is on GitHub: `INOVA26/deaf-safaris-Version-01.1`.
 The public website is hosted through Sites. `.openai/hosting.json` identifies
 the hosting project. GitHub Actions runs tests, lint, formatting, and a production
@@ -25,6 +32,8 @@ register it. Confirm ownership with the registrar before adding the domain to
 Sites. Use the exact DNS and verification records returned by Sites, wait for
 the domain and HTTPS certificate to become active, and then test the custom URL.
 Keep the generated Sites address available until this is complete.
+The DNS check during publication returned NXDOMAIN; registration and ownership
+have not been verified, and the domain has not been attached to Sites.
 
 ## Current release
 
