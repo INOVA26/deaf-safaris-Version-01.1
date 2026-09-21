@@ -17,6 +17,8 @@
 
 ## Latest reference-led update
 
+- Version 3 published successfully at <https://deaf-safaris.piusit94.chatgpt.site/#safaris> from commit `ef8adff24c6e552c511f55a287b77f14a43232c1`. Deployment `appgdep_6ab15bcfc268819188aec5326872ae36` succeeded; public HTML references the new JS/CSS and both assets plus the banner photo return HTTP 200. Local preview is available at <http://127.0.0.1:5173/#safaris>. Next step: visual desktop/iPhone QA when browser access is available.
+
 - 21 September search-results redesign: adapted the supplied travel-listing reference for Deaf Safaris Tanzania. Added a full-width safari photo banner and editable search form, desktop filter sidebar, mobile filter disclosure, compact horizontal journey cards, saved journeys, and trip-length filters based on the existing draft durations. Search submission and enquiry handoff preserve traveller and sign-language preferences. Results-only radius and gap tokens changed; other sections retain their styling. All 24 tests, lint, formatting, and production build pass. No new dependencies, invented prices, reviews, or availability. Browser discovery still returns no connection, so visual desktop/iPhone QA remains pending. Next step: publish and verify the new production assets.
 
 - 21 September version 2 published successfully at <https://deaf-safaris.piusit94.chatgpt.site>, with source commit `4f6af2530e5344dab5cd9e671164aa087e1664e4`. All 23 tests, lint, formatting, and production build passed. The live homepage references the new version's assets. Desktop/mobile visual verification remains pending browser access; custom domain setup still requires the exact registered name and registrar/DNS access.
