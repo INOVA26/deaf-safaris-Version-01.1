@@ -594,7 +594,7 @@ test('about page copy translates text, rich headings, and accessible media label
     assert.match(html, /data-i18n-html="aboutPage.hero.heading"/);
     assert.match(html, /data-i18n-alt="aboutPage.float.alt"/);
     assert.match(html, /data-i18n-aria-label="aboutPage.float.aria"/);
-    assert.match(html, /id="guides-heading"/);
+    assert.match(html, /id="about-guides-heading"/);
     assert.match(html, />Ertines</);
     assert.match(html, />Mike</);
     assert.match(html, /CEO, Deaf Safaris/);
@@ -761,6 +761,99 @@ test('results controls save journeys, recover from empty searches, and hand pref
   }
 });
 
+test('photo viewer wraps, handles keyboard navigation, restores focus, and cleans up', async () => {
+  const server = await createServer({
+    server: { middlewareMode: true, ws: false },
+    appType: 'custom',
+  });
+  const previousDocument = globalThis.document;
+  const previousWindow = globalThis.window;
+  let dispose;
+  try {
+    const { initPhotoGallery } = await server.ssrLoadModule(
+      '/src/components/PhotoGallery.js',
+    );
+    const { galleryPhotos } = await server.ssrLoadModule('/src/data/galleryPhotos.js');
+    const classes = new Set();
+    globalThis.document = {
+      body: {
+        classList: {
+          add: (name) => classes.add(name),
+          remove: (name) => classes.delete(name),
+        },
+      },
+    };
+    globalThis.window = new EventTarget();
+    const fields = Object.fromEntries(
+      [
+        'dialog',
+        '[data-photo-image]',
+        '[data-photo-caption]',
+        '[data-photo-position]',
+        '[data-photo-close]',
+        '[data-photo-previous]',
+        '[data-photo-next]',
+      ].map((name) => [name, new EventTarget()]),
+    );
+    const dialog = fields.dialog;
+    dialog.open = false;
+    dialog.showModal = () => {
+      dialog.open = true;
+    };
+    dialog.close = () => {
+      dialog.open = false;
+      dialog.dispatchEvent(new Event('close'));
+    };
+    const buttons = galleryPhotos.map((_, index) =>
+      Object.assign(new EventTarget(), {
+        dataset: { photoIndex: String(index) },
+        focus() {
+          this.focused = true;
+        },
+      }),
+    );
+    dispose = initPhotoGallery({
+      hidden: false,
+      querySelector: (selector) => fields[selector],
+      querySelectorAll: () => buttons,
+    });
+    const click = (element) => element.dispatchEvent(new Event('click'));
+    click(buttons.at(-1));
+    assert.equal(dialog.open, true);
+    assert.equal(classes.has('photo-viewer-open'), true);
+    assert.equal(fields['[data-photo-image]'].alt, galleryPhotos.at(-1).alt);
+    click(fields['[data-photo-next]']);
+    assert.equal(fields['[data-photo-image]'].src, galleryPhotos[0].src);
+    click(fields['[data-photo-previous]']);
+    assert.equal(fields['[data-photo-position]'].textContent, '5 / 5');
+    const left = Object.assign(new Event('keydown', { cancelable: true }), {
+      key: 'ArrowLeft',
+    });
+    dialog.dispatchEvent(left);
+    assert.equal(left.defaultPrevented, true);
+    assert.equal(fields['[data-photo-image]'].src, galleryPhotos[3].src);
+    click(fields['[data-photo-close]']);
+    assert.equal(dialog.open, false);
+    assert.equal(buttons.at(-1).focused, true);
+    assert.equal(classes.has('photo-viewer-open'), false);
+    click(buttons[0]);
+    window.dispatchEvent(new Event('hashchange'));
+    assert.equal(dialog.open, false);
+    click(buttons[0]);
+    dispose();
+    assert.equal(classes.has('photo-viewer-open'), false);
+    click(buttons[0]);
+    assert.equal(dialog.open, false, 'Disposed controls no longer open the viewer');
+  } finally {
+    dispose?.();
+    if (previousDocument === undefined) delete globalThis.document;
+    else globalThis.document = previousDocument;
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+    await server.close();
+  }
+});
+
 test('rendered sections have unique IDs, working internal links, and labelled inputs', async () => {
   const server = await createServer({
     server: { middlewareMode: true, ws: false },
@@ -774,6 +867,8 @@ test('rendered sections have unique IDs, working internal links, and labelled in
       'FeaturedSafari',
       'SafariResults',
       'About',
+      'Guides',
+      'PhotoGallery',
       'AboutPage',
       'Planning',
       'ReviewPreview',

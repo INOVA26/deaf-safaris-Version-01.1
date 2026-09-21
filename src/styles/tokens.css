@@ -303,6 +303,9 @@
   --shadow-soft: 0 1.25rem 3.75rem rgb(13 48 40 / 12%);
   --content-width: 80rem;
   --transition-base: 180ms ease;
+  --photo-gallery-caption-shade: linear-gradient(transparent, rgb(0 0 0 / 82%));
+  --photo-viewer-line: rgb(255 255 255 / 25%);
+  --photo-viewer-backdrop: rgb(0 0 0 / 88%);
 }
 
 @media (min-width: 64rem) {

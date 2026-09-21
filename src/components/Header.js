@@ -17,7 +17,7 @@ export function Header() {
             <li><a href="#destinations" data-i18n="nav.nationalPark">National Park</a></li>
             <li><a href="#hero-planner" data-nav-destination="Kilimanjaro" data-i18n="nav.kilimanjaro">Kilimanjaro</a></li>
             <li><a href="#about" data-i18n="nav.about">About us</a></li>
-            <li><a href="#gallery" data-i18n="nav.gallery">Gallery</a></li>
+            <li><a href="#photo-gallery" data-i18n="nav.gallery">Gallery</a></li>
             <li class="site-nav__mobile-action"><a class="button site-header__plan" href="#enquiries" data-i18n="nav.plan">Plan your Safari</a></li>
           </ul>
         </nav>

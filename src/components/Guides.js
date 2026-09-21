@@ -9,7 +9,7 @@ const guideCard = ({ name, role, image, alt, initials }) => `
           ? `<img src="${image}" alt="${alt}" width="581" height="839" loading="lazy" decoding="async" />`
           : `<img class="about-page__guide-logo" src="${logo}" alt="" width="240" height="240" loading="lazy" decoding="async" />
              <span class="about-page__guide-initials" aria-hidden="true">${initials}</span>
-             <span class="sr-only">Portrait of ${name} will be added soon.</span>`
+             <span class="guides__placeholder-note">Portrait coming soon</span>`
       }
     </div>
     <div class="about-page__guide-info">
@@ -18,17 +18,17 @@ const guideCard = ({ name, role, image, alt, initials }) => `
     </div>
   </article>`;
 
-export function Guides() {
+export function Guides(id = 'guides') {
   return `
-    <section class="about-page__guides-wrap" aria-labelledby="guides-heading" data-about-reveal>
+    <section class="guides about-page__guides-wrap" id="${id}" aria-labelledby="${id}-heading">
       <div class="container">
         <div class="about-page__guides-head">
           <p class="about-page__eyebrow about-page__eyebrow--dark">
             <span class="about-page__eyebrow-dot about-page__eyebrow-dot--green" aria-hidden="true"></span>
             <span>Our guides</span>
           </p>
-          <h2 id="guides-heading">The people beside<br />every adventure.</h2>
-          <p class="about-page__guides-intro">Meet the Deaf Safaris guides helping visitors experience Tanzania with confidence and connection.</p>
+          <h2 id="${id}-heading">Meet our guides</h2>
+          <p class="about-page__guides-intro">Ertines and Mike. The people behind Deaf Safaris.</p>
         </div>
         <div class="about-page__guides-grid">
           ${guideCard({
@@ -43,6 +43,7 @@ export function Guides() {
             initials: 'M',
           })}
         </div>
+        <div class="guides__action"><a class="button button--primary" href="#enquiries">Plan a journey with us <span aria-hidden="true">&rarr;</span></a></div>
       </div>
     </section>`;
 }

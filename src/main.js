@@ -7,6 +7,8 @@ import { Destinations, initDestinations } from './components/Destinations.js';
 import { initSafariIdeaCards } from './components/SafariIdeaCards.js';
 import { FeaturedSafari, initFeaturedSafari } from './components/FeaturedSafari.js';
 import { About } from './components/About.js';
+import { Guides } from './components/Guides.js';
+import { PhotoGallery, initPhotoGallery } from './components/PhotoGallery.js';
 import { AboutPage, initAboutPage } from './components/AboutPage.js';
 import { Planning, initPlanning } from './components/Planning.js';
 import { Reviews, initReviews } from './components/Reviews.js';
@@ -34,6 +36,8 @@ app.innerHTML = `
       ${SafariResults()}
       ${AboutPage()}
       ${Planning()}
+      ${Guides()}
+      ${PhotoGallery()}
       ${ReviewPreview()}
       ${DestinationListings()}
       ${Reviews()}
@@ -49,6 +53,7 @@ const disposeChat = initChat();
 const disposeSafariIdeaCards = initSafariIdeaCards();
 const disposeHero = initHero();
 const disposeAboutPage = initAboutPage();
+const disposePhotoGallery = initPhotoGallery();
 const disposeReviews = initReviews();
 const disposeReviewPreview = initReviewPreview();
 initEnquiry();
@@ -107,6 +112,7 @@ if (import.meta.hot) {
     disposeChat();
     disposeHero();
     disposeAboutPage();
+    disposePhotoGallery();
     disposeReviews();
     disposeReviewPreview();
     disposeHeroPlanner();

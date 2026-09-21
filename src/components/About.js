@@ -51,6 +51,7 @@ export function About() {
               .join('')}
           </ul>
           <a class="button button--primary about__link" href="#about"><span data-i18n="about.preview.link">Get to know Deaf Safaris</span> <span aria-hidden="true">&rarr;</span></a>
+          <a class="text-link about__guides-link" href="#guides">See our guides <span aria-hidden="true">&rarr;</span></a>
         </div>
         <figure class="about__portrait">
           <div class="about__portrait-stage">

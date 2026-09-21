@@ -15,6 +15,8 @@ export function Footer() {
             <h2>Explore</h2>
             <a href="#destinations">Safari inspiration</a>
             <a href="#about">Our story</a>
+            <a href="#guides">Meet our guides</a>
+            <a href="#photo-gallery">Photo gallery</a>
             <a href="#planning">Plan your journey</a>
           </nav>
           <nav aria-label="Planning resources">

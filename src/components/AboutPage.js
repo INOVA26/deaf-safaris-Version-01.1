@@ -238,7 +238,7 @@ export function AboutPage() {
     </div>
   </div>
 
-  ${Guides()}
+  ${Guides('about-guides')}
 
   <!-- ⑦ GALLERY SECTION ───────────────────────────────────────── -->
   <div class="about-page__gallery-wrap" data-about-reveal>
