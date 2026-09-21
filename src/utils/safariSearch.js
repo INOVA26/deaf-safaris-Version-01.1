@@ -48,7 +48,13 @@ export function readSafariSearch(hash) {
 export function filterSafaris(
   tours,
   search,
-  { category = 'all', sort = 'recommended', savedOnly = false, saved = new Set() } = {},
+  {
+    category = 'all',
+    duration = 'all',
+    sort = 'recommended',
+    savedOnly = false,
+    saved = new Set(),
+  } = {},
 ) {
   const results = tours.filter((tour) => {
     const destinationMatches =
@@ -63,6 +69,10 @@ export function filterSafaris(
     return (
       destinationMatches &&
       categoryMatches &&
+      (duration === 'all' ||
+        (duration === 'day' && tour.days === 1) ||
+        (duration === 'multi' && tour.days > 1) ||
+        (duration === 'flexible' && tour.days == null)) &&
       (!savedOnly || saved.has(tour.destination))
     );
   });

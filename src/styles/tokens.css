@@ -218,8 +218,8 @@
   --results-soft: #f4f6f2;
   --results-border: #e4e8e2;
   --results-muted: #626b65;
-  --results-radius: 1.5rem;
-  --results-gap: 1.75rem;
+  --results-radius: 0.5rem;
+  --results-gap: 1rem;
   --results-shadow: 0 4px 20px rgb(20 40 28 / 8%);
   --hero-text: #e1e3e6;
   --hero-muted: #ccd0d1;

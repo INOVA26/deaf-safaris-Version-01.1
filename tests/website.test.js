@@ -186,6 +186,37 @@ test('safari results combine destination, category, saved and sorting filters wi
   );
 });
 
+test('trip length filters use known draft durations and keep unconfirmed routes separate', () => {
+  const tours = [
+    { title: 'Serengeti', destination: 'Serengeti', days: 3 },
+    { title: 'Ngorongoro', destination: 'Ngorongoro', days: 1 },
+    { title: 'Kilimanjaro', destination: 'Kilimanjaro', days: null },
+  ];
+  const search = readSafariSearch('#safaris');
+  for (const [duration, destination] of [
+    ['day', 'Ngorongoro'],
+    ['multi', 'Serengeti'],
+    ['flexible', 'Kilimanjaro'],
+  ]) {
+    assert.deepEqual(
+      filterSafaris(tours, search, { duration }).map((tour) => tour.destination),
+      [destination],
+    );
+  }
+  assert.equal(
+    filterSafaris(tours, search, { duration: 'day', category: 'mountain' }).length,
+    0,
+  );
+  assert.equal(
+    filterSafaris(tours, search, {
+      duration: 'multi',
+      savedOnly: true,
+      saved: new Set(['Ngorongoro']),
+    }).length,
+    0,
+  );
+});
+
 test('dropdown search matches countries and currency codes without changing selection', () => {
   assert.ok(matchesDropdownSearch('de Deutsch Germany German', ' GERMAN '));
   assert.ok(matchesDropdownSearch('nl Nederlands Netherlands Dutch', 'dutch'));
@@ -742,6 +773,59 @@ test('results controls save journeys, recover from empty searches, and hand pref
     click('data-clear');
     assert.equal(readSafariSearch(globalThis.window.location.hash).destination, '');
     assert.equal((root.innerHTML.match(/<h1\b/g) || []).length, 1);
+    assert.match(root.innerHTML, /Deaf Safaris Tanzania/);
+    assert.match(root.innerHTML, /aria-label="Safari filters"/);
+    const change = (target) => {
+      const event = new Event('change');
+      Object.defineProperty(event, 'target', { value: target });
+      root.dispatchEvent(event);
+    };
+    change({ name: 'results-duration', value: 'day' });
+    assert.equal((root.innerHTML.match(/<article /g) || []).length, 1);
+    assert.match(root.innerHTML, /Ngorongoro Crater Escape/);
+    change({ name: 'results-category', value: 'mountain' });
+    assert.match(root.innerHTML, /No safari ideas match/);
+    click('data-clear');
+    assert.equal((root.innerHTML.match(/<article /g) || []).length, 3);
+    change({ id: 'results-sort', value: 'az' });
+    assert.ok(
+      root.innerHTML.indexOf('<h2>Kilimanjaro') <
+        root.innerHTML.indexOf('<h2>Ngorongoro'),
+    );
+    change({ id: 'results-sign-language', value: 'BSL' });
+    assert.equal(readSafariSearch(window.location.hash)['sign-language'], 'BSL');
+    const previousFormData = globalThis.FormData;
+    try {
+      globalThis.FormData = class {
+        constructor(form) {
+          return new Map(form.values);
+        }
+      };
+      const form = {
+        matches: (selector) => selector === '[data-results-search]',
+        values: [
+          ['destination', 'Serengeti'],
+          ['season', 'January – March'],
+          ['travellers', '6+'],
+        ],
+      };
+      const submit = new Event('submit', { cancelable: true });
+      Object.defineProperty(submit, 'target', { value: form });
+      root.dispatchEvent(submit);
+      assert.equal(submit.defaultPrevented, true);
+      assert.deepEqual(readSafariSearch(window.location.hash), {
+        destination: 'Serengeti',
+        season: 'January – March',
+        travellers: '6+',
+        'sign-language': 'BSL',
+      });
+      assert.equal((root.innerHTML.match(/<article /g) || []).length, 1);
+      click('data-plan', 'Serengeti');
+      assert.equal(planned.travellers, '6+');
+      assert.equal(planned['sign-language'], 'BSL');
+    } finally {
+      globalThis.FormData = previousFormData;
+    }
     for (const [, control] of root.innerHTML.matchAll(
       /<select\b[^>]*\bid="([^"]+)"/g,
     )) {

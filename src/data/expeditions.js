@@ -7,6 +7,7 @@ export const expeditions = [
   {
     title: 'Serengeti Wildlife Safari',
     destination: 'Serengeti',
+    days: 3,
     duration: 'Draft itinerary · 3 days · 2 nights',
     image: serengeti,
     alt: 'Four giraffes on green grassland with hills behind them.',
@@ -17,6 +18,7 @@ export const expeditions = [
   {
     title: 'Ngorongoro Crater Escape',
     destination: 'Ngorongoro',
+    days: 1,
     duration: 'Draft itinerary · 1 day · private journey',
     image: photos.sunset.src,
     alt: photos.sunset.alt,
@@ -27,6 +29,7 @@ export const expeditions = [
   {
     title: 'Kilimanjaro Together',
     destination: 'Kilimanjaro',
+    days: null,
     duration: 'Draft itinerary · route to be confirmed',
     image: kilimanjaro,
     alt: 'A tent below the snow-covered slopes of Mount Kilimanjaro.',
