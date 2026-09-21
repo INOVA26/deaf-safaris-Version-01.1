@@ -1,5 +1,5 @@
 import { expeditions } from '../data/expeditions.js';
-import { photos } from '../data/photos.js';
+import kilimanjaroBanner from '../assets/images/destinations/kilimanjaro-2.jpg';
 import {
   filterSafaris,
   readSafariSearch,
@@ -68,7 +68,7 @@ export function initSafariResults(
     });
     root.innerHTML = `
       <div class="safari-results__banner">
-        <img class="safari-results__landscape" src="${photos.sunset.src}" alt="" />
+        <img class="safari-results__landscape" src="${kilimanjaroBanner}" alt="An aerial view of Mount Kilimanjaro's snow-covered summit and surrounding clouds." />
         <div class="container safari-results__banner-content">
           <a class="safari-results__back" href="#home">${icon('arrow_back')} Home</a>
           <h1 id="safari-results-heading" tabindex="-1">Deaf Safaris Tanzania</h1>

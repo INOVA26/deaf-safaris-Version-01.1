@@ -774,6 +774,14 @@ test('results controls save journeys, recover from empty searches, and hand pref
     assert.equal(readSafariSearch(globalThis.window.location.hash).destination, '');
     assert.equal((root.innerHTML.match(/<h1\b/g) || []).length, 1);
     assert.match(root.innerHTML, /Deaf Safaris Tanzania/);
+    assert.match(
+      root.innerHTML,
+      /class="safari-results__landscape" src="[^"]*kilimanjaro-2\.jpg"/,
+    );
+    assert.match(
+      root.innerHTML,
+      /alt="An aerial view of Mount Kilimanjaro's snow-covered summit and surrounding clouds\."/,
+    );
     assert.match(root.innerHTML, /aria-label="Safari filters"/);
     const change = (target) => {
       const event = new Event('change');
