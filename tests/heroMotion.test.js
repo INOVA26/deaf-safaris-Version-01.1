@@ -217,79 +217,33 @@ test('featured safari rotates foreground and background together and respects mo
   }
 });
 
-test('review controls wrap, announce selection, plan the matching destination, and clean up', async () => {
+test('centered hero has a single photo, factual links and all safari search fields', async () => {
   const server = await createServer({
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
-  let dispose;
   try {
-    const { Hero, initHero } = await server.ssrLoadModule('/src/components/Hero.js');
+    const { Hero } = await server.ssrLoadModule('/src/components/Hero.js');
     const markup = Hero();
-    assert.doesNotMatch(markup, /data-hero-motion|Pause animations/);
-    assert.equal([...markup.matchAll(/data-tour-index=/g)].length, 4);
-    assert.equal([...markup.matchAll(/data-tour /g)].length, 4);
-    assert.match(markup, /Price to be confirmed/);
-    const selectors = Object.fromEntries(
-      [
-        '.hero__card-footer',
-        '[data-tour-count]',
-        '[data-tour-status]',
-        '[data-tour-previous]',
-        '[data-tour-next]',
-        '[data-plan-trip]',
-        '#hero-destination',
-        '#hero-planner',
-        '[data-hero-typing]',
-        '.hero__card',
-      ].map((selector) => [selector, element()]),
+    assert.equal([...markup.matchAll(/class="hero__background"/g)].length, 1);
+    assert.match(markup, /Deaf Safaris<br \/>Tanzania/);
+    assert.doesNotMatch(
+      markup,
+      /data-tour|data-price-usd|data-hero-typing|hero__card|Furniture/,
     );
-    const slides = [element(), element(), element(), element()];
-    const dots = [element(), element(), element(), element()];
-    const backgrounds = [element(), element(), element(), element()];
-    const root = Object.assign(element(), {
-      contains: () => false,
-      querySelector: (selector) => selectors[selector],
-      querySelectorAll: (selector) =>
-        selector === '[data-tour]'
-          ? slides
-          : selector === '[data-tour-index]'
-            ? dots
-            : backgrounds,
-    });
-    selectors['.hero__card'].matches = () => false;
-    const motion = motionEnvironment();
-    motion.media.matches = true;
-    let submitted = 0;
-    selectors['#hero-planner'].requestSubmit = () => submitted++;
-    dispose = initHero(root, motion);
-    assert.equal(selectors['.hero__card-footer'].hidden, false);
-    selectors['[data-tour-previous]'].emit('click');
-    assert.equal(slides[3].hidden, false);
-    assert.equal(slides[0].hidden, true);
-    assert.equal(dots[3].getAttribute('aria-pressed'), 'true');
+    assert.match(markup, /href="#destinations"><strong>7<\/strong>/);
+    assert.match(markup, /href="#guides"><strong>2<\/strong>/);
+    assert.match(markup, /href="#reviews"/);
+    for (const name of ['destination', 'season', 'sign-language', 'travellers']) {
+      assert.ok(markup.includes(`id="hero-${name}"`));
+      assert.ok(markup.includes(`for="hero-${name}"`));
+    }
+    assert.match(markup, /type="submit"/);
     assert.match(
-      selectors['[data-tour-status]'].textContent,
-      /Review 4 of 4: Share your story/,
+      markup,
+      /Dates and sign-language support|dates and sign-language support/,
     );
-    selectors['[data-plan-trip]'].emit('click', { preventDefault() {} });
-    assert.equal(selectors['#hero-destination'].value, 'Help me choose');
-    assert.equal(submitted, 1);
-    selectors['[data-tour-next]'].emit('click');
-    assert.equal(slides[0].hidden, false);
-    assert.equal(dots[3].getAttribute('aria-pressed'), 'false');
-    selectors['[data-plan-trip]'].emit('click', { preventDefault() {} });
-    assert.equal(selectors['#hero-destination'].value, 'Kilimanjaro');
-    assert.equal(submitted, 2);
-    dots[1].emit('click');
-    assert.match(selectors['[data-tour-count]'].textContent, /Review 2 of 4/);
-    assert.equal(slides[1].hidden, false);
-    dispose();
-    dispose = undefined;
-    assert.ok(dots.every((dot) => dot.listeners.size === 0));
-    assert.equal(selectors['[data-tour-next]'].listeners.size, 0);
   } finally {
-    dispose?.();
     await server.close();
   }
 });

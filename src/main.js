@@ -1,7 +1,7 @@
 import { Footer } from './components/Footer.js';
 import { Header, initHeader } from './components/Header.js';
 import { Chat, initChat } from './components/Chat.js';
-import { Hero, initHero, initHeroPlanner } from './components/Hero.js';
+import { Hero, initHeroPlanner } from './components/Hero.js';
 import { initPlannerDropdowns } from './utils/plannerDropdowns.js';
 import { Destinations, initDestinations } from './components/Destinations.js';
 import { initSafariIdeaCards } from './components/SafariIdeaCards.js';
@@ -51,7 +51,6 @@ app.innerHTML = `
 const disposeHeader = initHeader();
 const disposeChat = initChat();
 const disposeSafariIdeaCards = initSafariIdeaCards();
-const disposeHero = initHero();
 const disposeAboutPage = initAboutPage();
 const disposePhotoGallery = initPhotoGallery();
 const disposeReviews = initReviews();
@@ -110,7 +109,6 @@ if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     disposeHeader();
     disposeChat();
-    disposeHero();
     disposeAboutPage();
     disposePhotoGallery();
     disposeReviews();

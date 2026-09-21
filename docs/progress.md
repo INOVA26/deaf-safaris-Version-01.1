@@ -17,6 +17,8 @@
 
 ## Latest reference-led update
 
+- Centered homepage hero: adapted the new reference to a full-bleed team photograph, fixed Deaf Safaris Tanzania heading, translucent four-field search bar, compact factual destination/guide links, and a review-page link. Removed the side review/price carousel and its runtime initialization; the independent reviews page and safari results page remain unchanged. Hero-only shade and form tokens avoid changing other sections. Preserved native select fallbacks, keyboard dropdowns, labels, focus styles, and notes-preserving enquiry handoff. All 24 tests, lint, formatting and production build pass; local preview returns HTTP 200. Browser access remains unavailable, so visual desktop/iPhone checks are pending. Next step: publish the tested hero update and verify live assets.
+
 - Search banner refinement: replaced the sunset image with the existing credited Mount Kilimanjaro aerial photograph, added descriptive alternative text, and positioned the summit for narrow-screen cropping. Search controls and page layout are unchanged. Next step: run release checks and publish the banner update.
 
 - Version 3 published successfully at <https://deaf-safaris.piusit94.chatgpt.site/#safaris> from commit `ef8adff24c6e552c511f55a287b77f14a43232c1`. Deployment `appgdep_6ab15bcfc268819188aec5326872ae36` succeeded; public HTML references the new JS/CSS and both assets plus the banner photo return HTTP 200. Local preview is available at <http://127.0.0.1:5173/#safaris>. Next step: visual desktop/iPhone QA when browser access is available.
