@@ -1336,6 +1336,7 @@
 /* Centered photo hero; planner menu mechanics are shared with the native form. */
 .home-page {
   --utility-bar-height: 0rem;
+  --header-height: 4rem;
 }
 .home-page .site-header:not(.is-scrolled) {
   background: var(--hero-header-glass);
@@ -1356,7 +1357,7 @@
   color: var(--color-white);
   background: var(--hero-background);
 }
-.hero__background,
+.hero__backdrop,
 .hero__shade {
   position: absolute;
   inset: 0;
@@ -1364,10 +1365,45 @@
   height: 100%;
   pointer-events: none;
 }
-.hero__background {
-  object-fit: cover;
-  object-position: center 55%;
+.hero__backdrop {
+  overflow: hidden;
   z-index: -2;
+}
+.hero__background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 58%;
+  opacity: 0;
+  transition: opacity var(--hero-photo-fade);
+  animation: hero-background-zoom var(--hero-photo-zoom) ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+.hero__background.is-active {
+  opacity: 1;
+}
+.hero__background--mountain {
+  object-position: 26% 48%;
+}
+.hero[data-backdrop-motion='running'] .hero__background {
+  animation-play-state: running;
+}
+@keyframes hero-background-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__background {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
 }
 .hero__shade {
   z-index: -1;
@@ -1384,7 +1420,7 @@
 }
 .hero__intro {
   width: 100%;
-  max-width: 56rem;
+  max-width: 48rem;
   margin: 0 auto;
   padding-block: 1rem 2.5rem;
   text-align: center;
@@ -1397,14 +1433,14 @@
   letter-spacing: 0;
 }
 .hero__description {
-  max-width: 40rem;
+  max-width: 34rem;
   margin: 1.25rem auto 0;
   font-size: 0.875rem;
   line-height: 1.6;
   color: var(--hero-text);
 }
 .hero__planner {
-  width: min(100%, 70rem);
+  width: min(100%, 67rem);
   margin-inline: auto;
 }
 .hero__planner-row {
@@ -1414,7 +1450,7 @@
   gap: 0.875rem;
   padding: 1rem;
   border: 1px solid var(--hero-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--hero-planner-radius);
   background: var(--hero-planner-fallback);
 }
 @supports (backdrop-filter: blur(1px)) {
@@ -1673,6 +1709,27 @@
   font-size: 0.625rem;
   text-decoration: none;
 }
+.hero__motion-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.hero__motion-toggle {
+  display: grid;
+  place-items: center;
+  flex: 0 0 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--hero-border);
+  border-radius: 50%;
+  background: var(--hero-field-background);
+  color: var(--color-white);
+}
+.hero__motion-toggle:hover {
+  background: var(--hero-field-hover);
+}
 .hero__review-link {
   display: flex;
   flex-wrap: wrap;
@@ -1730,13 +1787,20 @@
     font-size: 1.5rem;
   }
 }
-@media (min-width: 68.8125rem) {
+@media (min-width: 56rem) {
   .hero h1 {
-    font-size: 4.75rem;
+    font-size: 4rem;
+  }
+  .hero__body {
+    padding-top: 3.5rem;
   }
   .hero__intro {
-    padding-block: 2rem 4rem;
-    margin-block: auto;
+    padding-block: 2.5rem 3.5rem;
+    margin-top: auto;
+    margin-bottom: 0;
+  }
+  .hero__planner {
+    width: min(calc(100% - 2rem), 67rem);
   }
   .hero__planner-row {
     grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
@@ -1750,8 +1814,8 @@
     grid-column: auto;
   }
   .hero__footer {
-    grid-template-columns: 1fr auto 1fr;
-    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 1rem;
     margin-top: auto;
     padding-top: 1.5rem;
   }
@@ -1763,7 +1827,7 @@
   }
 }
 
-@media (min-width: 64rem) {
+@media (min-width: 56rem) {
   .site-header {
     padding-inline: var(--header-gutter);
   }
@@ -1795,7 +1859,8 @@
     gap: var(--nav-link-gap);
   }
   .site-nav > li > a {
-    padding-inline: var(--space-3);
+    padding-inline: 0.625rem;
+    font-size: 0.875rem;
     white-space: nowrap;
     border-radius: 0;
   }

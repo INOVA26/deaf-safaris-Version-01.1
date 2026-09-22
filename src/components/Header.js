@@ -37,7 +37,7 @@ export function initHeader() {
   const utilityBar = header.querySelector('.utility-bar');
   const utilityPopovers = [...utilityBar.querySelectorAll('[popover]')];
   const disposeUtilityBar = initUtilityBar(utilityBar);
-  const desktop = window.matchMedia('(min-width: 64rem)');
+  const desktop = window.matchMedia('(min-width: 56rem)');
   const events = new AbortController();
   const listen = (target, type, handler, options = {}) => {
     target.addEventListener(type, handler, { ...options, signal: events.signal });

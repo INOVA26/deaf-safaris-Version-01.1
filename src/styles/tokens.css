@@ -269,6 +269,9 @@
   --hero-field-background: rgb(0 0 0 / 18%);
   --hero-field-hover: rgb(0 0 0 / 30%);
   --hero-field-border: rgb(255 255 255 / 65%);
+  --hero-photo-fade: 1400ms ease;
+  --hero-photo-zoom: 20s;
+  --hero-planner-radius: 1rem;
 
   --space-1: 0.5rem;
   /* About page only. */

@@ -1,4 +1,6 @@
 import teamPhoto from '../assets/images/team-group.jpeg';
+import mountainPhoto from '../assets/images/destinations/kilimanjaro-2.jpg';
+import plainsPhoto from '../assets/images/destinations/serengeti-2.jpg';
 import { destinations } from '../data/destinations.js';
 
 const icon = (name) =>
@@ -19,12 +21,16 @@ function field(name, label, options, placeholder = '') {
 
 export function Hero() {
   return `
-    <section id="home" class="hero" aria-labelledby="hero-heading">
-      <img class="hero__background" src="${teamPhoto}" alt="A group holding a Deaf Safaris banner at the Mount Kilimanjaro summit sign." width="975" height="1280" fetchpriority="high" />
+    <section id="home" class="hero" aria-labelledby="hero-heading" data-backdrop-motion="paused">
+      <div class="hero__backdrop">
+        <img class="hero__background is-active" data-hero-photo src="${teamPhoto}" alt="A group holding a Deaf Safaris banner at the Mount Kilimanjaro summit sign." width="975" height="1280" fetchpriority="high" />
+        <img class="hero__background hero__background--mountain" data-hero-photo src="${mountainPhoto}" alt="Mount Kilimanjaro's snowy summit above the clouds." aria-hidden="true" decoding="async" />
+        <img class="hero__background" data-hero-photo src="${plainsPhoto}" alt="An acacia tree on the golden plains of Serengeti National Park." aria-hidden="true" decoding="async" />
+      </div>
       <div class="hero__shade" aria-hidden="true"></div>
       <div class="container hero__body">
         <div class="hero__intro">
-          <h1 id="hero-heading">Deaf Safaris<br /><span>Tanzania adventures</span></h1>
+          <h1 id="hero-heading">Deaf Safaris<br /><span>Today &amp; Tomorrow</span></h1>
           <p class="hero__description" data-i18n="hero.description">From the heights of Kilimanjaro to the wilds of the Serengeti, imagine Tanzania through shared discovery. Start with your journey ideas and sign-language preferences.</p>
         </div>
         <form id="hero-planner" class="hero__planner" aria-label="Plan your safari" aria-describedby="hero-planner-note">
@@ -86,7 +92,10 @@ export function Hero() {
             <a href="#guides"><strong>2</strong><span>Meet our guides</span></a>
             <a href="#about"><strong>Your pace</strong><span>Your Tanzania journey</span></a>
           </div>
-          <a class="hero__scroll" href="#destinations">${icon('south')}<span>Explore Tanzania</span></a>
+          <div class="hero__motion-controls">
+            <a class="hero__scroll" href="#destinations">${icon('mouse')}<span>Scroll down</span></a>
+            <button class="hero__motion-toggle" type="button" data-backdrop-toggle aria-label="Pause background animation" title="Pause background animation" aria-pressed="false" hidden>${icon('pause')}</button>
+          </div>
           <div class="hero__review-link">
             ${icon('forum')}
             <p>What visitors say<span>Stories from Tanzania</span></p>

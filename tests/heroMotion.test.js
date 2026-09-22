@@ -3,6 +3,7 @@ import test from 'node:test';
 import { createServer } from 'vite';
 import { createTypewriter } from '../src/utils/typewriter.js';
 import { initHeroMotion } from '../src/utils/heroMotion.js';
+import { initHeroBackdrop } from '../src/utils/heroBackdrop.js';
 
 test('typing rotates through complete phrases and cancels pending work when paused', () => {
   const timers = new Map();
@@ -217,7 +218,7 @@ test('featured safari rotates foreground and background together and respects mo
   }
 });
 
-test('centered hero has a single photo, factual links and all safari search fields', async () => {
+test('centered hero has three photos, playback control, factual links and safari search fields', async () => {
   const server = await createServer({
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
@@ -225,8 +226,9 @@ test('centered hero has a single photo, factual links and all safari search fiel
   try {
     const { Hero } = await server.ssrLoadModule('/src/components/Hero.js');
     const markup = Hero();
-    assert.equal([...markup.matchAll(/class="hero__background"/g)].length, 1);
-    assert.match(markup, /Deaf Safaris<br \/><span>Tanzania adventures/);
+    assert.equal([...markup.matchAll(/data-hero-photo/g)].length, 3);
+    assert.match(markup, /data-backdrop-toggle/);
+    assert.match(markup, /Deaf Safaris<br \/><span>Today &amp; Tomorrow/);
     assert.match(markup, /class="hero__planner-row"/);
     assert.match(
       markup,
@@ -251,6 +253,65 @@ test('centered hero has a single photo, factual links and all safari search fiel
   } finally {
     await server.close();
   }
+});
+
+test('hero backdrop cycles loaded images, pauses accessibly and cleans up', () => {
+  const env = motionEnvironment();
+  const photos = Array.from({ length: 3 }, () =>
+    Object.assign(element(), { complete: true, naturalWidth: 1280 }),
+  );
+  const symbol = {};
+  const toggle = Object.assign(element(), { querySelector: () => symbol });
+  const field = {};
+  const root = Object.assign(element(), {
+    querySelectorAll: () => photos,
+    querySelector: () => toggle,
+    contains: (target) => target === field || target === toggle,
+  });
+  const dispose = initHeroBackdrop(root, env);
+  const tick = () => [...env.intervals.values()][0]();
+  assert.equal(env.intervals.size, 1);
+  assert.equal(root.dataset.backdropMotion, 'running');
+  tick();
+  assert.equal(photos[1].getAttribute('aria-hidden'), 'false');
+  photos[2].naturalWidth = 0;
+  tick();
+  assert.equal(photos[0].getAttribute('aria-hidden'), 'false');
+  toggle.emit('click');
+  assert.equal(env.intervals.size, 0);
+  assert.equal(toggle.getAttribute('aria-pressed'), 'true');
+  assert.equal(symbol.textContent, 'play_arrow');
+  toggle.emit('click');
+  assert.equal(env.intervals.size, 1);
+  root.emit('focusin', { target: field });
+  assert.equal(env.intervals.size, 0);
+  root.emit('focusout', { relatedTarget: null });
+  assert.equal(env.intervals.size, 1);
+  env.page.hidden = true;
+  env.page.emit('visibilitychange');
+  assert.equal(env.intervals.size, 0);
+  env.page.hidden = false;
+  env.page.emit('visibilitychange');
+  env.intersect(false);
+  assert.equal(env.intervals.size, 0);
+  env.intersect(true);
+  assert.equal(env.intervals.size, 1);
+  env.media.matches = true;
+  env.media.emit('change');
+  assert.equal(env.intervals.size, 0);
+  assert.equal(toggle.hidden, true);
+  assert.equal(root.dataset.backdropMotion, 'paused');
+  env.media.matches = false;
+  env.media.emit('change');
+  assert.equal(env.intervals.size, 1);
+  dispose();
+  assert.equal(env.intervals.size, 0);
+  assert.equal(env.disconnected(), true);
+  assert.ok(
+    [root, toggle, env.page, env.media, ...photos].every(
+      (target) => target.listeners.size === 0,
+    ),
+  );
 });
 
 test('hero cycles images and typing, respects reading pauses and reduced motion, and clears timers', () => {
