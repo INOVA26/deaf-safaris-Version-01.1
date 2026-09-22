@@ -264,7 +264,8 @@
   --review-image-radius: 1.375rem;
   --hero-shade: rgb(12 16 18 / 62%);
   --hero-planner-fallback: #444b4d;
-  --hero-planner-glass: rgb(255 255 255 / 16%);
+  --hero-planner-glass: rgb(255 255 255 / 24%);
+  --hero-header-glass: rgb(255 255 255 / 62%);
   --hero-field-background: rgb(0 0 0 / 18%);
   --hero-field-hover: rgb(0 0 0 / 30%);
   --hero-field-border: rgb(255 255 255 / 65%);

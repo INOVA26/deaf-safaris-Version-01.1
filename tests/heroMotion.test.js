@@ -226,7 +226,12 @@ test('centered hero has a single photo, factual links and all safari search fiel
     const { Hero } = await server.ssrLoadModule('/src/components/Hero.js');
     const markup = Hero();
     assert.equal([...markup.matchAll(/class="hero__background"/g)].length, 1);
-    assert.match(markup, /Deaf Safaris<br \/>Tanzania/);
+    assert.match(markup, /Deaf Safaris<br \/><span>Tanzania adventures/);
+    assert.match(markup, /class="hero__planner-row"/);
+    assert.match(
+      markup,
+      /<details class="hero__preferences"><summary>Sign-language preferences<\/summary>/,
+    );
     assert.doesNotMatch(
       markup,
       /data-tour|data-price-usd|data-hero-typing|hero__card|Furniture/,

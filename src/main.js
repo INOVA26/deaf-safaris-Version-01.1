@@ -142,6 +142,7 @@ function syncPageView() {
       : reviewsPage
         ? 'reviews'
         : null;
+  document.body.classList.toggle('home-page', !activePage);
   for (const section of document.querySelector('#main-content').children) {
     section.hidden = activePage
       ? section.id !== activePage

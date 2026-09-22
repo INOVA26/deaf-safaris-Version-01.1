@@ -24,10 +24,11 @@ export function Hero() {
       <div class="hero__shade" aria-hidden="true"></div>
       <div class="container hero__body">
         <div class="hero__intro">
-          <h1 id="hero-heading">Deaf Safaris<br />Tanzania</h1>
+          <h1 id="hero-heading">Deaf Safaris<br /><span>Tanzania adventures</span></h1>
           <p class="hero__description" data-i18n="hero.description">From the heights of Kilimanjaro to the wilds of the Serengeti, imagine Tanzania through shared discovery. Start with your journey ideas and sign-language preferences.</p>
         </div>
         <form id="hero-planner" class="hero__planner" aria-label="Plan your safari" aria-describedby="hero-planner-note">
+          <div class="hero__planner-row">
           ${field(
             'destination',
             'Where to?',
@@ -55,6 +56,15 @@ export function Hero() {
             ].map((v) => [v, v]),
             'Choose your dates',
           )}
+          ${field('travellers', 'Travellers', [
+            ['1', '1 traveller'],
+            ['2', '2 travellers', true],
+            ['3-5', '3–5 travellers'],
+            ['6+', '6+ travellers'],
+          ])}
+          <button class="button hero__planner-cta" type="submit"><span data-i18n="planner.submit">Search safaris</span></button>
+          </div>
+          <details class="hero__preferences"><summary>Sign-language preferences</summary>
           ${field(
             'sign-language',
             'Sign preference',
@@ -67,15 +77,9 @@ export function Hero() {
             ],
             'ASL, BSL, International…',
           )}
-          ${field('travellers', 'Travellers', [
-            ['1', '1 traveller'],
-            ['2', '2 travellers', true],
-            ['3-5', '3–5 travellers'],
-            ['6+', '6+ travellers'],
-          ])}
-          <button class="button hero__planner-cta" type="submit">${icon('search')} <span data-i18n="planner.submit">Search safaris</span></button>
+          </details>
         </form>
-        <p class="hero__planner-note" id="hero-planner-note" data-i18n="planner.note">Explore safari ideas, then create a personal brief. Draft itineraries; dates and sign-language support to be confirmed.</p>
+        <p class="hero__planner-note sr-only" id="hero-planner-note" data-i18n="planner.note">Explore safari ideas, then create a personal brief. Draft itineraries; dates and sign-language support to be confirmed.</p>
         <div class="hero__footer">
           <div class="hero__facts" aria-label="Explore Deaf Safaris">
             <a href="#destinations"><strong>${destinations.length}</strong><span>Destinations to explore</span></a>
