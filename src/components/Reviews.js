@@ -1,3 +1,4 @@
+import { initReviewComposer, reviewSummary } from '../utils/reviewComposer.js';
 import { createReviewDraft, reviewAsText } from '../utils/reviewDraft.js';
 import { destinations } from '../data/destinations.js';
 import { featuredReviews } from '../data/reviews.js';
@@ -20,11 +21,12 @@ export function Reviews() {
         </div>
         <div class="reviews__grid">
         <div class="reviews__intro">
+          <div class="reviews__summary" id="reviews-summary"></div>
           <div class="reviews__toolbar">
             <p id="reviews-count" role="status"></p>
             <div><label for="reviews-place-filter">Place visited</label><select id="reviews-place-filter"><option value="">All places</option>${destinations.map((place) => `<option>${escapeHtml(place.name)}</option>`).join('')}<option value="Tanzania">Other places in Tanzania</option></select></div>
           </div>
-          <p class="reviews__order">Newest first</p>
+          <label class="reviews__order" for="reviews-sort">Sort reviews <select id="reviews-sort"><option value="newest">Newest</option><option value="highest">Highest rating</option><option value="lowest">Lowest rating</option></select></label>
           <div class="reviews__list" id="reviews-list"></div>
           <article class="review-preview" id="review-preview" aria-labelledby="review-preview-heading" hidden>
             <p class="eyebrow">Your private preview · Not published</p>
@@ -37,7 +39,7 @@ export function Reviews() {
           </article>
         </div>
         <form class="review-form" id="review-form" aria-describedby="review-privacy">
-          <div class="form-heading"><h3>Write your review</h3><span>Your honest perspective, in your own words.</span></div>
+          <div class="form-heading"><p class="eyebrow">Deaf Safaris Tanzania</p><h3>How was your experience?</h3><span>Your memories can help shape the next journey.</span></div>
           <div class="form-grid">
             <div class="form-field">
               <label for="review-name">Display name <span>(optional)</span></label>
@@ -53,11 +55,11 @@ export function Reviews() {
             </div>
             <div class="review-rating form-field--wide">
               <div class="review-rating__heading">
-                <label for="review-rating">Your rating <span>(required)</span></label>
+                <span id="review-stars-label">Your rating</span>
                 <output id="review-rating-value" for="review-rating" aria-live="off">3 / 5</output>
               </div>
-              <input id="review-rating" name="rating" type="range" min="1" max="5" step="1" value="3" aria-valuetext="3 out of 5 stars" />
-              <div class="review-rating__scale" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+              <input id="review-rating" name="rating" type="hidden" value="3" />
+              <div class="review-stars" role="group" aria-labelledby="review-stars-label">${[1, 2, 3, 4, 5].map((value) => `<button type="button" data-review-star="${value}" aria-label="Rate ${value} out of 5 stars" aria-pressed="${value === 3}"><span aria-hidden="true">★</span></button>`).join('')}</div>
             </div>
             <div class="form-field form-field--wide">
               <label for="review-title">Review title <span>(optional)</span></label>
@@ -69,8 +71,13 @@ export function Reviews() {
               <p class="form-hint" id="review-length">20–2,000 characters. Review only your own experience.</p>
             </div>
           </div>
+          <div class="review-media">
+            <label class="review-media__picker" for="review-media">＋ Add photos or videos<input id="review-media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" multiple aria-describedby="review-media-hint" /></label>
+            <p class="form-hint" id="review-media-hint">Up to 4 files, 10 MB each. Private previews for this visit only; media is not uploaded or saved.</p>
+            <p id="review-media-status" role="status"></p><div class="review-media__previews" id="review-media-previews"></div>
+          </div>
           <p class="form-hint" id="review-privacy">Your review is saved on this device only. It is not submitted or published online.</p>
-          <button class="button button--accent" type="submit">Save my review <span aria-hidden="true">&rarr;</span></button>
+          <div class="review-form__actions"><button class="button button--quiet" type="reset">Clear draft</button><button class="button button--accent" type="submit">Save my review <span aria-hidden="true">&rarr;</span></button></div>
           <p class="form-hint" id="review-status" role="status"></p>
         </form>
         </div>
@@ -87,7 +94,8 @@ export function initReviews() {
   const filter = document.querySelector('#reviews-place-filter');
   const rating = document.querySelector('#review-rating');
   const ratingValue = document.querySelector('#review-rating-value');
-  const disposers = [];
+  const disposers = [initReviewComposer(form)];
+  const sort = document.querySelector('#reviews-sort');
   const listen = (target, type, handler) => {
     target.addEventListener(type, handler);
     disposers.push(() => target.removeEventListener(type, handler));
@@ -108,6 +116,10 @@ export function initReviews() {
     const visible = newestReviews(sample ? featuredReviews : reviews).filter(
       (review) => !filter.value || review.destination === filter.value,
     );
+    if (sort?.value === 'highest') visible.sort((a, b) => b.rating - a.rating);
+    if (sort?.value === 'lowest') visible.sort((a, b) => a.rating - b.rating);
+    const summary = document.querySelector('#reviews-summary');
+    if (summary) summary.innerHTML = reviewSummary(reviews);
     reviewList.innerHTML = visible.length
       ? ReviewCards(visible, { sample })
       : '<p class="reviews__list-empty">No reviews for this place yet. Share your experience using the form.</p>';
@@ -116,6 +128,14 @@ export function initReviews() {
   };
   renderReviews();
   listen(filter, 'change', renderReviews);
+  if (sort) listen(sort, 'change', renderReviews);
+  listen(form, 'reset', () =>
+    queueMicrotask(() => {
+      syncRating();
+      body.setCustomValidity('');
+      status.textContent = '';
+    }),
+  );
   listen(window, 'storage', (event) => {
     if (!event.key || event.key === 'deaf-safaris-reviews') renderReviews();
   });

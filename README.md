@@ -1,5 +1,11 @@
 # Deaf Safaris
 
+## Continuing work with another AI
+
+Start with [the current handoff](docs/handoff.md), then read [the project rules](AGENTS.md) and [the progress history](docs/progress.md). The handoff records where work stopped, what was checked, and the next step. Update it during build/design work and before ending a session.
+
+Suggested prompt for Cursor, Antigravity, or another assistant: "Read AGENTS.md, docs/handoff.md, and the latest entries in docs/progress.md. Verify the working tree, preserve existing changes, and continue from the recorded next step. Keep the handoff updated as you work."
+
 Deaf Safaris is a responsive safari website preview built with Vite and plain JavaScript. The homepage includes a photographic Hero, safari inspiration, a brand introduction, planning guidance, FAQs, and a local enquiry-brief builder. Business details awaiting approval are explicitly identified. The brief builder does not send messages or create bookings.
 
 ## Website organisation
@@ -43,7 +49,7 @@ Downloads the development tools listed in `package.json` into `node_modules`. Th
 npm run dev
 ```
 
-Starts Vite's local development server. Open the `Local` address it prints (normally `http://localhost:5173`) in a browser. Leave this terminal running while you work; Vite refreshes the browser after saved changes.
+Starts Vite's local development server at `http://127.0.0.1:5173/`, matching the editor tasks and debugger. Use this numeric loopback address consistently instead of `localhost` to avoid IPv4/IPv6 hostname differences. Leave this terminal running while you work; Vite refreshes the browser after saved changes. If port 5173 is occupied, startup fails clearly instead of silently choosing another port; reuse the existing server only after checking it shows this project.
 
 Press `Ctrl+C` in that terminal to stop the local server.
 
@@ -71,7 +77,17 @@ Creates an optimized production build in `dist/`. The output is ignored by Git.
 npm run preview
 ```
 
-Serves the built `dist/` folder locally so you can inspect the production build. Run `npm run build` first.
+Serves the built `dist/` folder at `http://127.0.0.1:4173/` so you can inspect the production build. Run `npm run build` first. This port is fixed too.
+
+### Recovering a failed local preview
+
+If the embedded preview shows `ERR_NETWORK_CHANGED (-21)`, reopen `http://127.0.0.1:5173/#main-content` after the connection settles. This is a browser network error that can occur before website JavaScript loads; the website cannot intercept that error screen or guarantee it never recurs. The `#main-content` fragment is the normal accessible skip-link target.
+
+1. Check that the development terminal still shows Vite running. If it stopped, run `npm run dev` and wait for the `Local` address before opening the preview.
+2. Reload the preview using the numeric address above. If the embedded browser remains stuck, close that preview tab and reopen it, or open the same address in Edge/Chrome.
+3. If it also fails in a normal browser while Vite is running, check for ongoing Wi-Fi, VPN or network-adapter changes. Do not repeatedly start more servers or change ports to hide the failure.
+
+For assistants: verify the server responds with this project's HTML before sharing a preview URL, and record the live address in `docs/handoff.md`. Recheck availability each session; a previously running server is not guaranteed to survive closing its terminal or restarting the computer.
 
 ## Where to make changes
 

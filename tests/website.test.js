@@ -3,11 +3,128 @@ import test from 'node:test';
 import { createServer } from 'vite';
 import { createBrief } from '../src/utils/createBrief.js';
 import { createReviewDraft, reviewAsText } from '../src/utils/reviewDraft.js';
+import { initTourDisclosure } from '../src/utils/tourDisclosure.js';
+import { initScrollReveal } from '../src/utils/scrollReveal.js';
 import {
   filterSafaris,
   readSafariSearch,
   safariSearchHash,
 } from '../src/utils/safariSearch.js';
+
+test('tour grid expands three more cards, reverses clicks and respects reduced motion', () => {
+  const motion = Object.assign(new EventTarget(), { matches: false });
+  const clock = Object.assign(new EventTarget(), {
+    matchMedia: () => motion,
+    getComputedStyle: () => ({ getPropertyValue: () => '' }),
+  });
+  const button = Object.assign(new EventTarget(), {
+    getAttribute(name) {
+      return this[name] || 'false';
+    },
+    setAttribute(name, value) {
+      this[name] = value;
+    },
+    scrollIntoView() {
+      this.scrolled = true;
+    },
+  });
+  const animations = [];
+  const panel = {
+    hidden: true,
+    contains: () => false,
+    style: { removeProperty() {} },
+    getBoundingClientRect: () => ({ height: 500 }),
+    animate() {
+      const animation = {
+        cancel() {
+          this.cancelled = true;
+        },
+      };
+      animations.push(animation);
+      return animation;
+    },
+  };
+  const section = {
+    querySelector: (selector) => (selector === '[data-tour-toggle]' ? button : panel),
+  };
+  const root = { querySelectorAll: () => [section], activeElement: button };
+  const dispose = initTourDisclosure(root, clock);
+  const click = () => button.dispatchEvent(new Event('click'));
+  assert.equal(panel.hidden, true);
+  assert.equal(panel.inert, true);
+  click();
+  assert.equal(panel.hidden, false);
+  assert.equal(panel.inert, false);
+  assert.equal(button.textContent, 'Show Less');
+  assert.equal(button['aria-expanded'], 'true');
+  click();
+  assert.equal(animations[0].cancelled, true);
+  assert.equal(panel.inert, true);
+  animations[1].onfinish();
+  assert.equal(panel.hidden, true);
+  assert.equal(button.textContent, 'More Details');
+  assert.equal(button.scrolled, true);
+  click();
+  motion.matches = true;
+  motion.dispatchEvent(new Event('change'));
+  assert.equal(panel.hidden, false);
+  assert.equal(animations[2].cancelled, true);
+  click();
+  assert.equal(panel.hidden, true);
+  assert.equal(animations.length, 3);
+  dispose();
+  click();
+  assert.equal(panel.hidden, true);
+});
+
+test('scroll reveals wait for entry, cancel on focus and respect reduced motion', () => {
+  const root = Object.assign(new EventTarget(), { querySelectorAll: () => [section] });
+  const motion = Object.assign(new EventTarget(), { matches: false });
+  let entries;
+  let disconnected = false;
+  let animations = 0;
+  let cancelled = false;
+  const section = {
+    contains: (element) => element === 'focused-link',
+    animate() {
+      animations += 1;
+      return {
+        cancel() {
+          cancelled = true;
+        },
+      };
+    },
+  };
+  const clock = {
+    matchMedia: () => motion,
+    getComputedStyle: () => ({ getPropertyValue: () => '' }),
+    IntersectionObserver: class {
+      constructor(callback) {
+        entries = callback;
+      }
+      observe() {}
+      unobserve() {}
+      disconnect() {
+        disconnected = true;
+      }
+    },
+  };
+  const dispose = initScrollReveal(root, clock);
+  entries([{ target: section, isIntersecting: false }]);
+  assert.equal(animations, 0);
+  entries([{ target: section, isIntersecting: true }]);
+  assert.equal(animations, 1);
+  const focus = new Event('focusin');
+  Object.defineProperty(focus, 'target', { value: 'focused-link' });
+  root.dispatchEvent(focus);
+  assert.equal(cancelled, true);
+  motion.matches = true;
+  entries([{ target: section, isIntersecting: true }]);
+  assert.equal(animations, 1);
+  dispose();
+  assert.equal(disconnected, true);
+  assert.doesNotThrow(() => initScrollReveal(root, { matchMedia: () => motion })());
+});
 import { priceFromUsd, initCurrencySelector } from '../src/utils/currencyPrice.js';
 import {
   initDropdownSearch,
@@ -431,6 +548,9 @@ test('latest reviews sort by date rather than rating and tolerate old or invalid
 
 test('review submission updates recent stories, filters places, escapes content and survives blocked storage', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
@@ -438,6 +558,9 @@ test('review submission updates recent stories, filters places, escapes content 
     document: globalThis.document,
     window: globalThis.window,
     FormData: globalThis.FormData,
+    getComputedStyle: globalThis.getComputedStyle,
+    requestAnimationFrame: globalThis.requestAnimationFrame,
+    cancelAnimationFrame: globalThis.cancelAnimationFrame,
   };
   let disposeReviews;
   let disposePreview;
@@ -500,6 +623,8 @@ test('review submission updates recent stories, filters places, escapes content 
     Object.assign(preview, { scrollLeft: 0, clientWidth: 600, scrollWidth: 1000 });
     const previewFields = Object.fromEntries(
       [
+        '[data-review-pause]',
+        '[data-review-echo]',
         '[data-review-total]',
         '[data-review-note]',
         '[data-carousel-previous]',
@@ -507,11 +632,19 @@ test('review submission updates recent stories, filters places, escapes content 
         '[data-carousel-position]',
       ].map((selector) => [selector, makeElement()]),
     );
+    preview.querySelector = () => null;
+    preview.insertAdjacentHTML = (_, html) => {
+      preview.innerHTML += html;
+    };
+    globalThis.getComputedStyle = () => ({ columnGap: '16px' });
+    globalThis.requestAnimationFrame = () => 1;
+    globalThis.cancelAnimationFrame = () => {};
     previewFields['[data-latest-reviews]'] = preview;
     previewFields['[data-carousel-track]'] = preview;
     let stored = '[]';
     let blocked = false;
     globalThis.window = Object.assign(new EventTarget(), {
+      matchMedia: () => Object.assign(new EventTarget(), { matches: true }),
       localStorage: {
         getItem: () => stored,
         setItem(key, value) {
@@ -556,7 +689,7 @@ test('review submission updates recent stories, filters places, escapes content 
       querySelector: (selector) => previewFields[selector],
     });
     assert.match(preview.innerHTML, /Sample review/);
-    assert.match(previewFields['[data-review-total]'].textContent, /3 sample reviews/);
+    assert.match(previewFields['[data-review-total]'].textContent, /6 sample reviews/);
     assert.match(Reviews(), /<option>Chemka Hot Springs<\/option>/);
     fields['[data-write-review]'].dispatchEvent(new Event('click'));
     assert.equal(fields['#review-destination'].focused, true);
@@ -615,6 +748,9 @@ test('review submission updates recent stories, filters places, escapes content 
 
 test('about page copy translates text, rich headings, and accessible media labels', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
@@ -698,6 +834,9 @@ function translatedElement(dataset) {
 
 test('results controls save journeys, recover from empty searches, and hand preferences to the brief', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
@@ -855,6 +994,9 @@ test('results controls save journeys, recover from empty searches, and hand pref
 
 test('photo viewer wraps, handles keyboard navigation, restores focus, and cleans up', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
@@ -948,6 +1090,9 @@ test('photo viewer wraps, handles keyboard navigation, restores focus, and clean
 
 test('rendered sections have unique IDs, working internal links, and labelled inputs', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
@@ -955,8 +1100,12 @@ test('rendered sections have unique IDs, working internal links, and labelled in
     const names = [
       'Header',
       'Hero',
-      'Destinations',
-      'FeaturedSafari',
+      'TripCards',
+      'Places',
+      'PromiseBanner',
+      'GalleryResources',
+      'FeaturedTrips',
+      'ContactPrompt',
       'SafariResults',
       'About',
       'Guides',
@@ -997,6 +1146,96 @@ test('rendered sections have unique IDs, working internal links, and labelled in
     assert.ok(html.includes('aria-controls="primary-navigation"'));
     assert.ok(html.includes('role="status"'));
   } finally {
+    await server.close();
+  }
+});
+
+test('tours follow requested order and Places reveals the requested extra three', async () => {
+  const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
+    server: { middlewareMode: true, ws: false },
+    appType: 'custom',
+  });
+  const previousDocument = globalThis.document;
+  const page = new EventTarget();
+  globalThis.document = page;
+  let dispose;
+  try {
+    const { initTripCards, TripCards } = await server.ssrLoadModule(
+      '/src/components/TripCards.js',
+    );
+    const html = TripCards();
+    assert.equal([...html.matchAll(/<article class="reference-trip"/g)].length, 3);
+    assert.deepEqual(
+      [...html.matchAll(/aria-label="Plan a journey to ([^"]+)"/g)].map(
+        (match) => match[1],
+      ),
+      ['Kilimanjaro', 'Ngorongoro', 'Serengeti'],
+    );
+    assert.doesNotMatch(html, /data-tour-toggle/);
+    assert.match(html, /href="#traveller-destinations">See More Tours/);
+    assert.doesNotMatch(html, /\$195|\$650|\$250/);
+    const { Places } = await server.ssrLoadModule('/src/components/Places.js');
+    const places = Places();
+    const [firstRow, extraRow] = places.split('<div class="tour-extra"');
+    const names = (row) =>
+      [...row.matchAll(/aria-label="Plan a journey to ([^"]+)"/g)].map(
+        (match) => match[1],
+      );
+    assert.deepEqual(names(firstRow), [
+      'Chemka Hot Spring',
+      'Serval Wildlife',
+      'Arts &amp; Culture',
+    ]);
+    assert.deepEqual(names(extraRow), ['Waterfall', 'Napur', 'Markets']);
+    assert.match(extraRow, /data-tour-extra hidden/);
+    assert.ok(
+      extraRow.indexOf('data-tour-toggle') > extraRow.lastIndexOf('</article>'),
+    );
+    assert.match(
+      places,
+      /aria-expanded="false" aria-controls="more-places">More Details/,
+    );
+    assert.doesNotMatch(places, /data-trip-destination/);
+    assert.match(places, /<strong>150K<\/strong>/);
+    assert.doesNotMatch(places, /data-tour-photo|reference-trip__photos/);
+    assert.match(places, /A visitor holding a basket between two zebras/);
+    assert.match(places, /Serval Wildlife/);
+    const { DestinationListings } = await server.ssrLoadModule(
+      '/src/components/DestinationListings.js',
+    );
+    const listing = DestinationListings();
+    assert.equal([...listing.matchAll(/<article class="reference-trip"/g)].length, 7);
+    assert.doesNotMatch(listing, /class="explore-place"/);
+    assert.doesNotMatch(listing, /More places to explore|local-experiences/);
+    let selected;
+    dispose = initTripCards((destination) => {
+      selected = destination;
+    });
+    const link = { dataset: { tripDestination: 'Tarangire' } };
+    function click(control, modified = false) {
+      const event = new Event('click', { cancelable: true });
+      Object.defineProperty(event, 'target', {
+        value: {
+          closest: (selector) => (selector === control ? link : null),
+        },
+      });
+      event.ctrlKey = modified;
+      page.dispatchEvent(event);
+      return event;
+    }
+    assert.equal(click('[data-trip-destination]', true).defaultPrevented, false);
+    assert.equal(selected, undefined);
+    assert.equal(click('[data-trip-destination]').defaultPrevented, true);
+    assert.equal(selected, 'Tarangire');
+    dispose();
+    assert.equal(click('[data-trip-destination]').defaultPrevented, false);
+  } finally {
+    dispose?.();
+    if (previousDocument === undefined) delete globalThis.document;
+    else globalThis.document = previousDocument;
     await server.close();
   }
 });

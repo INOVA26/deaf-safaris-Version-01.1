@@ -14,10 +14,10 @@ export function Header() {
         <nav id="primary-navigation" class="site-navigation" aria-label="Primary navigation">
           <ul class="site-nav">
             <li><a href="#home" data-i18n="nav.home">Home</a></li>
-            <li><a href="#destinations" data-i18n="nav.nationalPark">National Park</a></li>
+            <li><a href="#destinations">National Park</a></li>
             <li><a href="#hero-planner" data-nav-destination="Kilimanjaro" data-i18n="nav.kilimanjaro">Kilimanjaro</a></li>
-            <li><a href="#about" data-i18n="nav.about">About us</a></li>
-            <li><a href="#photo-gallery" data-i18n="nav.gallery">Gallery</a></li>
+            <li><a href="#hero-planner" data-nav-destination="Arusha Cultural Heritage Centre">Cultures</a></li>
+            <li><a href="#gallery">Gallery</a></li>
             <li class="site-nav__mobile-action"><a class="button site-header__plan" href="#enquiries" data-i18n="nav.plan">Plan your Safari</a></li>
           </ul>
         </nav>
@@ -72,6 +72,7 @@ export function initHeader() {
       document
         .querySelector('#hero-destination')
         .dispatchEvent(new Event('change', { bubbles: true }));
+      syncCurrentLink(link.hash);
     }
     setOpen(false);
     const target = link.hash ? document.querySelector(link.hash) : null;
@@ -97,11 +98,15 @@ export function initHeader() {
     }
   });
   listen(desktop, 'change', syncLayout);
-  const syncCurrentLink = () => {
-    const hash = window.location.hash;
+  const syncCurrentLink = (nextHash) => {
+    const hash = typeof nextHash === 'string' ? nextHash : window.location.hash;
     const current = !hash || hash === '#main-content' ? '#home' : hash;
     links.forEach((link) => {
-      if (link.hash === current)
+      const matchesDestination =
+        !link.dataset.navDestination ||
+        link.dataset.navDestination ===
+          document.querySelector('#hero-destination').value;
+      if (link.hash === current && matchesDestination)
         link.setAttribute('aria-current', current === '#about' ? 'page' : 'location');
       else link.removeAttribute('aria-current');
     });

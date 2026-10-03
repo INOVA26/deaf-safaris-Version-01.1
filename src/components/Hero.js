@@ -1,10 +1,10 @@
+import { ContactPrompt } from './ContactPrompt.js';
 import teamPhoto from '../assets/images/team-group.jpeg';
-import mountainPhoto from '../assets/images/destinations/kilimanjaro-2.jpg';
+import mountainPhoto from '../assets/images/hero-kilimanjaro.jpg';
 import plainsPhoto from '../assets/images/destinations/serengeti-2.jpg';
-import { destinations } from '../data/destinations.js';
 
-const icon = (name) =>
-  `<span class="material-symbols-rounded" aria-hidden="true">${name}</span>`;
+const star =
+  '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.2L5.8 21 7 14.2 2 9.3l6.9-1Z"/></svg>';
 
 function field(name, label, options, placeholder = '') {
   const translationKey = {
@@ -23,15 +23,15 @@ export function Hero() {
   return `
     <section id="home" class="hero" aria-labelledby="hero-heading" data-backdrop-motion="paused">
       <div class="hero__backdrop">
-        <img class="hero__background is-active" data-hero-photo src="${teamPhoto}" alt="A group holding a Deaf Safaris banner at the Mount Kilimanjaro summit sign." width="975" height="1280" fetchpriority="high" />
-        <img class="hero__background hero__background--mountain" data-hero-photo src="${mountainPhoto}" alt="Mount Kilimanjaro's snowy summit above the clouds." aria-hidden="true" decoding="async" />
-        <img class="hero__background" data-hero-photo src="${plainsPhoto}" alt="An acacia tree on the golden plains of Serengeti National Park." aria-hidden="true" decoding="async" />
+        <img class="hero__background is-active" data-hero-photo src="${teamPhoto}" alt="The Deaf Safaris team holding their banner at the Kilimanjaro summit sign." width="975" height="1280" fetchpriority="high" />
+        <img class="hero__background hero__background--mountain" data-hero-photo src="${mountainPhoto}" alt="Kilimanjaro’s snowy summit above the clouds." width="1280" height="853" aria-hidden="true" decoding="async" />
+        <img class="hero__background" data-hero-photo src="${plainsPhoto}" alt="An acacia tree on the golden Serengeti plains." width="1280" height="853" aria-hidden="true" decoding="async" />
       </div>
       <div class="hero__shade" aria-hidden="true"></div>
       <div class="container hero__body">
         <div class="hero__intro">
-          <h1 id="hero-heading">Deaf Safaris<br /><span>Today &amp; Tomorrow</span></h1>
-          <p class="hero__description" data-i18n="hero.description">From the heights of Kilimanjaro to the wilds of the Serengeti, imagine Tanzania through shared discovery. Start with your journey ideas and sign-language preferences.</p>
+          <h1 id="hero-heading">Adventure for<br />Today &amp; Tomorrow</h1>
+          <p class="hero__description">From the heights of Kilimanjaro to the wilds of the Serengeti, discover Tanzania through shared experiences. Start a journey shaped around you.</p>
         </div>
         <form id="hero-planner" class="hero__planner" aria-label="Plan your safari" aria-describedby="hero-planner-note">
           <div class="hero__planner-row">
@@ -68,9 +68,9 @@ export function Hero() {
             ['3-5', '3–5 travellers'],
             ['6+', '6+ travellers'],
           ])}
-          <button class="button hero__planner-cta" type="submit"><span data-i18n="planner.submit">Search safaris</span></button>
+          <button class="button hero__planner-cta" type="submit"><span>Start planning</span></button>
           </div>
-          <details class="hero__preferences"><summary>Sign-language preferences</summary>
+          <details class="hero__preferences" hidden><summary>Sign-language preferences</summary>
           ${field(
             'sign-language',
             'Sign preference',
@@ -84,22 +84,26 @@ export function Hero() {
             'ASL, BSL, International…',
           )}
           </details>
+
         </form>
         <p class="hero__planner-note sr-only" id="hero-planner-note" data-i18n="planner.note">Explore safari ideas, then create a personal brief. Draft itineraries; dates and sign-language support to be confirmed.</p>
-        <div class="hero__footer">
+      </div>
+      <div class="hero__footer">
+        <div class="hero__footer-inner">
           <div class="hero__facts" aria-label="Explore Deaf Safaris">
-            <a href="#destinations"><strong>${destinations.length}</strong><span>Destinations to explore</span></a>
-            <a href="#guides"><strong>2</strong><span>Meet our guides</span></a>
-            <a href="#about"><strong>Your pace</strong><span>Your Tanzania journey</span></a>
+            <a href="#destinations"><strong>Explore</strong><span>Tanzania’s wildlife</span></a>
+            <a href="#guides"><strong>Connect</strong><span>Share your preferences</span></a>
+            <a href="#about"><strong>Discover</strong><span>Mountain landscapes</span></a>
           </div>
           <div class="hero__motion-controls">
-            <a class="hero__scroll" href="#destinations">${icon('mouse')}<span>Scroll down</span></a>
-            <button class="hero__motion-toggle" type="button" data-backdrop-toggle aria-label="Pause background animation" title="Pause background animation" aria-pressed="false" hidden>${icon('pause')}</button>
+            <a class="hero__scroll" href="#destinations"><span class="hero__mouse" aria-hidden="true"><span class="hero__mouse-wheel"></span></span><span>Scroll down</span></a>
+            <button class="hero__motion-toggle" type="button" data-backdrop-toggle aria-label="Pause hero animation" aria-pressed="false" hidden><span aria-hidden="true">Pause</span></button>
           </div>
           <div class="hero__review-link">
-            ${icon('forum')}
-            <p>What visitors say<span>Stories from Tanzania</span></p>
-            <a class="button" href="#reviews">Visit our reviews ${icon('arrow_forward')}</a>
+            <div class="hero__review-previews" role="img" aria-label="Traveller story previews"><img src="${mountainPhoto}" alt="" width="32" height="32" /><img src="${plainsPhoto}" alt="" width="32" height="32" /><span class="hero__review-badge">${star}</span></div>
+            <p>What visitors say<span>Preview traveller stories</span></p>
+            <a class="button" href="#reviews">Visit our reviews</a>
+            ${ContactPrompt()}
           </div>
         </div>
       </div>

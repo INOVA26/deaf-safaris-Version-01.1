@@ -1,7 +1,17 @@
+import { createTypewriter } from './typewriter.js';
+
 export function initHeroBackdrop(root, { clock = window, page = document } = {}) {
   const photos = [...root.querySelectorAll('[data-hero-photo]')];
   const toggle = root.querySelector('[data-backdrop-toggle]');
   const reduced = clock.matchMedia('(prefers-reduced-motion: reduce)');
+  const typingElement = root.querySelector('[data-hero-typing]');
+  const writer = typingElement
+    ? createTypewriter(
+        typingElement,
+        ['Today & Tomorrow', 'Beyond Words', 'At Your Pace'],
+        clock,
+      )
+    : null;
   const cleanups = [];
   let active = 0;
   let paused = false;
@@ -35,12 +45,13 @@ export function initHeroBackdrop(root, { clock = window, page = document } = {})
     clock.clearInterval(timer);
     const running = !paused && !reduced.matches && !page.hidden && visible && !focused;
     root.dataset.backdropMotion = running ? 'running' : 'paused';
+    writer?.setEnabled(running);
     toggle.hidden = reduced.matches || photos.length < 2;
     toggle.setAttribute('aria-pressed', String(paused));
-    const label = paused ? 'Play background animation' : 'Pause background animation';
+    const label = paused ? 'Play hero animation' : 'Pause hero animation';
     toggle.setAttribute('aria-label', label);
     toggle.title = label;
-    toggle.querySelector('span').textContent = paused ? 'play_arrow' : 'pause';
+    toggle.querySelector('span').textContent = paused ? 'Play' : 'Pause';
     if (running && photos.length > 1) timer = clock.setInterval(advance, 8000);
   }
   listen(toggle, 'click', () => {
@@ -72,6 +83,7 @@ export function initHeroBackdrop(root, { clock = window, page = document } = {})
   observer?.observe(root);
   sync();
   return () => {
+    writer?.stop();
     clock.clearInterval(timer);
     observer?.disconnect();
     cleanups.forEach((cleanup) => cleanup());

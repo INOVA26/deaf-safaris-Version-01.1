@@ -77,8 +77,8 @@ export function initPlannerDropdowns(form = document.querySelector('#hero-planne
         return;
       }
       sync();
-      const rect = trigger.closest('.hero__field').getBoundingClientRect();
-      const preferredWidth = select.name === 'travellers' ? 300 : 340;
+      const rect = trigger.getBoundingClientRect();
+      const preferredWidth = 240;
       menu.style.width = `${Math.min(Math.max(rect.width, preferredWidth), view.innerWidth - 24)}px`;
       menu.style.left = `${Math.max(12, Math.min(rect.left, view.innerWidth - menu.offsetWidth - 12))}px`;
       const below = view.innerHeight - rect.bottom - 24;

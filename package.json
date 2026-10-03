@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/website.test.js tests/heroMotion.test.js",
+    "test": "node --test tests/website.test.js tests/heroMotion.test.js tests/galleryCarousel.test.js tests/reviewComposer.test.js",
     "dev": "vite",
     "live-support": "node server/liveSupportServer.js",
     "build": "vite build",

@@ -1,7 +1,7 @@
 const translations = {
   en: {
     'nav.home': 'Home',
-    'nav.nationalPark': 'National Park',
+    'nav.explore': 'Explore',
     'nav.kilimanjaro': 'Kilimanjaro',
     'nav.cultures': 'Cultures',
     'nav.about': 'About us',
@@ -100,7 +100,7 @@ const translations = {
   },
   de: {
     'nav.home': 'Startseite',
-    'nav.nationalPark': 'Nationalpark',
+    'nav.explore': 'Entdecken',
     'nav.kilimanjaro': 'Kilimandscharo',
     'nav.cultures': 'Kulturen',
     'nav.about': 'Über uns',
@@ -201,7 +201,7 @@ const translations = {
   },
   pl: {
     'nav.home': 'Strona główna',
-    'nav.nationalPark': 'Park narodowy',
+    'nav.explore': 'Odkrywaj',
     'nav.kilimanjaro': 'Kilimandżaro',
     'nav.cultures': 'Kultury',
     'nav.about': 'O nas',
@@ -299,7 +299,7 @@ const translations = {
   },
   ko: {
     'nav.home': '홈',
-    'nav.nationalPark': '국립공원',
+    'nav.explore': '둘러보기',
     'nav.kilimanjaro': '킬리만자로',
     'nav.cultures': '문화',
     'nav.about': '소개',
@@ -394,7 +394,7 @@ const translations = {
   },
   nl: {
     'nav.home': 'Home',
-    'nav.nationalPark': 'Nationaal park',
+    'nav.explore': 'Ontdek',
     'nav.kilimanjaro': 'Kilimanjaro',
     'nav.cultures': 'Culturen',
     'nav.about': 'Over ons',

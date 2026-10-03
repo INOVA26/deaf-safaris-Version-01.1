@@ -1,23 +1,109 @@
 :root {
-  /* Brand roles: green actions, gold accents, and contrasting text pairs. */
-  --color-primary: #315646;
-  --color-primary-hover: #193a2c;
-  --color-primary-soft: #edf2eb;
+  /* Figma landing-page tokens. Existing detail-page themes remain independent. */
+  --reference-paper: #f8f8f6;
+  --reference-ink: #344450;
+  --reference-muted: #71777c;
+  --reference-brown: #382f27;
+  --reference-yellow: #ffdc27;
+  --reference-mint: #bce8d8;
+  --reference-serif: Volkhov, Georgia, 'Times New Roman', serif;
+  --reference-width: 80rem;
+  --reference-gap: 1.5rem;
+  --reference-card-width: 424px;
+  --reference-card-padding: 16px;
+  --reference-trip-gap: clamp(1rem, 3.2vw, 3rem);
+  --tour-row-gap: 2rem;
+  --tour-content-width: 80rem;
+  --tour-inline-gutter: clamp(1rem, 5.5vw, 5rem);
+  --tour-card-image-ratio: 1.4;
+  --tour-card-body-padding: clamp(0.75rem, 1.2vw, 1rem);
+  --tour-card-title-size: clamp(0.9375rem, 1.35vw, 1.125rem);
+  --tour-card-copy-size: clamp(0.75rem, 1.1vw, 0.875rem);
+  --tour-card-detail-size: clamp(0.6875rem, 0.95vw, 0.8125rem);
+  --tour-feature-text-size: 0.75rem;
+  --tour-feature-icon-size: 1rem;
+  --tour-feature-icon-gap: 0.375rem;
+  --tour-feature-row-gap: 0.5rem;
+  --tour-feature-column-gap: 0.75rem;
+  --tour-feature-top-space: 0.875rem;
+  --tour-rating-star-size: clamp(0.6875rem, 4cqi, 1rem);
+  --tour-rating-gap: 0.375rem;
+  --tour-rating-star-gap: 0.0625rem;
+  --tour-rating-label-size: 0.625rem;
+  --tour-section-gap: clamp(2rem, 5.3vw, 4.75rem);
+  --promise-banner-height: clamp(20rem, 31.8vw, 32rem);
+  --promise-copy-width: 26rem;
+  --promise-content-space: clamp(1rem, 2.6vw, 2.25rem);
+  --tour-card-radius: 0.75rem;
+  --tour-card-border: #e0e0df;
+  --tour-card-tag-background: #eee7ff;
+  --tour-card-tag-text: #283977;
+  --tour-card-feature-text: #52606b;
+  --reference-review-width: 378px;
+  --reference-review-gap: 16px;
+  --reference-review-card-size: clamp(10.25rem, 26vw, 23.625rem);
+  --reference-review-row-gap: clamp(0.75rem, 1.67vw, 1.5rem);
+  --reference-trip-surface: #ffffff;
+  --reference-promise-overlay: linear-gradient(
+    100deg,
+    rgb(74 29 114 / 72%),
+    rgb(25 103 149 / 65%) 60%,
+    rgb(26 157 162 / 66%)
+  );
+  --review-star-gold: #b77800;
+  --review-panel-shadow: 0 12px 36px rgb(38 47 40 / 7%);
+  --gallery-muted: #625d55;
+  --gallery-title-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  --gallery-heading-space: clamp(2.5rem, 5vw, 4rem);
+  --gallery-layout-gap: 20px;
+  --gallery-dot-gap: 6px;
+  --gallery-panel-padding: clamp(0.875rem, 1.5vw, 1.25rem);
+  --gallery-button-radius: 999px;
+  --gallery-slide-transition: 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  --reference-nav-green: #28654f;
+  --reference-footer-bottom: #2c241e;
+  --reference-footer-muted: #c0b7ad;
+  --reference-footer-gold: #eba634;
+  --footer-logo-surface: #f3eadc;
+  --footer-field-surface: #51483f;
+  --footer-field-border: #75695b;
+  --paw-accent: #e6c891;
+  --reference-radius: 0.75rem;
+  --reference-number-radius: 0.375rem;
+  --promise-pill: #a5fff0;
+  --promise-active-dot: #40535b;
+  --promise-photo-blur: 9px;
+  --promise-photo-motion: 550ms ease;
+  --promise-control-surface: rgb(25 42 47 / 62%);
+  --promise-control-hover: rgb(25 42 47 / 88%);
+  --promise-control-border: rgb(255 255 255 / 55%);
+  --reference-rating-gold: #ff9e27;
+  --reference-rating-empty: #dedede;
+  --whatsapp-background: #137c43;
+  --whatsapp-shadow: 0 4px 18px rgb(18 85 49 / 22%);
+  --whatsapp-motion: 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  --reference-shadow: 0 2px 5px rgb(30 35 40 / 15%);
+  --reference-section-space: clamp(3.5rem, 6vw, 5.5rem);
+  --reference-title-size: clamp(1.75rem, 2.85vw, 2.5rem);
+  /* Lion-gold accents, charcoal foundations, and neutral reading surfaces. */
+  --color-primary: #805819;
+  --color-primary-hover: #242629;
+  --color-primary-soft: #f7f0df;
   --color-on-primary: #ffffff;
-  --color-secondary: #d7b46a;
-  --color-secondary-hover: #e6ca8d;
+  --color-secondary: #d6aa56;
+  --color-secondary-hover: #e9c880;
   --color-secondary-soft: #faf3e5;
   --color-secondary-ink: #795c22;
-  --color-on-secondary: #17201d;
+  --color-on-secondary: #202124;
   --color-forest-950: var(--color-primary-hover);
   --color-forest-800: var(--color-primary);
-  --color-sand-50: #fafbf8;
-  --color-sand-100: #eff2eb;
+  --color-sand-50: #fafafa;
+  --color-sand-100: #f0f0ef;
   --color-clay-600: var(--color-secondary-ink);
-  --color-ink: #25382e;
-  --color-muted: #5c6a60;
+  --color-ink: #242629;
+  --color-muted: #626467;
   --color-white: #ffffff;
-  --color-charcoal: #25382e;
+  --color-charcoal: #242629;
   --color-olive: var(--color-primary);
   --color-sand-accent: var(--color-secondary);
   --color-sand-hover: var(--color-secondary-hover);
@@ -25,10 +111,14 @@
   --frame-inset: clamp(0.5rem, 2vw, 1.5rem);
   --section-space: 5rem;
   --page-gutter: 1rem;
-  --color-line: #dce3d7;
+  --color-line: #dededb;
   --color-earth: var(--color-secondary-ink);
   --color-dune: var(--color-secondary);
-  --color-field: #f3f5ef;
+  --color-field: #f4f4f2;
+  --quote-gold: #ead4a6;
+  --quote-neutral: #ededeb;
+  --quote-blue: #e4eaf0;
+  --footer-surface: #191d20;
 
   --font-sans:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -81,18 +171,18 @@
     inset 0 1px 0 rgb(255 255 255 / 78%), inset 0 -1px 0 rgb(255 255 255 / 18%),
     0 12px 40px rgb(9 24 18 / 22%);
   --nav-menu-tint: rgb(255 255 255 / 78%);
-  --nav-link-hover: rgb(41 100 73 / 8%);
-  --nav-menu-border: rgb(23 82 68 / 12%);
+  --nav-link-hover: rgb(128 88 25 / 10%);
+  --nav-menu-border: rgb(36 38 41 / 15%);
   --nav-link-gap: 0.25rem;
   --nav-dropdown-background: var(--color-white);
   --chat-background: var(--color-primary);
   --chat-background-hover: var(--color-primary-hover);
-  --chat-avatar-background: #e1e7d9;
+  --chat-avatar-background: #eee2c8;
   --chat-shadow: 0 6px 20px rgb(18 35 22 / 20%);
   /* Floating chat trigger only. */
   --chat-trigger-size: 3.5rem;
-  --chat-trigger-fallback: #e2ece8;
-  --chat-trigger-glass: rgb(226 240 233 / 82%);
+  --chat-trigger-fallback: #efe1c2;
+  --chat-trigger-glass: rgb(239 225 194 / 90%);
   --chat-trigger-border: rgb(255 255 255 / 75%);
   --chat-trigger-ink: var(--color-primary);
   --chat-trigger-highlight: linear-gradient(
@@ -103,7 +193,7 @@
   --chat-trigger-shadow:
     inset 0 1px 1px rgb(255 255 255 / 80%), 0 8px 28px rgb(18 35 22 / 18%);
   --chat-trigger-avatar: rgb(255 255 255 / 34%);
-  --chat-trigger-status: #287b53;
+  --chat-trigger-status: #805819;
   --chat-trigger-motion: 320ms cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Section aliases inherit the shared brand roles. */
@@ -169,7 +259,7 @@
   --destination-badge-red: var(--color-secondary-ink);
   --destination-badge-shadow: 0 3px 9px rgb(20 40 30 / 8%);
   --destination-soft: var(--color-primary-soft);
-  --destination-caption: rgb(16 37 29 / 82%);
+  --destination-caption: rgb(27 29 32 / 86%);
   --destination-radius: 0;
   --destination-photo-radius: 6px;
   --destination-icon-size: 1rem;
@@ -182,11 +272,11 @@
   --destination-photo-duration: 6500ms;
   --gallery-zoom-duration: 8100ms;
   /* Supporting safari idea cards within destination discovery. */
-  --safari-idea-background: #22382d;
-  --safari-idea-surface: #2c4437;
+  --safari-idea-background: #242629;
+  --safari-idea-surface: #33363a;
   --safari-idea-text: #f7f8f2;
-  --safari-idea-muted: #c2cec1;
-  --safari-idea-border: #526453;
+  --safari-idea-muted: #ced0d2;
+  --safari-idea-border: #55585b;
   --safari-idea-accent: var(--color-secondary);
   --safari-idea-gap: 1.5rem;
   --safari-idea-radius: var(--radius-sm);
@@ -194,25 +284,28 @@
   --featured-base: var(--color-primary-hover);
   --featured-overlay: linear-gradient(
     110deg,
-    rgb(25 58 44 / 55%),
-    rgb(49 86 70 / 45%) 48%,
-    rgb(25 58 44 / 55%)
+    rgb(24 26 29 / 60%),
+    rgb(44 44 42 / 45%) 48%,
+    rgb(24 26 29 / 60%)
   );
   --featured-mint: var(--color-primary-soft);
   --featured-sand: var(--color-secondary-soft);
   --featured-gold: var(--color-secondary);
   --featured-gold-hover: var(--color-secondary-hover);
-  --featured-text: #e6f1ed;
-  --featured-muted: #c8ddda;
+  --featured-text: #f1f1f0;
+  --featured-muted: #d1d1cd;
   --featured-glass: rgb(255 255 255 / 10%);
   --featured-glass-hover: rgb(255 255 255 / 20%);
   --featured-border: rgb(255 255 255 / 28%);
   --featured-photo-shadow: 0 24px 48px rgb(7 29 27 / 22%);
   --featured-button-shadow: 0 6px 24px rgb(215 180 106 / 12%);
   --featured-motion: 900ms cubic-bezier(0.22, 1, 0.36, 1);
-  --featured-background-blur: 12px;
+  --featured-background-blur: 6px;
+  --featured-banner-height: 590px;
+  --featured-heading-font: Georgia, 'Times New Roman', serif;
+  --featured-zoom-duration: 8.1s;
   --featured-crossfade: 1600ms ease-in-out;
-  --featured-copy-shade: rgb(8 35 32 / 62%);
+  --featured-copy-shade: rgb(18 20 23 / 68%);
   /* Safari results only. */
   --results-surface: #ffffff;
   --results-soft: #f4f6f2;
@@ -228,6 +321,13 @@
   --hero-dot: #6c7478;
   --hero-border: rgb(255 255 255 / 25%);
   --hero-divider: rgb(255 255 255 / 11%);
+  --hero-footer-background: rgb(0 0 0 / 18%);
+  --hero-footer-height: 5.25rem;
+  --hero-footer-width: 72rem;
+  --hero-stats-gap: 2.5rem;
+  --hero-desktop-padding: 5rem;
+  --hero-desktop-title-size: 5.625rem;
+  --hero-content-gap: 6.25rem;
   --hero-quiet: rgb(255 255 255 / 5%);
   --hero-quiet-hover: rgb(255 255 255 / 13%);
   --hero-shadow: 0 24px 65px rgb(0 0 0 / 20%);
@@ -235,12 +335,12 @@
   /* Visitor review card only. */
   --review-card-green: var(--color-primary);
   --review-card-green-hover: var(--color-primary-hover);
-  --review-card-fallback: #25382e;
+  --review-card-fallback: #242629;
   --review-card-glass: linear-gradient(
     120deg,
-    rgb(37 56 46 / 90%),
-    rgb(25 45 35 / 88%) 55%,
-    rgb(37 56 46 / 90%)
+    rgb(36 38 41 / 94%),
+    rgb(26 28 31 / 92%) 55%,
+    rgb(36 38 41 / 94%)
   );
   --review-card-blur: 24px;
   --review-card-border: rgb(255 255 255 / 20%);
@@ -262,15 +362,19 @@
   --review-card-padding: clamp(1rem, 3.6%, 1.375rem);
   --review-card-radius: 2rem;
   --review-image-radius: 1.375rem;
-  --hero-shade: rgb(12 16 18 / 62%);
-  --hero-planner-fallback: #444b4d;
-  --hero-planner-glass: rgb(255 255 255 / 24%);
+  --hero-shade: rgb(0 0 0 / 68%);
+  --hero-planner-fallback: #515456;
+  --hero-planner-glass: rgb(255 255 255 / 23%);
+  --hero-menu-surface: var(--hero-planner-fallback);
+  --hero-menu-glass: var(--hero-planner-glass);
+  --hero-menu-hover: rgb(255 255 255 / 12%);
+  --hero-menu-selected: rgb(255 255 255 / 20%);
   --hero-header-glass: rgb(255 255 255 / 62%);
   --hero-field-background: rgb(0 0 0 / 18%);
   --hero-field-hover: rgb(0 0 0 / 30%);
   --hero-field-border: rgb(255 255 255 / 65%);
   --hero-photo-fade: 1400ms ease;
-  --hero-photo-zoom: 20s;
+  --hero-photo-zoom: 8s;
   --hero-planner-radius: 1rem;
 
   --space-1: 0.5rem;
@@ -299,6 +403,11 @@
   --shadow-soft: 0 1.25rem 3.75rem rgb(13 48 40 / 12%);
   --content-width: 80rem;
   --transition-base: 180ms ease;
+  --motion-reveal-duration: 650ms;
+  --motion-reveal-distance: 24px;
+  --motion-reveal-stagger: 70ms;
+  --motion-disclosure-duration: 420ms;
+  --motion-reveal-easing: cubic-bezier(0.22, 1, 0.36, 1);
   --photo-gallery-caption-shade: linear-gradient(transparent, rgb(0 0 0 / 82%));
   --photo-viewer-line: rgb(255 255 255 / 25%);
   --photo-viewer-backdrop: rgb(0 0 0 / 88%);

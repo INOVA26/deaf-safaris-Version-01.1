@@ -1,12 +1,15 @@
-import { Footer } from './components/Footer.js';
+import { Footer, initFooter } from './components/Footer.js';
 import { Header, initHeader } from './components/Header.js';
 import { Chat, initChat } from './components/Chat.js';
 import { Hero, initHeroPlanner } from './components/Hero.js';
 import { initHeroBackdrop } from './utils/heroBackdrop.js';
+import { TripCards, initTripCards } from './components/TripCards.js';
+import { Places } from './components/Places.js';
+import { PromiseBanner, initPromiseBanner } from './components/PromiseBanner.js';
+import { GalleryResources } from './components/GalleryResources.js';
+import { initGalleryCarousel } from './utils/galleryCarousel.js';
+import { FeaturedTrips } from './components/FeaturedTrips.js';
 import { initPlannerDropdowns } from './utils/plannerDropdowns.js';
-import { Destinations, initDestinations } from './components/Destinations.js';
-import { initSafariIdeaCards } from './components/SafariIdeaCards.js';
-import { FeaturedSafari, initFeaturedSafari } from './components/FeaturedSafari.js';
 import { About } from './components/About.js';
 import { Guides } from './components/Guides.js';
 import { PhotoGallery, initPhotoGallery } from './components/PhotoGallery.js';
@@ -21,25 +24,31 @@ import {
 import { Enquiry, initEnquiry } from './components/Enquiry.js';
 import { SafariResults, initSafariResults } from './components/SafariResults.js';
 import { safariSearchHash } from './utils/safariSearch.js';
+import { initTourDisclosure } from './utils/tourDisclosure.js';
+import { initScrollReveal } from './utils/scrollReveal.js';
 import './styles/global.css';
 import './styles/components.css';
 
 const app = document.querySelector('#app');
+let visiblePage = null;
 
 app.innerHTML = `
   <div class="page-intro">
     ${Header()}
     <main id="main-content" tabindex="-1">
       ${Hero()}
-      ${Destinations()}
       ${About()}
-      ${FeaturedSafari()}
+      ${TripCards()}
+      ${PromiseBanner()}
+      ${Places()}
+      ${ReviewPreview()}
+      ${GalleryResources()}
+      ${Guides()}
+      ${FeaturedTrips()}
       ${SafariResults()}
       ${AboutPage()}
       ${Planning()}
-      ${Guides()}
       ${PhotoGallery()}
-      ${ReviewPreview()}
       ${DestinationListings()}
       ${Reviews()}
       ${Enquiry()}
@@ -50,13 +59,17 @@ app.innerHTML = `
 `;
 
 const disposeHeader = initHeader();
+const disposeTourDisclosure = initTourDisclosure();
+const disposeScrollReveal = initScrollReveal();
+const disposeFooter = initFooter();
 const disposeChat = initChat();
-const disposeSafariIdeaCards = initSafariIdeaCards();
 const disposeHeroBackdrop = initHeroBackdrop(document.querySelector('.hero'));
 const disposeAboutPage = initAboutPage();
 const disposePhotoGallery = initPhotoGallery();
 const disposeReviews = initReviews();
 const disposeReviewPreview = initReviewPreview();
+const disposePromiseBanner = initPromiseBanner();
+const disposeGalleryCarousel = initGalleryCarousel();
 initEnquiry();
 const disposeHeroPlanner = initHeroPlanner((answers) => {
   window.location.hash = safariSearchHash(answers);
@@ -72,6 +85,7 @@ function restorePlanner(search) {
 function chooseDestination(destination) {
   restorePlanner({ destination });
   window.location.hash = '#hero-planner';
+  syncPageView();
   document.querySelector('#hero-planner').scrollIntoView();
   document
     .querySelector(
@@ -79,13 +93,12 @@ function chooseDestination(destination) {
     )
     .focus({ preventScroll: true });
 }
-const disposeDestinations = initDestinations(undefined, chooseDestination);
+const disposeTripCards = initTripCards(chooseDestination);
 const disposeDestinationListings = initDestinationListings(
   undefined,
   chooseDestination,
 );
 const disposePlanning = initPlanning(undefined, chooseDestination);
-const disposeFeaturedSafari = initFeaturedSafari(undefined, chooseDestination);
 const results = initSafariResults({
   onEdit(search) {
     restorePlanner(search);
@@ -109,20 +122,23 @@ const results = initSafariResults({
 });
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
+    disposeTourDisclosure();
+    disposeScrollReveal();
     disposeHeader();
+    disposeFooter();
     disposeChat();
+    disposeHeroBackdrop();
     disposeAboutPage();
     disposePhotoGallery();
     disposeReviews();
     disposeReviewPreview();
+    disposePromiseBanner();
+    disposeGalleryCarousel();
     disposeHeroPlanner();
     disposePlannerDropdowns();
-    disposeDestinations();
+    disposeTripCards();
     disposeDestinationListings();
     disposePlanning();
-    disposeFeaturedSafari();
-    disposeSafariIdeaCards();
-    disposeHeroBackdrop();
     results.dispose();
     window.removeEventListener('hashchange', syncPageView);
   });
@@ -138,27 +154,49 @@ function syncPageView() {
   document.body.classList.toggle('safaris-page', safariPage);
   document.body.classList.toggle('about-page-view', aboutPage);
   document.body.classList.toggle('reviews-page', reviewsPage);
-  const activePage = aboutPage
-    ? 'about'
-    : safariPage
-      ? 'safaris'
-      : reviewsPage
-        ? 'reviews'
-        : null;
+  const extraPages = [
+    'enquiries',
+    'planning',
+    'photo-gallery',
+    'traveller-destinations',
+  ];
+  const extraPage = extraPages.find((id) => window.location.hash === `#${id}`);
+  const wasExtraPage = document.body.classList.contains('detail-page');
+  document.body.classList.toggle('detail-page', Boolean(extraPage));
+  const activePage =
+    extraPage ||
+    (aboutPage ? 'about' : safariPage ? 'safaris' : reviewsPage ? 'reviews' : null);
+  const pageChanged = visiblePage !== activePage;
+  visiblePage = activePage;
   document.body.classList.toggle('home-page', !activePage);
   for (const section of document.querySelector('#main-content').children) {
     section.hidden = activePage
       ? section.id !== activePage
-      : ['safaris', 'about', 'reviews'].includes(section.id);
+      : ['safaris', 'about', 'reviews', ...extraPages].includes(section.id);
   }
-  document.title = aboutPage
-    ? 'About us | Deaf Safaris'
-    : safariPage
-      ? 'Explore safaris | Deaf Safaris'
-      : reviewsPage
-        ? 'Traveller reviews | Deaf Safaris'
-        : 'Deaf Safaris | Your Next Adventure. Beyond Words.';
-  if (aboutPage) {
+  const detailTitles = {
+    enquiries: 'Plan your safari',
+    planning: 'Planning your journey',
+    'photo-gallery': 'Photo gallery',
+    'traveller-destinations': 'Explore Tanzania',
+  };
+  document.title = extraPage
+    ? `${detailTitles[extraPage]} | Deaf Safaris`
+    : aboutPage
+      ? 'About us | Deaf Safaris'
+      : safariPage
+        ? 'Explore safaris | Deaf Safaris'
+        : reviewsPage
+          ? 'Traveller reviews | Deaf Safaris'
+          : 'Deaf Safaris | Your Next Adventure. Beyond Words.';
+  if (extraPage) {
+    if (pageChanged) {
+      const target = document.getElementById(extraPage);
+      target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  } else if (aboutPage) {
     if (!wasAboutPage) {
       document.querySelector('#about-page-heading').focus({ preventScroll: true });
       window.scrollTo({ top: 0, behavior: 'instant' });
@@ -174,8 +212,11 @@ function syncPageView() {
       document.querySelector('#reviews-heading').focus({ preventScroll: true });
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
-  } else if (wasSafariPage || wasAboutPage || wasReviewsPage) {
-    document.getElementById(window.location.hash.slice(1) || 'home')?.scrollIntoView();
+  } else if (wasSafariPage || wasAboutPage || wasReviewsPage || wasExtraPage) {
+    const target = document.getElementById(window.location.hash.slice(1) || 'home');
+    target?.setAttribute('tabindex', '-1');
+    target?.focus({ preventScroll: true });
+    target?.scrollIntoView();
   }
 }
 

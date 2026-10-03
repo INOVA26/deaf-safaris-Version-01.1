@@ -4,6 +4,122 @@ import { createServer } from 'vite';
 import { createTypewriter } from '../src/utils/typewriter.js';
 import { initHeroMotion } from '../src/utils/heroMotion.js';
 import { initHeroBackdrop } from '../src/utils/heroBackdrop.js';
+import { HeroWeather } from '../src/components/HeroWeather.js';
+
+test('team includes Mike’s supplied portrait, senior role and the digital media profile', async () => {
+  const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
+    server: { middlewareMode: true, ws: false },
+    appType: 'custom',
+  });
+  try {
+    const { Guides } = await server.ssrLoadModule('/src/components/Guides.js');
+    const { ReviewPreview } = await server.ssrLoadModule(
+      '/src/components/ReviewPreview.js',
+    );
+    const markup = Guides();
+    assert.equal((markup.match(/class="about-page__guide-card"/g) || []).length, 3);
+    assert.match(markup, /Ertines/);
+    assert.match(markup, /Mike/);
+    assert.match(markup, /Senior Safari Guide/);
+    assert.match(markup, /mike-profile.png/);
+    assert.match(markup, /Hyune/);
+    assert.match(markup, /Digital & Media/);
+    assert.match(markup, /class="paw-trail" aria-hidden="true"/);
+    assert.match(ReviewPreview(), /What the people think about us/);
+    assert.match(ReviewPreview(), /data-review-note/);
+  } finally {
+    await server.close();
+  }
+});
+
+test('weather notice explains rescheduling without a forecast widget', () => {
+  const markup = HeroWeather();
+  assert.match(markup, /Tanzania Meteorological Authority \(TMA\)/);
+  assert.match(markup, /contact you to arrange alternative booking dates/);
+  assert.doesNotMatch(markup, /<aside|<a |aria-live|data-season-advice/);
+});
+
+test('explore grid filters destinations, expands and hands a choice to the planner', async () => {
+  const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
+    server: { middlewareMode: true, ws: false },
+    appType: 'custom',
+  });
+  try {
+    const { DestinationListings, initDestinationListings } = await server.ssrLoadModule(
+      '/src/components/DestinationListings.js',
+    );
+    assert.match(DestinationListings(), /All Tours &amp; Destinations/);
+    const { Header } = await server.ssrLoadModule('/src/components/Header.js');
+    assert.match(Header(), /href="#destinations">National Park/);
+    assert.doesNotMatch(Header(), /nav.nationalPark/);
+    assert.doesNotMatch(DestinationListings(), /data-carousel-track/);
+    const cards = [
+      'Mountain',
+      'National parks',
+      'Crater',
+      'National parks',
+      'National parks',
+      'Hot springs',
+      'Culture',
+    ].map((category, i) => {
+      const card = element();
+      card.dataset = { placeCategory: category, listingDestination: `Place ${i}` };
+      return card;
+    });
+    const buttons = ['All places', 'Mountain', 'National parks'].map((filter) => {
+      const button = element();
+      button.dataset.placeFilter = filter;
+      return button;
+    });
+    const more = element();
+    const count = {};
+    const root = Object.assign(element(), {
+      querySelectorAll: (selector) =>
+        selector === '[data-listing-destination]' ? cards : buttons,
+      querySelector: (selector) => (selector === '[data-places-more]' ? more : count),
+    });
+    let choice;
+    const dispose = initDestinationListings(root, (value) => {
+      choice = value;
+    });
+    const click = (selector, target, extra = {}) =>
+      root.emit('click', {
+        target: { closest: (query) => (query === selector ? target : null) },
+        preventDefault() {},
+        ...extra,
+      });
+    assert.equal(cards.filter((card) => !card.hidden).length, 6);
+    click('[data-places-more]', more);
+    assert.equal(cards.filter((card) => !card.hidden).length, 7);
+    assert.equal(more.getAttribute('aria-expanded'), 'true');
+    click('[data-place-filter]', buttons[2]);
+    assert.equal(cards.filter((card) => !card.hidden).length, 3);
+    assert.equal(more.hidden, true);
+    assert.equal(buttons[2].getAttribute('aria-pressed'), 'true');
+    click('[data-place-filter]', buttons[1]);
+    assert.equal(count.textContent, '1 of 1 places');
+    click(
+      '[data-listing-link]',
+      { dataset: { listingLink: 'Place 0' } },
+      { ctrlKey: true },
+    );
+    assert.equal(choice, undefined);
+    click('[data-listing-link]', { dataset: { listingLink: 'Place 0' } });
+    assert.equal(choice, 'Place 0');
+    click('[data-place-filter]', buttons[0]);
+    assert.equal(cards.filter((card) => !card.hidden).length, 6);
+    dispose();
+    assert.equal(root.listeners.size, 0);
+  } finally {
+    await server.close();
+  }
+});
 
 test('typing rotates through complete phrases and cancels pending work when paused', () => {
   const timers = new Map();
@@ -111,8 +227,11 @@ function motionEnvironment() {
   };
 }
 
-test('featured safari rotates foreground and background together and respects motion preferences', async () => {
+test('adventure banner links to Explore and rotates backgrounds with motion preferences', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
@@ -122,8 +241,13 @@ test('featured safari rotates foreground and background together and respects mo
       '/src/components/FeaturedSafari.js',
     );
     const env = motionEnvironment();
-    assert.doesNotMatch(FeaturedSafari(), /data-gallery-motion|Pause gallery/);
-    const selectors = { '[data-featured-plan]': element() };
+    const markup = FeaturedSafari();
+    assert.doesNotMatch(
+      markup,
+      /data-gallery-motion|Pause gallery|clipPath|featured-safari__art|data-featured-frame/,
+    );
+    assert.match(markup, /Discover the Wild Heart of Tanzania/);
+    assert.match(markup, /href="#traveller-destinations">Explore Now/);
     const backgrounds = Array.from({ length: 3 }, (_, index) => ({
       complete: true,
       naturalWidth: 1280,
@@ -137,26 +261,12 @@ test('featured safari rotates foreground and background together and respects mo
         },
       },
     }));
-    const frames = backgrounds.map((image) =>
-      Object.assign(element(), {
-        querySelector: () => image,
-      }),
-    );
     const root = Object.assign(element(), {
       matches: () => false,
       contains: () => false,
-      querySelector: (selector) => selectors[selector],
-      querySelectorAll: (selector) =>
-        selector === '[data-featured-frame]' ? frames : backgrounds,
+      querySelectorAll: () => backgrounds,
     });
-    let choice;
-    dispose = initFeaturedSafari(
-      root,
-      (destination) => {
-        choice = destination;
-      },
-      env,
-    );
+    dispose = initFeaturedSafari(root, undefined, env);
     assert.equal(env.intervals.size, 0);
     env.intersect(true);
     assert.equal(env.intervals.size, 1);
@@ -170,8 +280,8 @@ test('featured safari rotates foreground and background together and respects mo
     );
     backgrounds[1].naturalWidth = 1280;
     tick();
-    assert.equal(frames[1].getAttribute('aria-hidden'), 'false');
-    assert.equal(frames[0].getAttribute('aria-hidden'), 'true');
+    assert.equal(backgrounds[1].active, true);
+    assert.equal(backgrounds[0].active, false);
     tick();
     tick();
     assert.deepEqual(
@@ -202,15 +312,11 @@ test('featured safari rotates foreground and background together and respects mo
     env.media.matches = true;
     env.media.emit('change');
     assert.equal(env.intervals.size, 0);
-    selectors['[data-featured-plan]'].emit('click', { preventDefault() {} });
-    assert.equal(choice, 'Tarangire');
     dispose();
     assert.equal(env.intervals.size, 0);
     assert.equal(env.disconnected(), true);
     assert.ok(
-      [root, env.page, env.media, ...Object.values(selectors)].every(
-        (target) => target.listeners.size === 0,
-      ),
+      [root, env.page, env.media].every((target) => target.listeners.size === 0),
     );
   } finally {
     dispose?.();
@@ -218,38 +324,32 @@ test('featured safari rotates foreground and background together and respects mo
   }
 });
 
-test('centered hero has three photos, playback control, factual links and safari search fields', async () => {
+test('reference hero retains labelled safari search fields without unverified claims', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
   try {
     const { Hero } = await server.ssrLoadModule('/src/components/Hero.js');
     const markup = Hero();
-    assert.equal([...markup.matchAll(/data-hero-photo/g)].length, 3);
-    assert.match(markup, /data-backdrop-toggle/);
-    assert.match(markup, /Deaf Safaris<br \/><span>Today &amp; Tomorrow/);
+    assert.equal([...markup.matchAll(/class="hero__background is-active"/g)].length, 1);
+    assert.match(markup, /team-group\.jpeg/);
+    assert.match(markup, /Adventure for<br \/>Today &amp; Tomorrow/);
+    assert.match(markup, /hero__review-previews/);
     assert.match(markup, /class="hero__planner-row"/);
-    assert.match(
-      markup,
-      /<details class="hero__preferences"><summary>Sign-language preferences<\/summary>/,
-    );
-    assert.doesNotMatch(
-      markup,
-      /data-tour|data-price-usd|data-hero-typing|hero__card|Furniture/,
-    );
-    assert.match(markup, /href="#destinations"><strong>7<\/strong>/);
-    assert.match(markup, /href="#guides"><strong>2<\/strong>/);
-    assert.match(markup, /href="#reviews"/);
+    assert.doesNotMatch(markup, /Furniture|420\+|100%|Nations welcomed|12\+ reviews/);
+    for (const id of ['destinations', 'guides', 'about', 'reviews']) {
+      assert.ok(markup.includes(`href="#${id}"`));
+    }
     for (const name of ['destination', 'season', 'sign-language', 'travellers']) {
       assert.ok(markup.includes(`id="hero-${name}"`));
       assert.ok(markup.includes(`for="hero-${name}"`));
     }
     assert.match(markup, /type="submit"/);
-    assert.match(
-      markup,
-      /Dates and sign-language support|dates and sign-language support/,
-    );
+    assert.match(markup, /dates and sign-language support to be confirmed/);
   } finally {
     await server.close();
   }
@@ -263,14 +363,17 @@ test('hero backdrop cycles loaded images, pauses accessibly and cleans up', () =
   const symbol = {};
   const toggle = Object.assign(element(), { querySelector: () => symbol });
   const field = {};
+  const typed = element();
   const root = Object.assign(element(), {
     querySelectorAll: () => photos,
-    querySelector: () => toggle,
+    querySelector: (selector) => (selector === '[data-hero-typing]' ? typed : toggle),
     contains: (target) => target === field || target === toggle,
   });
   const dispose = initHeroBackdrop(root, env);
   const tick = () => [...env.intervals.values()][0]();
   assert.equal(env.intervals.size, 1);
+  assert.equal(env.timeouts.size, 1);
+  assert.equal(typed.textContent, 'Today & Tomorrow');
   assert.equal(root.dataset.backdropMotion, 'running');
   tick();
   assert.equal(photos[1].getAttribute('aria-hidden'), 'false');
@@ -279,8 +382,9 @@ test('hero backdrop cycles loaded images, pauses accessibly and cleans up', () =
   assert.equal(photos[0].getAttribute('aria-hidden'), 'false');
   toggle.emit('click');
   assert.equal(env.intervals.size, 0);
+  assert.equal(env.timeouts.size, 0);
   assert.equal(toggle.getAttribute('aria-pressed'), 'true');
-  assert.equal(symbol.textContent, 'play_arrow');
+  assert.equal(symbol.textContent, 'Play');
   toggle.emit('click');
   assert.equal(env.intervals.size, 1);
   root.emit('focusin', { target: field });
@@ -300,12 +404,15 @@ test('hero backdrop cycles loaded images, pauses accessibly and cleans up', () =
   env.media.emit('change');
   assert.equal(env.intervals.size, 0);
   assert.equal(toggle.hidden, true);
+  assert.equal(env.timeouts.size, 0);
+  assert.equal(typed.textContent, 'Today & Tomorrow');
   assert.equal(root.dataset.backdropMotion, 'paused');
   env.media.matches = false;
   env.media.emit('change');
   assert.equal(env.intervals.size, 1);
   dispose();
   assert.equal(env.intervals.size, 0);
+  assert.equal(env.timeouts.size, 0);
   assert.equal(env.disconnected(), true);
   assert.ok(
     [root, toggle, env.page, env.media, ...photos].every(
@@ -383,6 +490,9 @@ test('hero cycles images and typing, respects reading pauses and reduced motion,
 
 test('safari experience preview reveals and collapses the remaining cards', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
@@ -436,6 +546,9 @@ test('safari experience preview reveals and collapses the remaining cards', asyn
 
 test('destination tabs support keyboard wrapping, a single selected panel, and planner handoff', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });
@@ -599,6 +712,9 @@ test('destination tabs support keyboard wrapping, a single selected panel, and p
 
 test('planner preserves visitor notes, updates its own summary, and retains group ranges', async () => {
   const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
     server: { middlewareMode: true, ws: false },
     appType: 'custom',
   });

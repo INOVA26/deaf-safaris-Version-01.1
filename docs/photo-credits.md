@@ -1,8 +1,12 @@
 # Photo credits
 
+## Serval Wildlife — 30 September 2026
+
+Four original photographs supplied by the user in this conversation for the Serval Wildlife card: a visitor with zebras, a resting giraffe, a giraffe being fed, and the entrance sign. Stored unchanged in `src/assets/images/serval-wildlife/`. The repeated sign attachment was deduplicated. Used at the user's request; photographer and original licence are not specified. No stock or Creative Commons attribution is asserted. Responsive crops are applied with CSS; the source images remain unchanged.
+
 ## Destination galleries — 14 September 2026
 
-The discovery gallery uses three photographs for each of seven destinations. Eighteen are from the existing 21-image Wikimedia Commons collection in `src/assets/images/destinations/`; three lead images now come from the Deaf Safaris website, as documented below. Full Commons source, author and licence records are in `src/data/destinationPhotoCredits.json` and are also displayed in the website Footer. Each gallery image links to its source. Commons files are generated thumbnails, displayed with CSS cropping and zoom; the source photographs retain their stated Creative Commons or public-domain terms. The gallery assets do not imply confirmed tour availability or photographer endorsement.
+The discovery gallery uses three photographs for each of seven destinations. Eighteen are from the existing 21-image Wikimedia Commons collection in `src/assets/images/destinations/`; three lead images now come from the Deaf Safaris website, as documented below. Full Commons source, author and licence records are in `src/data/destinationPhotoCredits.json` (the footer credits panel was removed at the user’s request). Each gallery image links to its source. Commons files are generated thumbnails, displayed with CSS cropping and zoom; the source photographs retain their stated Creative Commons or public-domain terms. The gallery assets do not imply confirmed tour availability or photographer endorsement.
 
 The gallery replaces the former illustrative Ngorongoro sunset with photographs identified by their Commons sources as Ngorongoro. Kilimanjaro is shown first. All 21 local files were visually inspected before delivery. Gallery order and descriptive alternative text are in `src/data/destinationPhotos.js`.
 
@@ -39,3 +43,7 @@ Copied from the local reference project's `public/images/` in `Documents/Deaf Sa
 - `src/assets/images/kilimanjaro.jpg`: tent below Kilimanjaro's snowy slopes; Kilimanjaro draft expedition card.
 
 These retain their reference filenames. Their original photographer and licensing details were not included in the reference component and remain to be confirmed before publication. The reference's `ngorongoro.jpg` showed a climber in snow, so it was not copied; that card instead uses the licensed sunset photo above, explicitly labelled as illustrative safari inspiration. The original sunset photo also remains in the landscape inspiration section.
+
+## Mike profile — 3 October 2026
+
+`src/assets/images/mike-profile.png` is the profile artwork supplied by the user for Mike. The team card displays its portrait using a circular CSS crop; the original attachment is retained unchanged. The user’s “Senior” label is combined with Mike’s existing Safari Guide role. The unrelated testimonial text in the artwork is not used as company copy.

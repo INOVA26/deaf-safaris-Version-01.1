@@ -1,5 +1,155 @@
 # Project progress
 
+## 3 October 2026 — Reference-led Gallery with three automatic slides
+
+- Replaced the prior photo mosaic with the new reference composition: centered title/subtitle, resource label, tall left photo with white inset copy, middle copy above photo and right photo above copy. Three distinct themes use existing Tanzania imagery and factual copy. Omitted the reference's unapproved competition promotion.
+- Added automatic horizontal sliding every five seconds, previous/next, three dots, touch swipe, keyboard controls and pause/resume. Manual navigation pauses; hidden/offscreen/hover/focus states pause rotation; reduced motion disables autoplay. Inactive slides are inert/aria-hidden, manual changes announce, and cleanup removes timers/listeners/observer.
+- Fixed column and slide gaps at 20px through a scoped token; responsive phone/tablet/desktop layouts and existing button/focus conventions preserved. Initialization/disposal remains explicit in main.js.
+- Added three Gallery controller tests to npm test. Lint/format, production build and six focused tests pass. Fresh real-browser visual comparison is still unavailable following the earlier Chrome approval rejection; no workaround attempted. No dependency, commit or deployment changes.
+- Handoff refreshed with exact stopping point and pending photo/price/sample-rating decisions. Next: actual desktop/mobile visual and transition review of the new Gallery reference layout.
+
+## 3 October 2026 — Varied, explicitly labelled sample star ratings
+
+- User requested star icons and different scores like the reference, then confirmed proceeding with disclosed demo scores. Added a stable ID-to-score sample map and five orange/grey SVG stars, decimal values and visible Sample rating labels to every shared card.
+- Fractional star fills reflect each number; accessible labels state that these are demonstration values, not guest reviews. No review counts or review schema added. Confirmed prices, per-person units, no-visit-fee labels and three feature items retained.
+- Added scoped rating sizing/spacing tokens and responsive styles. Lint/format, build and three regressions pass. A render check verified 19 cards, 11 distinct sample scores, five stars and three features each, correct fill totals and disclosures.
+- Fresh browser rendering remains unavailable following the earlier approval rejection. No commit/deployment or dependencies. Next: visual review and genuine sourced scores before replacing sample labels; prior venue/photo and Gallery follow-ups remain pending.
+
+## 2 October 2026 — Remove Not yet rated from all shared cards
+
+- Removed the unrated text in TourCard.js; confirmed it is absent from both source and production output. Preserved price/per-person, no-visit-fee labels and all three feature items.
+- Lint/format and production build pass. No commit/deployment. Asked whether “rates” means prices or star ratings; that clarification remains pending. No scores or additional prices fabricated.
+
+## 2 October 2026 — Per-person prices, inviting no-fee copy and three features
+
+- Added explicit / per person to Serval Wildlife 150K, Waterfall $120 and Napur $120; retained Kilimanjaro's existing unit. Shared rendering keeps no-fee and unconfirmed-price states separate.
+- Replaced Markets' Free label with No visit fee and welcoming “Enjoy more of Arusha — no visit fee” supporting copy. Retained separate transport/purchases/gifts and school advance arrangements.
+- Completed all feature lists to three entries. Added market, walking and school SVGs and concise labels, preserving the existing single-row grid and consistent sizing.
+- Lint/format, build and three regressions pass. Additional rendered-markup assertions verified 19 shared cards each contain exactly three features/icons and checked all new price/no-fee output. Fresh browser verification remains unavailable after the prior automatic approval rejection; screenshot inspected as before-state only.
+- No commit/deployment. Next: card review; venue/photo confirmation and Gallery visual review remain pending separately.
+
+## 2 October 2026 — Place prices and free local visits
+
+- User requested 120 for Waterfall and Napur; answered “S120” to currency clarification. Applied `$120` to both, explicitly interpreting the reply as dollars in commentary. No per-person unit or inclusions invented.
+- Markets now displays Free. Added an expanded-section note that markets, school visits and street walks are free, retaining advance school arrangements and separate transport/purchases/gifts. Feature row/disclosure layout retained.
+- Sourced and visually inspected Materuni (Daniel Msirikale, CC BY-SA 4.0) and Napuru (Agness Abubakar Saidi, CC0) candidates, held in ignored release-artifacts pending user confirmation of the venues. A second clarification is pending; photo placeholders have not yet been replaced.
+- Lint/format, production build and three targeted regressions pass. No commit/deployment. Next: confirm Materuni/Napuru identities, integrate suitable local photos and attribution, and recheck.
+
+## 2 October 2026 — One-row card features and redesigned homepage Gallery
+
+- Kept feature groups in one grid row with equal flexible columns; long labels may wrap within their columns. This applies to all shared tour/Places/listing cards.
+- Rebuilt GalleryResources with a prominent photo layout: one large Tarangire image, supporting mountain and giraffe images, factual captions and a clear full-gallery link. Planning/destination links now occupy a separate compact row. Reused existing local photos and gallery metadata.
+- Added mobile-first scoped Gallery styles and tokens, tablet/desktop layouts, contrast overlay and visible focus. Removed obsolete Gallery styles. Full-gallery viewer and page order remain unchanged.
+- Production build, four targeted regression tests and final combined lint/format check pass. Live preview returned project HTML with HTTP 200. Fresh rendered verification remains pending because the earlier browser launch was rejected by automatic approval review. No commit/deployment or new dependencies.
+- Next: visual checks of the photo layout and one-row features at phone/tablet/desktop widths, plus gallery/planning navigation and real motion. Goal marked blocked after the same browser-verification limitation persisted across three consecutive turns; fresh rendered evidence is required to complete it.
+
+## 2 October 2026 — Remove card thumbnails and refine feature lists
+
+- Removed the Serval Wildlife thumbnail strip, obsolete photo-switching handler/HMR wiring and related styles. Kept the main zebra image and 150K; original image files remain on disk.
+- Refined shared feature lists with responsive equal columns, consistent 16px icons/12px labels, intentional spacing, aligned first lines and wrapping on narrow cards. Tour, Places and full-listing cards share the improvement.
+- Updated the existing regression assertion to require no thumbnails and retain the main zebra image. Production build and three focused regressions pass. Final `npm run check` passes after correcting handoff/progress formatting.
+- Browser visual verification remains unavailable following the earlier automatic approval rejection. No commit, deployment or new dependencies. Next: user review of the updated card and later browser review of the broader sections.
+
+## 2 October 2026 — Two-reference card layout, pending visual verification
+
+- Inspected both attached references and received confirmation: three lower cards initially, expand to six, then collapse with Show Less. Preserved three tours above the full-width promise banner.
+- Adjusted tour card geometry to landscape 1.4 photos, wider gutters/gaps, compact body typography, single-line visual excerpts and tighter feature spacing. Hid only the visual Places heading while retaining its semantic accessible heading. Shared card changes also affect full destination listings.
+- Preserved owner-approved Serval photos and 150K, its four thumbnail controls, and all existing content/placeholders. Formatted TourCard.js to resolve the previous check warning.
+- Whole-project lint/format and production build pass. Four applicable regression tests pass, plus a DOM-mock check for banner controls/keyboard/cleanup. Live preview HTML/module/CSS returned 200.
+- Fresh rendering/smoothness verification is still pending: earlier Chrome launch was rejected by automatic approval review (“blocked by policy”), with no browser tool or live debug endpoint available this turn. Existing screenshots predate these edits. Goal marked blocked after three consecutive turns confirming unavailable visual verification; implementation remains incomplete pending visual comparison.
+- Updated handoff with next step: user screenshots or an authorized available browser verification path. No commit/deployment or new dependencies. Prior design state and pending content confirmations are preserved in the handoff.
+
+## 2 October 2026 — Consistent local preview and network-error recovery
+
+- Investigated the supplied ERR_NETWORK_CHANGED screenshot. Found npm-started Vite listening on IPv6 localhost while editor tools expected numeric IPv4. This discrepancy is verified; the actual network event causing the screenshot is unknown.
+- Set explicit loopback hosts, fixed ports (5173 dev / 4173 production preview), and strict-port behavior in vite.config.js. Updated README startup and recovery instructions. No website behavior or dependencies changed.
+- Verified five successful project HTML responses, rejection of a second development server, and production preview response on its fixed port. Production build and lint passed. Combined check failed on existing TourCard.js formatting; that file was not modified.
+- Automatic approval review blocked the headless Chrome verification attempt with “blocked by policy”; embedded-browser recovery remains for user confirmation. Browser/OS network interruptions cannot be guaranteed away by application code.
+- Updated handoff, preserved all prior work, and left the existing development server serving http://127.0.0.1:5173/. No commit or deployment. Next: reopen that address and resume the previous design review separately.
+
+## 30 September 2026 — Full-section reference proportions and scroll reveals
+
+- Compared the rendered welcome/tours/banner/Places sequence with the supplied screenshot. Reduced the oversized banner from 448px to about 326px at 1024px viewport; narrowed its copy, compacted its controls, corrected body typography and replaced the location font icon with local SVG.
+- Refined welcome feature text and shared card details for consistent spacing and row geometry. Kept the requested tour/place order and yellow bottom toggle. Missing venue photos, exact prices and unapproved claims remain explicitly pending.
+- Changed scroll reveals to animate individual cards and welcome items with a short stagger; banner/other sections retain section entrances. Preserved native scrolling, focus cancellation, reduced motion and cleanup.
+- Lint/format, build and five focused tests pass. Chrome at 1024, 1440, 768 and 390 px verified real scroll triggers, stagger timing, banner/card proportions, no horizontal overflow, expansion/collapse, keyboard and reduced motion without runtime exceptions. Compared the desktop section screenshot with the reference.
+- Updated `docs/handoff.md` with evidence, shared-style effects and pending content confirmations. No commit, deployment or dependency changes.
+
+## 30 September 2026 — Tour order and separate Places section
+
+- Reordered the initial tours to Kilimanjaro, Ngorongoro, Serengeti. Added a separately titled Places section after PromiseBanner, initially showing Chemka Hot Spring, Wildlife, Arts & Culture. The yellow More Details button reveals Waterfall, Napur, Markets; Show Less collapses them.
+- Reused the shared card and motion controller; added missing-photo placeholders and enquiry links for places not represented by the hero select. Updated the footer anchor and regression tests.
+- Exact company prices and the identity of Wildlife, Waterfall and Napur require user confirmation. Existing third-party reference rates were not substituted. The prior Kilimanjaro $1,850 price remains; other unconfirmed amounts are labelled accordingly. Unconfirmed venue imagery is explicitly pending.
+- Lint/format, production build and four targeted tests passed. New browser review remains pending; the old six-tour screenshots no longer represent this layout.
+- Next: apply user-confirmed prices/venues and review the finished cards. See `docs/handoff.md` for the pending questions. No commit or deployment was made.
+
+## 29 September 2026 — Corrected tour grid from attached reference
+
+- Supersedes the previous split tour/day-trip arrangement: three cards initially, three more immediately underneath on More Details, and a centered yellow Show Less button below the complete grid. PromiseBanner follows the entire section.
+- Added shared `TourCard.js` for the homepage tours and all full-listing destinations. Replaced the old Explore More tiles with matching landscape-photo cards, compact facts, and local SVG icons. Kept real Tanzania imagery and factual existing prices/status instead of importing sample ratings or Venice photographs.
+- Updated the extra-row motion controller and regression tests. Category filtering and planner handoff still work; rapid reversal, keyboard focus and reduced motion are supported.
+- Lint/format and production build pass. Five targeted regressions pass; full suite is 29/31 with the same two unrelated team/review test failures documented in the handoff.
+- Chrome checks passed at 1024, 1440, 768 and 390 px: 3 → 6 → 3, toggle below the cards, aligned desktop rows, responsive layout, category filters, shared listing cards and planner handoff. Inspected the desktop card layout against the attachment and mobile stacking.
+- Next: user review of the corrected grid. Current paths and checks are in `docs/handoff.md`. No commit or deployment was made.
+
+## 29 September 2026 — Tour navigation, three-card disclosure, and scroll motion
+
+- “See More Tours” now opens the full destinations view. “More Details” reveals the three day-trip cards (Arusha, Tarangire, Chemka); “Show less” collapses them. Culture/community ideas remain on the destinations page.
+- Added smooth reversible disclosure height and once-per-section scroll entrances, with reduced-motion support, focus handling, immediate inert collapsed content, and cleanup. New motion tokens affect these controllers; existing token values are unchanged.
+- Lint/format and production build pass. Four targeted regression tests pass. Chrome checks at 1440, 768, and 390 px passed expansion, keyboard collapse, page navigation/Back, reduced motion, and overflow checks without runtime exceptions. Desktop and phone screenshots were inspected.
+- The full suite has two existing failures: stale ICT-profile expectations and missing review browser mocks. Details, changed paths, local browser artifacts, and the Vite/browser-profile file-lock issue are recorded in `docs/handoff.md`.
+- Next: user review of the interaction, then address the unrelated test failures and continue section review. No commit or deployment was made.
+
+## 29 September 2026 — Cross-assistant handoff
+
+- Added `docs/handoff.md` as the concise starting point for the current objective, stopping point, affected files, validation status, blockers, and next steps.
+- Added checkpoint requirements to `AGENTS.md`, a README continuation prompt, and an always-applied Cursor rule. Save progress during long tasks and before ending sessions so another assistant can resume from the repository.
+- Preserved the existing website work and progress history. Previous validation results are identified as historical; browser review and reliable build validation remain pending.
+- Next: resume the checks and section-by-section browser review recorded in the handoff. No commit or deployment was made in this session.
+
+## 25 September — Follow-up validation
+
+- Production build succeeded once, but a repeat after formatting failed with esbuild `spawn EPERM`; the environment restriction remains intermittent.
+- Formatted the hero backdrop controller and updated its motion test to expect the current visible “Play” label instead of the previous icon name.
+- Validation: lint, formatting and all 29 tests pass with test isolation disabled. Ordinary `npm test` still encounters Windows `spawn EPERM` when starting isolated workers. A final production build remains pending a reliable process environment.
+- Next: browser review at 1440, 768 and 390 px against the reference. No browser tool is connected in this session; visual verification remains pending. No commit or deployment was made.
+
+## 25 September — Figma landing-page replacement
+
+- Replaced the homepage composition with the reference order: photographic hero and glass planner, welcome collage and four numbered benefits, first trip row, gradient promise banner, second trip row, contact prompt, review rows, gallery/resources, circular team portraits, four featured trips and brown footer.
+- Kept each section in its own component and the page order in `src/main.js`. New tokens scope the reference styling; the shared footer and decorative paw SVGs also update their appearances on detail views.
+- Retained safari search, destination selection, mobile navigation, gallery viewer, local reviews, contact options and downloadable planning briefs. The full gallery, destination list, planning and enquiry sections now have separate hash views to preserve the reference homepage composition.
+- Fixed a startup crash from initializing the removed safari-ideas section, restored show-more/show-fewer behavior, distinguished Kilimanjaro/Cultures active navigation states, and prevented repeated route updates from stealing focus from the brief form.
+- Added mobile typography, stacked card layouts, touch target refinements and local homepage icons. Decorative repeated reviews are inert and hidden from assistive technology; sample/local review disclosure remains visible.
+- Used existing safari photographs and project copy in place of unavailable reference assets, furniture-template text, unsupported ratings/prices and statistics. Pending team profiles remain explicit placeholders.
+- Validation: `npm run check` passes. All 29 tests pass with `node --test --experimental-test-isolation=none tests/website.test.js tests/heroMotion.test.js`. Vite test servers use native configuration loading, preserve symlink paths and skip unnecessary dependency discovery for this Windows environment.
+- Preview: HTTP 200 at `http://127.0.0.1:5173/`; recursively checked 83 served modules/imports with no HTTP failures. Temporary configuration: ignored `release-artifacts/preview.config.mjs`. No runtime dependencies were added.
+- Still blocked: ordinary `npm test` cannot spawn isolated workers. Both `npm run build` and a native/unminified build fail to spawn esbuild (`EPERM`). Chrome and Edge headless startup fail with Windows access-denied/IPC errors. Screenshots, browser console checks and desktop/tablet/mobile visual comparison are **not completed**; this is not pixel-verified or deployment-ready.
+- Next: run the production build and browser QA where those processes are permitted; compare at 1440, 768 and 390 px and refine against the reference. Exact image matching also requires the original Figma image assets. No commit or deployment was made; unrelated existing changes were preserved.
+
+## Reference Layouts: Visitor Stories, Team, Footer And Explore
+
+- Replaced the homepage review carousel with three staggered quote cards and a left-aligned introduction. Review updates and sample/local disclosure remain intact; the full review page is unchanged.
+- Restyled the shared team section as compact landscape-photo cards with profile text below, retaining pending portraits and ICT identity labels.
+- Built a responsive Explore More photo grid with category filters, show-all/show-fewer controls, and the existing planner handoff. No invented destination ratings.
+- Restyled the footer as a dark four-column layout with functional navigation and a safari-brief CTA instead of an unconnected newsletter form. Photo credits remain available.
+- Changes remain local. Browser visual verification and deployment are still outstanding.
+
+## 23 September: Lion-Gold Theme And Team Refresh
+
+- Replaced the green brand foundation with dark gold, lion-gold highlights, charcoal, and neutral surfaces. Shared tokens update navigation, buttons, chat, About, and safari sections.
+- Added decorative paw trails with the existing icon font, avoiding new dependencies. Expanded the shared team section to Ertines, Mike, and an explicitly pending ICT profile; Mike's portrait remains a placeholder.
+- Refined the visitor-stories carousel with a charcoal section, larger white review cards, gold accents, and a review-page action. Sample and local-only labels remain visible.
+- Next: desktop/mobile visual review and approved ICT name/portrait. Changes are local, not published.
+
+## 22 September: Hero Review And Typing Refinement
+
+- Follow-up reference comparison: moved the hero footer outside the narrow planner container into a full-width dark band, with a 96px minimum desktop height, closely grouped figures, a centered mouse cue, and a compact review group. New footer tokens affect only this band. Existing typing and photo transitions are preserved.
+- Centered the desktop mouse-scroll cue independently of the animation toggle; tightened the review link with decorative destination thumbnails and a compact button, without invented ratings.
+- Restored typing on the second headline line with reserved layout space and a stable screen-reader heading. The existing pause control now governs both photos and typing, including reduced-motion, focus, visibility, and disposal handling.
+- All 25 tests, lint/format checks, and the production build passed. Local preview responds at `http://127.0.0.1:5173/`.
+- Browser connection remains unavailable; desktop/iPhone visual verification is outstanding. These changes are local and not yet published. Next: visual review, then publish the approved refinement.
+
 ## Completed
 
 - Repository initialized and connected to GitHub before this milestone.
@@ -243,3 +393,63 @@ Review the full homepage and About page at desktop and mobile sizes. Confirm Mik
 - Built a 3-column responsive grid for the Guides highlighting Safari Experts and Interpreters using existing assets, and a 4-image CSS masonry-style layout for the gallery section.
 - Ensured layout uses fluid typography, accessible alt text, and shared tokens (ap-ink, ap-muted, ap-warm) from the About page context.
 - Passed npm run check, test, and build flawlessly. No commit made, ready for visual review.
+
+- 27 September 2026: Reduced the Welcome section's four number cards to 56px squares with 24px Inter digits, soft 8px corners, and tighter heading spacing. Reused existing tokens without changing shared values. Desktop cards retain the compact size.
+- Validation: lint passed; formatting checks flagged existing issues in src/components/Guides.js and src/styles/global.css. Production build was blocked by the environment's spawn EPERM error. Next step: review this section at mobile and desktop sizes. No commit made.
+
+- 27 September 2026 follow-up: Refined number-card corners to a section-specific 6px radius. Aligned WhatsApp above chat, with a desktop label that contracts after 160px of scrolling and compact mobile placement. Keyboard focus reveals its label; reduced-motion styles remain respected.
+- Restyled trip details with sans-serif typography, price/rating layout and icon rows. Kilimanjaro reproduces the supplied screenshot as an explicitly labelled unconfirmed draft; other destinations retain factual inspiration content and price/rating placeholders. Show more experiences now starts collapsed and reveals Tarangire, Arusha, Chemka and Cultural Heritage Centre.
+- Validation: lint passed and direct behavior checks passed for experience expansion/collapse and WhatsApp scroll cleanup. Full build and test runner were blocked by spawn EPERM. Repository formatting still flags pre-existing Guides.js and global.css issues. Next step: visually compare desktop/mobile cards and confirm draft commercial details. No commit made.
+
+- 27 September 2026 final layout revision: Moved WhatsApp into the centre of the Hero footer, preserving the animation pause control. It scrolls with the Hero and reveals its label on hover/focus. Removed its scroll listener and floating placement.
+- Aligned the three trip cards to the About section's 1280px maximum width, with a dedicated fluid 46px maximum gap, full-width cards and container-scaled single-row icon details. Show more experiences now navigates to the existing destination discovery page; removed the hidden extra homepage card block.
+- Rebuilt review rows as compact 174px minimum-height cards with 16px horizontal gaps and a staggered second row 24px below. Primary reviews remain keyboard/touch scrollable on narrow screens. Sample/local review disclosure remains visible.
+- Old-site price lookup: deafsafaris.com and www.deafsafaris.com were inaccessible through browsing, and search returned no indexed prices. Removed the unverified sample price, rating and duration; prices remain on request. No shared token values were changed; the new card gap token is section-specific.
+- Validation: lint and focused rendering/navigation checks passed. Repository formatting has existing warnings in Guides.js/global.css; production build is blocked by spawn EPERM. Browser visual verification and confirmed legacy prices remain outstanding. No commit made.
+
+- 27 September 2026 correction: Restored the Hero mouse/scroll indicator in the centre and moved WhatsApp beside the left-hand Hero facts. Kept hover/focus text and the motion pause control.
+- Fixed the actual review layout regression: the combined row selector lacked display:flex and inherited older alternating card margins. Both rows now explicitly use flex with 16px gaps, zero card margins, equal-height cards, and a 24px staggered second-row gap. First-row keyboard/touch scrolling remains available.
+- Verified indexed content from https://deafsafaris.co.tz/: Marangu 5–6 days USD 1,850/person; Machame 6–7 days USD 2,000; Lemosho 7–8 days USD 2,300; Rongai 6–7 days USD 2,200. Updated the homepage Kilimanjaro card to the Marangu price and matching route/hut description. Safari package/day-trip pages did not list numeric rates, so those cards remain price on request.
+- Validation: lint and parsed-CSS/markup checks passed. Changed files are formatted. Existing Guides.js/global.css formatting warnings remain, and build is blocked by spawn EPERM. Next: browser comparison of both review rows and the Hero footer at mobile and desktop widths. No commit made.
+
+- 27 September 2026: Returned WhatsApp to the Hero review area on the right, retaining the central mouse indicator. Its label expands left within a fixed-size slot using a dedicated smooth transition, without reflowing neighbouring buttons. Existing reduced-motion rules still apply.
+- Restored a separate DayTrips.js section after the promise banner with Arusha, Tarangire and Ngorongoro full-day cards. Reused the trip-card renderer and renamed discovery links More Details. Multi-day Kilimanjaro pricing stays on the original trek card.
+- Expanded the homepage review preview to six illustrative people, with a different starting order in the second row. Added examples only to the preview; sample disclosures remain visible and local submitted reviews still take precedence.
+- Validation: lint and direct rendering checks passed for both card sections, price separation, six review cards and disclosures. Changed files were formatted. Existing Guides.js/global.css formatting warnings remain; build is blocked by spawn EPERM. Next step: desktop/mobile browser visual review. No commit made.
+
+- 27 September 2026 screenshot refinement: Added the compact All Tour & Destination / See More Tours header; retained a three-card row from 600px upward; removed the upper details button. The restored Day Trips row now uses an accessible hidden heading and one centred yellow pill link below, matching the supplied section composition.
+- Reduced card text/spacing, made image panels edge-aligned, shortened feature labels, and kept descriptions on one line with ellipsis. Adjusted the promise banner proportions and OUR PROMISES pill using a section-specific gradient token.
+- Rescaled review cards for the screenshot proportions, retaining two flex rows and staggered lower cards. Removed visible card footers while retaining accessible metadata, placed sample labels beside authors, and added the lower-right paw. Existing real content, verified Marangu price and sample disclosures remain.
+- Validation: lint and focused parsed-CSS/rendering checks passed; changed files formatted. Existing Guides.js/global.css formatting warnings and build spawn EPERM remain. No browser tool is available, so exact visual comparison is outstanding. No commit made.
+
+- 27 September 2026 review/footer fix: Review rows now measure card/viewport width and add enough decorative copies to fill both rows even with only one or three stored reviews. ResizeObserver updates wide layouts; copies stay hidden from assistive technology and cleanup removes listeners.
+- Replaced oversized black review paws with smaller, translucent gold accents and a secondary footprint. Scoped the paw styling to reviews/footer so the About section is unaffected.
+- Refined the four-column footer to the supplied reference, displayed the original logo image without the white silhouette filter, and used a pale logo backing for contrast. Added the compact email/Join control, explicitly opening an email draft rather than claiming an active mailing-list subscription. Kept photo credits and existing valid navigation.
+- Validation: lint passed. Regression checks passed for 1/3/6 local reviews at 1920px and 3840px, resize handling, decorative-copy accessibility and cleanup. Existing Guides.js/global.css formatting warnings remain; build is blocked by spawn EPERM. Next step: visual browser review of the wide-screen rows and footer. No commit made.
+
+- 27 September 2026: Removed the footer photography panel and Back to the beginning link as requested; retained source records in docs/photo-credits.md and the destination credit data. Hid the review scrollbar while preserving touch/keyboard scrolling.
+- Added slow, seamless opposing review-row motion with duplicated full cycles. Motion pauses on hover, keyboard focus, explicit pause, reduced-motion preference, hidden pages and hidden sections. Animation/resize listeners are cleaned up.
+- Validation: lint and motion checks passed (opposite movement, pause, reduced motion, cleanup). Existing Guides.js/global.css formatting warnings remain; build is blocked by spawn EPERM. Browser visual check remains outstanding. No commit made.
+
+- 27 September 2026 promise-banner revision: Matched the supplied panoramic proportion, enlarged white serif heading, mint pill, centred location/review row, stronger photo blur and lower pagination placement. Added five manual slides using existing imagery with smooth crossfade; mouse, keyboard arrows and Home/End select slides. Reduced-motion styles remain respected.
+- Retained factual Tanzania locations and labelled sample reviews rather than publishing the screenshot's Alaska location or unverified 4.9/300-review claim. New visual tokens are scoped to the promise banner.
+- Validation: lint and five-slide interaction/cleanup checks passed. Existing Guides.js/global.css formatting warnings remain; build blocked by spawn EPERM. Exact visual comparison in a browser remains outstanding. No commit made.
+
+- 27 September 2026: Added circular previous/next chevrons to the promise banner, with wraparound and shared dot selection state. Controls sit beside pagination below 1024px to avoid text overlap, retain visible keyboard focus, and respect existing reduced-motion styling.
+- User supplied four unique portrait safari photos (one repeated attachment). They are visible in chat but no corresponding files were found in the workspace. Created src/assets/images/safari-moments and requested the local image paths; image integration remains pending those files. Recommended a photo-led gallery with a large traveller portrait, two wildlife images, short captions, a full-screen viewer and separate planning links.
+- Validation: lint and next/previous/dot synchronization checks passed. Existing formatting warnings in Guides.js/global.css remain; build is blocked by spawn EPERM. No commit made.
+
+- 27 September 2026 Explore/review update: Kept six unique featured homepage tours (Kilimanjaro, Serengeti, Ngorongoro, Arusha, Tarangire and Chemka). More Details now uses a keyboard-accessible native disclosure to reveal additional places on the homepage. Shared the added list with the Explore page without introducing duplicate IDs or planner options that cannot be selected.
+- Added Arusha/Sokoni market, Maasai market/clothing, artists, cultural art, Cultural Heritage Centre, Clock Tower crafts, Meru Primary, Themi and Shanga. School visits include gift and advance-arrangement notes. Added owner-supplied Street Food pricing ($45 / 1 day) and Serval Wildlife ($120 / 1 day), plus further nature/food ideas with prices on request. Listings are curated, without unsupported popularity or ratings. The linked third-party food listing differs in price/duration; the displayed offer follows the owner's explicit figures. No new photos or dependencies added.
+- Reviews continue automatically through hover and page scrolling. Manual pause/resume works while its button retains focus; keyboard focus on the review track still pauses for reading, and reduced motion remains respected. Existing tokens reused; no shared token values changed.
+- Validation: production build and lint passed; 27 of 29 tests pass after updating obsolete trip expansion and page composition tests. Remaining existing failures: outdated ICT Support team expectation and review test missing window.matchMedia. Separate motion checks passed for automatic movement, hover, pause/resume, reduced motion, keyboard reading and cleanup. Repository formatting still flags existing Guides.js/global.css issues. Next: visual review on mobile/desktop and approved photographs for the new listings. No commit made.
+
+- 3 October 2026: At the user’s request, rolled back the calendar and presentation-style Gallery edits made after 6:46 AM. Restored the preceding three-column Gallery with three slides, five-second autoplay, 20px gaps and Pause/Resume, plus the original seasonal Date selector. Earlier cards, prices, sample ratings and Places expansion remain preserved. Recovered original source from edit history; saved the removed work under ignored release-artifacts/before-646-rollback.
+- Rollback validation: all three Gallery controller tests, npm run check and npm run build pass. Generated JS/CSS hashes match the pre-redesign build exactly (index-BKKkvw8s.js, index-T9UGVij1.css). No new browser visual verification, commit or deployment. Next: user review of the restored local version.
+
+- 3 October 2026: Simplified Gallery controls to three active-state dots, keeping keyboard/touch navigation and five-second autoplay with focus/hover/reduced-motion support. Retained the restored Gallery layout and 20px gaps.
+- Redesigned the review workspace with selectable stars, local-only rating breakdown (excluding samples), newest/highest/lowest sorting, clearer review entry link, and private image/video previews with file limits and URL cleanup. Text remains saved on the visitor’s device; media is explicitly session-only. No Google posting/backend added.
+- Validation: npm run check/build, three Gallery controller tests and five targeted review/content/markup tests passed. Composer tests added for rating selection, empty/valid summary, file rejection and cleanup. Mike’s existing Safari Guide card remains; portrait integration awaits the requested photo path/role. No commit/deployment or fresh browser visual review.
+
+- 3 October 2026: Added the user-supplied Mike profile artwork as a circular portrait crop in Meet our team, with Senior Safari Guide role. Added a fourth Gallery slide/dot and scoped 6px pagination spacing, retaining 20px slide/content gaps.
+- Fixed outdated team/review test fixtures; supplied ratings on three explicitly labelled sample stories that were previously filtered out, restoring all six preview stories. Full suite passes 37/37, lint/format/build pass. User authorized GitHub commit/push; synchronized two upstream workflow commits. Preparing a website-only commit preserving unrelated staged documents and images. Browser visual verification remains unavailable.

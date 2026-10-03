@@ -1,41 +1,31 @@
 import { destinations } from '../data/destinations.js';
-import { escapeHtml } from '../utils/escapeHtml.js';
-import { initHorizontalCarousel } from '../utils/horizontalCarousel.js';
+import { TourCard } from './TourCard.js';
 
 const categories = {
   kilimanjaro: 'Mountain',
-  serengeti: 'Wildlife',
-  ngorongoro: 'Crater safari',
-  tarangire: 'Wildlife',
-  arusha: 'Nature',
+  serengeti: 'National parks',
+  ngorongoro: 'Crater',
+  tarangire: 'National parks',
+  arusha: 'National parks',
   chemka: 'Hot springs',
   culture: 'Culture',
 };
+const filters = ['All places', ...new Set(Object.values(categories))];
 
 export function DestinationListings() {
-  return `<section class="destination-listings" id="traveller-destinations" aria-labelledby="destination-listings-heading">
+  return `<section class="explore-places section-space" id="traveller-destinations" aria-labelledby="destination-listings-heading">
     <div class="container">
-      <h2 id="destination-listings-heading">More places. More memories.</h2>
-      <div class="destination-listings__track" id="destination-listings-track" data-carousel-track tabindex="0" role="region" aria-label="Tanzania destinations">
+      <header class="explore-places__heading"><div><h2 id="destination-listings-heading">All Tours &amp; Destinations</h2><p>Discover Tanzania's landscapes, cultures and unforgettable adventures.</p></div><a class="button button--outline" href="#destinations">Back to tours <span class="material-symbols-rounded" aria-hidden="true">arrow_back</span></a></header>
+      <div class="explore-places__filters" role="group" aria-label="Filter destinations">${filters.map((filter, i) => `<button type="button" data-place-filter="${filter}" aria-pressed="${i === 0}" aria-controls="destination-listings-track">${filter}</button>`).join('')}</div>
+      <p class="sr-only" data-place-count role="status"></p>
+      <div class="reference-trip-grid reference-trip-grid--listing" id="destination-listings-track">
         ${destinations
-          .map(
-            (
-              place,
-            ) => `<a class="destination-listing" href="#hero-planner" data-listing-destination="${escapeHtml(place.name)}">
-          <img src="${place.photos[0].src}" alt="${escapeHtml(place.photos[0].alt)}" width="640" height="850" loading="lazy" decoding="async" />
-          <span class="destination-listing__category">${categories[place.id]}</span>
-          <span class="destination-listing__name">${place.label || place.name}<span aria-hidden="true">&nearr;</span></span>
-        </a>`,
+          .map((place, i) =>
+            TourCard(place, { category: categories[place.id], hidden: i > 5 }),
           )
           .join('')}
       </div>
-      <div class="destination-listings__footer">
-        <a class="button button--primary" href="#destinations">View all destinations <span aria-hidden="true">&rarr;</span></a>
-        <div class="carousel-controls">
-          <button class="carousel-arrow" data-carousel-previous type="button" aria-label="Previous destinations" title="Previous destinations" aria-controls="destination-listings-track">&larr;</button>
-          <button class="carousel-arrow carousel-arrow--next" data-carousel-next type="button" aria-label="Next destinations" title="Next destinations" aria-controls="destination-listings-track">&rarr;</button>
-        </div>
-      </div>
+      <div class="explore-places__more"><button class="button button--outline" type="button" data-places-more aria-expanded="false" aria-controls="destination-listings-track">Show all places <span class="material-symbols-rounded" aria-hidden="true">expand_more</span></button></div>
     </div>
   </section>`;
 }
@@ -44,9 +34,45 @@ export function initDestinationListings(
   root = document.querySelector('#traveller-destinations'),
   onChoose,
 ) {
-  const carousel = initHorizontalCarousel(root);
-  const choose = (event) => {
-    const link = event.target.closest('[data-listing-destination]');
+  const cards = [...root.querySelectorAll('[data-listing-destination]')];
+  const buttons = [...root.querySelectorAll('[data-place-filter]')];
+  const more = root.querySelector('[data-places-more]');
+  const status = root.querySelector('[data-place-count]');
+  let filter = 'All places';
+  let expanded = false;
+  function render() {
+    const matching = cards.filter(
+      (card) => filter === 'All places' || card.dataset.placeCategory === filter,
+    );
+    cards.forEach((card) => {
+      card.hidden =
+        !matching.includes(card) || (!expanded && matching.indexOf(card) >= 6);
+    });
+    buttons.forEach((button) =>
+      button.setAttribute(
+        'aria-pressed',
+        String(button.dataset.placeFilter === filter),
+      ),
+    );
+    more.hidden = matching.length <= 6;
+    more.setAttribute('aria-expanded', String(expanded));
+    more.innerHTML = `${expanded ? 'Show fewer places' : 'Show all places'} <span class="material-symbols-rounded" aria-hidden="true">${expanded ? 'expand_less' : 'expand_more'}</span>`;
+    status.textContent = `${Math.min(matching.length, expanded ? matching.length : 6)} of ${matching.length} places`;
+  }
+  function click(event) {
+    const filterButton = event.target.closest('[data-place-filter]');
+    if (filterButton) {
+      filter = filterButton.dataset.placeFilter;
+      expanded = false;
+      render();
+      return;
+    }
+    if (event.target.closest('[data-places-more]')) {
+      expanded = !expanded;
+      render();
+      return;
+    }
+    const link = event.target.closest('[data-listing-link]');
     if (
       !link ||
       !onChoose ||
@@ -57,11 +83,9 @@ export function initDestinationListings(
     )
       return;
     event.preventDefault();
-    onChoose(link.dataset.listingDestination);
-  };
-  root.addEventListener('click', choose);
-  return () => {
-    root.removeEventListener('click', choose);
-    carousel.dispose();
-  };
+    onChoose(link.dataset.listingLink);
+  }
+  render();
+  root.addEventListener('click', click);
+  return () => root.removeEventListener('click', click);
 }
