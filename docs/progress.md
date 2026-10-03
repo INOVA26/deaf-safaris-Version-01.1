@@ -453,3 +453,5 @@ Review the full homepage and About page at desktop and mobile sizes. Confirm Mik
 
 - 3 October 2026: Added the user-supplied Mike profile artwork as a circular portrait crop in Meet our team, with Senior Safari Guide role. Added a fourth Gallery slide/dot and scoped 6px pagination spacing, retaining 20px slide/content gaps.
 - Fixed outdated team/review test fixtures; supplied ratings on three explicitly labelled sample stories that were previously filtered out, restoring all six preview stories. Full suite passes 37/37, lint/format/build pass. User authorized GitHub commit/push; synchronized two upstream workflow commits. Preparing a website-only commit preserving unrelated staged documents and images. Browser visual verification remains unavailable.
+
+- GitHub delivery: website commit `5899178` pushed to `origin/main` successfully after retrying a transient DNS failure. All unrelated staged documents/images/CNAME and local rule/editor changes remain intact. GitHub Pages deployment was not verified.

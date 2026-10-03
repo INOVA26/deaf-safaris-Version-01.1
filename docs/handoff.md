@@ -4,7 +4,7 @@ Last updated: 3 October 2026 (Africa/Dar_es_Salaam).
 
 ## Current objective and stopping point
 
-User requested dots-only Gallery controls, Mike’s profile/portrait, and a review area inspired by the supplied Google screenshots. Mike’s supplied profile artwork is integrated with a circular CSS portrait crop and Senior Safari Guide role. Gallery now has four real slides/dots and a dedicated 6px pagination gap; the slide/content gap remains 20px. User authorized committing and pushing the current website to GitHub. Preparing that commit; push pending.
+User requested dots-only Gallery controls, Mike’s profile/portrait, and a review area inspired by the supplied Google screenshots. Mike’s supplied profile artwork is integrated with a circular CSS portrait crop and Senior Safari Guide role. Gallery now has four real slides/dots and a dedicated 6px pagination gap; the slide/content gap remains 20px. User authorized committing and pushing the current website to GitHub. Website commit `5899178` was pushed successfully to `origin/main` (GitHub). Initial DNS failure resolved on retry.
 
 ## Implemented
 
@@ -22,12 +22,12 @@ Affected: GalleryResources.js, galleryCarousel.js, Reviews.js, ReviewPreview.js,
 - Three Gallery controller tests and five targeted review validation/download/order, page markup and tour-card tests: PASS.
 - Two new composer tests: PASS (valid/empty summary, star selection, oversized media rejection and listener cleanup).
 - No fresh browser visual check: earlier browser launch was rejected by automatic approval review. No workaround attempted. These are source/markup/controller checks.
-- Full test suite: 37/37 PASS. npm run check/build PASS before remote synchronization. Updated stale team/review mocks and restored missing ratings on explicitly labelled preview samples so all six sample stories render.
-- Fast-forwarded two remote workflow commits from origin/main without overwriting local edits. Website commit/push pending; unrelated staged documents/images/CNAME and local editor/rules changes remain excluded. Earlier rollback backup remains ignored under release-artifacts/before-646-rollback.
+- Full test suite: 37/37 PASS. npm run check/build PASS; formatting rechecked after remote synchronization. Updated stale team/review mocks and restored missing ratings on explicitly labelled preview samples so all six sample stories render.
+- Fast-forwarded two remote workflow commits from origin/main without overwriting local edits. Website commit `5899178` pushed; unrelated staged documents/images/CNAME and local editor/rules changes remain excluded. Earlier rollback backup remains ignored under release-artifacts/before-646-rollback.
 
 ## Next concrete step
 
-Mike portrait is complete. Finish GitHub commit/push and record the result. Review Gallery dots and review composer at desktop/mobile sizes. If a Google review URL is supplied, add a clearly labelled public-review link. Until then, keep local-saving and media-preview disclosures visible.
+Mike portrait is complete. GitHub push is complete; deployed-site status is not verified. Review Gallery dots and review composer at desktop/mobile sizes. If a Google review URL is supplied, add a clearly labelled public-review link. Until then, keep local-saving and media-preview disclosures visible.
 
 ## Preserved prior requests and pending items
 
