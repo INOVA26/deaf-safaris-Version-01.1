@@ -556,3 +556,9 @@ Review the full homepage and About page at desktop and mobile sizes. Confirm Mik
 - User requested committing and pushing the completed website work. Reviewed source diffs in Git; VS Code UI unavailable. Includes responsive layout/reviews/team, About/Gallery and destination pages, image banners, synchronized left-moving Hero, supporting assets and regressions.
 - Fresh lint/format, 44 tests, production build and diff whitespace check pass. No browser rendering verification claimed.
 - Remote origin/main matched local main before commit. Preparing scoped website commit; separately staged source documents, CNAME and editor/agent settings remain untouched. Next: push and verify remote commit SHA.
+
+## 5 October 2026 — GitHub push confirmed
+
+- Website milestone commit `4f67b9e` (38 files) pushed successfully to `origin/main`, advancing from `d20c1f7`. Repository: INOVA26/deaf-safaris-Version-01.1.
+- The ten previously staged reference/document/config files remain staged locally and were not included. No force push or history rewrite.
+- Checks passed: npm run check, 44 tests, npm run build and diff whitespace check. Next: visual review on mobile/desktop; live deployment has not been verified.

@@ -4,7 +4,7 @@ Last updated: 5 October 2026 (Africa/Dar_es_Salaam).
 
 ## GitHub commit and push — 5 October 2026
 
-User explicitly requested commit and push. Reviewed the website source changes through Git diffs (VS Code UI is unavailable), including responsive layouts, full review lists, team cards, inner pages, banners and synchronized Hero slides. Fresh npm run check, all 44 tests, production build and diff whitespace checks pass. Preparing a scoped commit on main to origin (INOVA26/deaf-safaris-Version-01.1). Existing staged reference documents, domain CNAME and editor/agent instructions are excluded and preserved. Push confirmation will be recorded after it succeeds. Visual browser verification remains pending; a Git push is not proof of a live deployment.
+User explicitly requested commit and push. Reviewed the website source changes through Git diffs (VS Code UI is unavailable), including responsive layouts, full review lists, team cards, inner pages, banners and synchronized Hero slides. Fresh npm run check, all 44 tests, production build and diff whitespace checks pass. Website milestone committed as 4f67b9e and successfully pushed to origin/main (INOVA26/deaf-safaris-Version-01.1). Existing staged reference documents, domain CNAME and editor/agent instructions are excluded and preserved. Git push confirmed main advanced from d20c1f7 to 4f67b9e. Next step is rendered visual review; GitHub deployment status is not verified. Visual browser verification remains pending; a Git push is not proof of a live deployment.
 
 ## Latest Hero correction — left-moving image and content slides
 
