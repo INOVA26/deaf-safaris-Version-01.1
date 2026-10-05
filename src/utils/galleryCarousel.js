@@ -11,6 +11,7 @@ export function initGalleryCarousel(
   const dots = [...root.querySelectorAll('[data-gallery-dot]')];
   const announcement = root.querySelector('[data-gallery-announcement]');
   const motion = clock.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobile = clock.matchMedia('(max-width: 47.999rem)');
   const removers = [];
   let selected = 0;
   let hovering = false;
@@ -36,7 +37,8 @@ export function initGalleryCarousel(
       !visible ||
       root.hidden ||
       doc.hidden ||
-      motion.matches
+      motion.matches ||
+      mobile.matches
     )
       return;
     timer = clock.setTimeout(() => choose(selected + 1), 5000);
@@ -93,6 +95,8 @@ export function initGalleryCarousel(
   });
   listen(viewport, 'pointerdown', (event) => {
     if (event.pointerType !== 'touch' || event.target.closest('a, button')) return;
+    const row = event.target.closest('[data-gallery-slide]');
+    if (row && row.scrollWidth > row.clientWidth + 1) return;
     gesture = { x: event.clientX, y: event.clientY, id: event.pointerId };
     stop();
   });
@@ -117,6 +121,7 @@ export function initGalleryCarousel(
   listen(motion, 'change', () => {
     schedule();
   });
+  listen(mobile, 'change', schedule);
   const observer = clock.IntersectionObserver
     ? new clock.IntersectionObserver(
         (entries) => {

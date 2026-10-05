@@ -1,6 +1,6 @@
 import portrait from '../assets/images/about-mountain-portrait.jpg';
 import mikePortrait from '../assets/images/mike-profile.png';
-import logo from '../assets/images/deaf-safaris-logo-transparent.png';
+import logo from '../assets/images/deaf-safaris-logo-512.png';
 import { PawTrail } from './PawTrail.js';
 
 const guideCard = ({
@@ -45,15 +45,7 @@ export function Guides(id = 'guides') {
           <h2 id="${id}-heading">Meet our team</h2>
           <p class="about-page__guides-intro">The people behind your journey. Get to know Deaf Safaris Tanzania.</p>
         </div>
-        <div class="about-page__guides-grid">
-          ${guideCard({
-            name: 'Ertines',
-            role: 'CEO, Deaf Safaris',
-            symbol: 'explore',
-            detail: 'Ertines leads Deaf Safaris Tanzania.',
-            image: portrait,
-            alt: "Ertines smiling on the snow near Kilimanjaro's glaciers.",
-          })}
+        <div class="about-page__guides-grid" ${id === 'guides' ? 'data-team-stack' : ''}>
           ${guideCard({
             name: 'Mike',
             role: 'Senior Safari Guide',
@@ -62,6 +54,14 @@ export function Guides(id = 'guides') {
             alt: 'Mike wearing a Deaf Safaris Tanzania shirt.',
             symbol: 'landscape',
             detail: 'Part of our two-person guiding team.',
+          })}
+          ${guideCard({
+            name: 'Ertines',
+            role: 'CEO, Deaf Safaris',
+            symbol: 'explore',
+            detail: 'Ertines leads Deaf Safaris Tanzania.',
+            image: portrait,
+            alt: "Ertines smiling on the snow near Kilimanjaro's glaciers.",
           })}
           ${guideCard({
             name: 'Hyune',

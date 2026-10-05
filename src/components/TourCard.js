@@ -68,12 +68,11 @@ export function TourCard(place, { dayTrip = false, category, hidden = false } = 
       : dayTrip
         ? [['pace', 'Full day'], ...place.highlights.slice(0, 2)]
         : place.highlights;
-  const linkAttribute = category ? 'data-listing-link' : 'data-trip-destination';
-  const href = place.enquiryOnly ? '#enquiries' : '#hero-planner';
-  const linkData = place.enquiryOnly ? '' : `${linkAttribute}="${name}"`;
+  const href = `#place-${escapeHtml(place.id)}`;
+  const linkData = '';
   return `<article class="reference-trip" ${category ? `data-listing-destination="${name}" data-place-category="${escapeHtml(category)}"` : ''} ${hidden ? 'hidden' : ''}>
     <div class="reference-trip__media">
-    <a class="reference-trip__image" href="${href}" ${linkData} aria-label="Plan a journey to ${name}">
+    <a class="reference-trip__image" href="${href}" ${linkData} aria-label="Explore ${name}">
       ${photo ? `<img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.alt)}" loading="lazy" decoding="async" width="640" height="440" ${photo.position ? `style="object-position: ${escapeHtml(photo.position)}"` : ''} />` : '<span class="reference-trip__photo-pending">Photo pending</span>'}
       <span class="reference-trip__tag">${escapeHtml(category || place.badge || (dayTrip ? 'Day trip' : 'Safari inspiration'))}</span>
     </a>

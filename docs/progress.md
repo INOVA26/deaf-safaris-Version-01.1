@@ -455,3 +455,104 @@ Review the full homepage and About page at desktop and mobile sizes. Confirm Mik
 - Fixed outdated team/review test fixtures; supplied ratings on three explicitly labelled sample stories that were previously filtered out, restoring all six preview stories. Full suite passes 37/37, lint/format/build pass. User authorized GitHub commit/push; synchronized two upstream workflow commits. Preparing a website-only commit preserving unrelated staged documents and images. Browser visual verification remains unavailable.
 
 - GitHub delivery: website commit `5899178` pushed to `origin/main` successfully after retrying a transient DNS failure. All unrelated staged documents/images/CNAME and local rule/editor changes remain intact. GitHub Pages deployment was not verified.
+
+- 4 October 2026, responsive phases 1–3 implementation checkpoint: constrained intrinsic grid/form/media sizing, restored safe-area gutters and dvh, retained content/desktop layout, added compact tablet navigation with interruptible menu motion and readable Hero captions. WhatsApp and chat entries stay in mobile document flow. Mobile tour/feature/team/gallery/review collections use native 84% snap rails, tablet collections use two columns, phone/tablet review auto-motion/clones are removed. No page-level overflow hiding. These edits are not yet validated in a browser; shell checks pending. No commit or push.
+
+## 5 October 2026 — Responsive interaction and alignment verification milestone
+
+- Verified the inherited responsive implementation against the working tree; handoff was behind the completed typography, touch-target, image-loading and image-size work. Existing local changes and unrelated staged files preserved.
+- Disabled Gallery autoplay on phone swipe layouts, retaining manual dots and wider-screen autoplay. Added breakpoint/cleanup regression coverage.
+- Added results-row keyboard scrolling through a delegated listener so filtering and rerendering retain support; tested before and after filtering. Reused the shared scroll behavior.
+- Aligned review rows with safe-area-aware tour gutters and extended shared mobile gutter rules through 1087px, matching compact navigation. This also affects header/Hero/footer/reference container alignment at 1024–1087px.
+- Fresh tests pass 41/41. Final npm run check (lint/format) and npm run build also pass. No dependency, commit, push or deployment changes.
+- Next: actual browser review at all nine requested widths. Historical browser-launch rejection remains recorded; no browser tool or remote-debug Edge session found and no workaround attempted. Visual quality and zero root overflow remain unverified; mobile goal remains active.
+
+## 5 October 2026 — Responsive audit coverage
+
+- Confirmed all eight audit routes against src/main.js. Extended the disposable-frame audit to include expanded Places, every Gallery slide, final positions of visible swipe rows, and page bottom/compact header.
+- Audit script passes ESLint and Node syntax checks. This is tooling validation only; the browser audit remains unexecuted. Application checks from the previous milestone remain applicable because no application files changed in this continuation.
+- Browser tool discovery still exposes no browser controller. Historical launch rejection remains respected. This is the second consecutive goal turn with the same visual-verification blocker; goal remains active. Next: obtain rendered results through an authorized browser session; no commit/push/deployment.
+
+## 5 October 2026 — Goal blocked pending rendered verification
+
+- Third consecutive turn confirmed the same blocker: no exposed browser tool or Chrome/Edge remote-debug session, with historical browser-launch rejection still recorded. No browser workaround attempted.
+- Previous turn made progress by extending audit coverage. This turn found no new rendering evidence; further source-only styling would be speculative. Marked the mobile goal blocked, not complete.
+- Existing implementation and checks remain: 41 passing tests, lint/format/build passed at the application milestone; audit script lint/syntax passed subsequently. Changes remain local and all unrelated work is preserved.
+- Resume with authorized browser access or supplied browser audit results/screenshots, verify all nine requested widths, and fix observed issues section by section.
+
+## 5 October 2026 — Mobile composition redesign after user feedback
+
+- User reported that mobile alignment still looked unsatisfactory. Read the attached detailed brief and retained its 84% swipe cards, text/brand preservation and desktop constraint.
+- Fixed source-confirmed container mismatches: homepage team (96%) and footer (84%) now share the surrounding safe-area gutters through 1087px.
+- Added mobile-only typography/card tokens and a cohesive composition block: left-aligned Hero/section headings, consistent planner and card padding, full-width Hero actions, wrapped tour metadata, in-flow team portraits and roomier footer columns.
+- Rebuilt phone Gallery card styling into consistent 4:3 image-above-text layouts, with equal padding/radii and bottom-aligned buttons. Gallery switching uses a 220ms phone transition; global reduced-motion rules still take precedence.
+- Changed src/styles/components.css and src/styles/tokens.css plus handoff/review/progress docs. No text, component order, dependencies, commit, push or deployment changes. Existing work preserved.
+- Fresh npm run check, npm test (41/41) and npm run build pass. Browser rendering remains unavailable following the historical launch rejection; this redesign has not received visual sign-off. Next: inspect phone/tablet/desktop screenshots and run the existing browser audit.
+
+## 5 October 2026 — Jambo reference-led mobile refinement
+
+- User explicitly requested inspection of https://jambo.team/ and redesign based on its alignment. Visited with web tool and fetched live HTML/CSS read-only. Source confirms centered Hero, limited text width, generous section spacing, regular grid gaps and rounded subtle white cards. No rendered screenshot inspection claimed.
+- Updated the existing mobile composition block rather than adding a second competing block. Centered Hero/section headings, 38ch paragraph width, 36–44px Hero title, 64–80px section spacing, 24px radii and restrained shadows; mobile gutters extend to 32px on tablet.
+- Made phone planner a white panel with dark labels/fields and explicit focus outlines; added a thin Hero footer divider and consistent welcome-card borders. Retained safari brand/content, 84% swipe rows and wider desktop design.
+- Changed src/styles/components.css, src/styles/tokens.css and handoff/review/progress docs. Check/test/build executed successfully; no dependency, commit, push or deployment changes. Browser visual comparison remains pending.
+- Next: render the local revision at the nine requested widths, inspect against the reference principles, and fix observed alignment issues. Local preview: npm run dev at http://127.0.0.1:5173/.
+
+## 5 October 2026 — User mobile Hero mockup
+
+- Used the attached 371×735 image as the latest phone Hero composition reference. Replaced prior white planner with a glass panel, three aligned field columns and a full-width white CTA. Added compact logo/menu header, ruled highlight row, aligned review preview/button and bottom scroll cue.
+- Preserved existing safari copy and factual disclosures instead of introducing the furniture placeholder content and unconfirmed statistics/rating from the image. Retained readable field values and 44px tap targets rather than forcing the screenshot's tiny controls.
+- Moved the phone WhatsApp entry to a footer-only ContactPrompt wrapper; desktop Hero entry retained. Added scoped glass/header/radius/gap tokens. Existing reduced motion and functional menu/dropdown behavior preserved.
+- Modified components.css, tokens.css, Footer.js and continuity docs. Check, all 41 tests and production build pass. Local only; no dependency/commit/push/deployment changes.
+- Visual comparison is pending: attachment inspected, but current implementation cannot be browser-rendered through available tools. Next: screenshot comparison at requested widths, especially three-field fit and Hero vertical spacing.
+
+## 5 October 2026 — Full-page reference and desktop-style mobile reviews
+
+- Removed the pictured Hero Pause button. Background controller exits without timers when no control exists; Hero remains static. Added regression coverage. Separate desktop review-motion control remains unchanged.
+- Matched the reference structure: welcome photo collage retained, feature cards in a two-by-two grid, tour cards use 92% swipe widths/3:2 photos, compact heading alignment and tighter section gaps. Promise minimum height reduced while retaining readable copy and 44px controls. Screenshot placeholder content, prices, photos and blank tail not copied.
+- Mobile reviews now show unique stories in two swipeable rows with desktop-style white cards/dark photo backdrop. Shared keyboard handling added; long-story expansion and sample disclosures retained.
+- Tests pass 42/42. Final lint/format check and production build also pass after the last CSS-only adjustment. Changed Hero.js, heroBackdrop.js, responsiveRows.js, components.css, tokens.css, heroMotion.test.js and notes. No dependency/commit/push/deployment.
+- Target screenshot inspected in chat; actual rendering remains unverified due to unavailable browser access. Next: compare at mobile/tablet/desktop widths and exercise scrolling.
+
+## 5 October 2026 — Stacked team reference
+
+- Matched screenshot structure for homepage team through 1087px: dark brown section, centered introduction, white rounded full-width cards, overlapping circular portraits with white rings and shadows, centered names/roles/descriptions, responsive spacing.
+- Mike now appears first, followed by existing Ertines and Hyune. Preserved factual existing profiles and approved images; screenshot placeholder text/different identities were not substituted.
+- Added homepage data-team-stack marker and excluded that grid from swipe keyboard semantics. Other About grids and wider desktop geometry remain unchanged.
+- Changed Guides.js, responsiveRows.js, components.css, tokens.css and continuity notes. Lint/format and 42 tests pass; production build checked. No dependencies/commit/push/deployment. Rendered screenshot comparison remains pending due to unavailable browser access.
+
+## 5 October 2026 — Complete mobile reviews and centered promise controls
+
+- Removed six-review cap on both desktop/mobile. Compact reviews now display the entire available set in normal document flow (one column below 640px, two through 1087px), replacing the swipe layout at explicit user request. Sample/local labels preserved; desktop decorative duplicates remain assistive-technology hidden.
+- Removed compact review scrolling semantics; restore desktop focusability. Extended existing regression to prove an eighth review appears in both modes and breakpoint focusability updates.
+- Promise arrows now center vertically at the left/right edges; copy reserves side space. Centered bottom pagination uses a shared exact 4px control gap while retaining mobile touch targets. Shared gap also affects desktop dots.
+- Changed ReviewPreview.js, responsiveRows.js, components.css, tokens.css, website.test.js and notes. All 42 tests, lint/format and build pass. No commit/push/deployment. Rendered verification remains pending.
+
+## 5 October 2026 — Visible indicator spacing and complete review text
+
+- Corrected earlier interpretation: promise pagination now has 4px between actual visible dots, not padded wrappers. Narrow dot controls remain keyboard operable and 44px tall; large side chevrons provide touch navigation and remain centered vertically.
+- Homepage review cards show full escaped text on phone and desktop; removed their mobile excerpt expander. Added visible review count. All available review records remain uncapped.
+- Asked whether user views local preview or published site, since changes are local only. Reviews are stored per device, which can also explain differences between devices; no backend added.
+- Changed ReviewPreview.js, components.css and notes. Final lint/format, all 42 tests and production build pass; rendered review still pending. No commit/push/deployment.
+
+## 5 October 2026 — About, Gallery and image-first destination pages
+
+- Added direct About/Gallery navigation and a shared short full-width photo banner on inner pages, with breadcrumb, page heading, top-of-page scroll and heading focus. Safari results retain their existing photo banner.
+- Improved existing About page with compact introduction and story/values/team chapter navigation. Gallery now uses a normal responsive one/two/three-column grid; existing modal photo viewer retains keyboard navigation and focus restoration.
+- Added 11 destination article routes using existing records and photos. Tour cards, Places, featured trips, planning tiles and destination menu links open these pages. Planning CTA carries the place into the draft enquiry, preserves existing notes and reopens an editable form.
+- Restored changing Hero photos at the latest request, with a discreet icon pause/play control and existing reduced-motion, reading-focus and offscreen safeguards. No new dependencies.
+- References inspected: Private Tours Cape Town About, Simba homepage HTML and Thomson Serengeti article. Reused project content; did not copy company claims. Referenced new screenshots were not attached. Unconfirmed Waterfall/Napur remain labelled and use illustrative banners.
+- npm test: 43/43 pass, including destination/banner assertions and updated navigation contract. Production build passes. An intermediate Vite timeout run was interrupted during machine slowdown; clean rerun passes. Final npm run check passes (ESLint and Prettier). Rendered visual comparison remains pending; no browser verification claimed.
+- All changes local; no commit/push/deployment. Existing staged/unstaged/untracked work preserved. Next: render About/Gallery/place routes at mobile/tablet/desktop sizes and compare banner crops, spacing and navigation.
+
+## 5 October 2026 — Hero slides left with matching content
+
+- Removed visible pause/play button as requested. Added explicit button-free slideshow mode without changing static Hero behavior elsewhere.
+- Three synchronized image/headline/description slides: team/adventure, Kilimanjaro and Serengeti. Eight-second cycle, 900ms right-to-left photo transitions and matching copy entrance; first slide displays immediately. Shared text footprint keeps planner steady.
+- Preserved reduced-motion, focus/offscreen/hidden-tab pauses, image-load checks and disposal. Escape inside Hero stops autoplay. No new dependencies or external content.
+- Changed Hero.js, heroBackdrop.js, components.css, tokens.css and heroMotion.test.js. All 44 tests and production build pass; final npm run check passes (ESLint and Prettier). Rendered visual verification remains pending. No commit/push/deployment.
+
+## 5 October 2026 — Prepare requested GitHub commit
+
+- User requested committing and pushing the completed website work. Reviewed source diffs in Git; VS Code UI unavailable. Includes responsive layout/reviews/team, About/Gallery and destination pages, image banners, synchronized left-moving Hero, supporting assets and regressions.
+- Fresh lint/format, 44 tests, production build and diff whitespace check pass. No browser rendering verification claimed.
+- Remote origin/main matched local main before commit. Preparing scoped website commit; separately staged source documents, CNAME and editor/agent settings remain untouched. Next: push and verify remote commit SHA.

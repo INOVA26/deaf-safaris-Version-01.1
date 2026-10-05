@@ -620,6 +620,9 @@ test('review submission updates recent stories, filters places, escapes content 
       ].map((selector) => [selector, makeElement()]),
     );
     const preview = makeElement();
+    preview.removeAttribute = (name) => {
+      delete preview[name];
+    };
     Object.assign(preview, { scrollLeft: 0, clientWidth: 600, scrollWidth: 1000 });
     const previewFields = Object.fromEntries(
       [
@@ -643,8 +646,11 @@ test('review submission updates recent stories, filters places, escapes content 
     previewFields['[data-carousel-track]'] = preview;
     let stored = '[]';
     let blocked = false;
+    const compactLayout = Object.assign(new EventTarget(), { matches: true });
+    const reducedMotion = Object.assign(new EventTarget(), { matches: true });
     globalThis.window = Object.assign(new EventTarget(), {
-      matchMedia: () => Object.assign(new EventTarget(), { matches: true }),
+      matchMedia: (query) =>
+        query.includes('reduced-motion') ? reducedMotion : compactLayout,
       localStorage: {
         getItem: () => stored,
         setItem(key, value) {
@@ -689,7 +695,35 @@ test('review submission updates recent stories, filters places, escapes content 
       querySelector: (selector) => previewFields[selector],
     });
     assert.match(preview.innerHTML, /Sample review/);
+    assert.doesNotMatch(preview.innerHTML, /reference-reviews__duplicate/);
+    assert.equal(previewFields['[data-review-pause]'].hidden, true);
+    compactLayout.matches = false;
+    compactLayout.dispatchEvent(new Event('change'));
+    assert.match(preview.innerHTML, /reference-reviews__duplicate/);
+    compactLayout.matches = true;
+    compactLayout.dispatchEvent(new Event('change'));
+    assert.doesNotMatch(preview.innerHTML, /reference-reviews__duplicate/);
     assert.match(previewFields['[data-review-total]'].textContent, /6 sample reviews/);
+    assert.equal(preview.tabindex, undefined);
+    stored = JSON.stringify(
+      Array.from({ length: 8 }, (_, index) => ({
+        name: `Traveller ${index + 1}`,
+        title: 'Safari memories',
+        review: 'A memorable journey through Tanzania.',
+        destination: 'Serengeti',
+        rating: 5,
+      })),
+    );
+    globalThis.window.dispatchEvent(new Event('reviews:updated'));
+    assert.equal((preview.innerHTML.match(/class="review-quote"/g) || []).length, 8);
+    assert.match(preview.innerHTML, /Traveller 8/);
+    compactLayout.matches = false;
+    compactLayout.dispatchEvent(new Event('change'));
+    assert.match(preview.innerHTML, /Traveller 8/);
+    assert.equal(preview.tabindex, '0');
+    stored = '[]';
+    compactLayout.matches = true;
+    compactLayout.dispatchEvent(new Event('change'));
     assert.match(Reviews(), /<option>Chemka Hot Springs<\/option>/);
     fields['[data-write-review]'].dispatchEvent(new Event('click'));
     assert.equal(fields['#review-destination'].focused, true);
@@ -887,12 +921,35 @@ test('results controls save journeys, recover from empty searches, and hand pref
     };
     results.render();
     assert.equal((root.innerHTML.match(/<article /g) || []).length, 3);
+    // Keyboard scrolling survives replacement of the filtered results row.
+    globalThis.window.matchMedia = () => ({ matches: true });
+    const scrollRow = () => {
+      const row = {
+        matches: (selector) => selector === '.safari-results__grid',
+        clientWidth: 300,
+        scrollWidth: 900,
+        scrollLeft: 0,
+        scrollTo(options) {
+          this.scrolled = options;
+        },
+      };
+      const event = new Event('keydown', { cancelable: true });
+      Object.defineProperties(event, {
+        target: { value: row },
+        key: { value: 'End' },
+      });
+      root.dispatchEvent(event);
+      assert.equal(event.defaultPrevented, true);
+      assert.deepEqual(row.scrolled, { left: 900, behavior: 'instant' });
+    };
+    scrollRow();
     assert.match(root.innerHTML, /3–5 travellers/);
     assert.match(root.innerHTML, /Your preference: ASL/);
     click('data-save', 'Serengeti');
     assert.match(root.innerHTML, /Saved \(1\)/);
     click('data-saved-only');
     assert.equal((root.innerHTML.match(/<article /g) || []).length, 1);
+    scrollRow();
     click('data-plan', 'Serengeti');
     assert.deepEqual(planned, {
       destination: 'Serengeti',
@@ -915,7 +972,7 @@ test('results controls save journeys, recover from empty searches, and hand pref
     assert.match(root.innerHTML, /Deaf Safaris Tanzania/);
     assert.match(
       root.innerHTML,
-      /class="safari-results__landscape" src="[^"]*kilimanjaro-2\.jpg"/,
+      /class="safari-results__landscape"[^>]* src="[^"]*kilimanjaro-2\.jpg"/,
     );
     assert.match(
       root.innerHTML,
@@ -1114,6 +1171,7 @@ test('rendered sections have unique IDs, working internal links, and labelled in
       'Planning',
       'ReviewPreview',
       'DestinationListings',
+      'DestinationPages',
       'Reviews',
       'Enquiry',
       'Footer',
@@ -1169,9 +1227,7 @@ test('tours follow requested order and Places reveals the requested extra three'
     const html = TripCards();
     assert.equal([...html.matchAll(/<article class="reference-trip"/g)].length, 3);
     assert.deepEqual(
-      [...html.matchAll(/aria-label="Plan a journey to ([^"]+)"/g)].map(
-        (match) => match[1],
-      ),
+      [...html.matchAll(/aria-label="Explore ([^"]+)"/g)].map((match) => match[1]),
       ['Kilimanjaro', 'Ngorongoro', 'Serengeti'],
     );
     assert.doesNotMatch(html, /data-tour-toggle/);
@@ -1181,9 +1237,7 @@ test('tours follow requested order and Places reveals the requested extra three'
     const places = Places();
     const [firstRow, extraRow] = places.split('<div class="tour-extra"');
     const names = (row) =>
-      [...row.matchAll(/aria-label="Plan a journey to ([^"]+)"/g)].map(
-        (match) => match[1],
-      );
+      [...row.matchAll(/aria-label="Explore ([^"]+)"/g)].map((match) => match[1]);
     assert.deepEqual(names(firstRow), [
       'Chemka Hot Spring',
       'Serval Wildlife',
@@ -1236,6 +1290,44 @@ test('tours follow requested order and Places reveals the requested extra three'
     dispose?.();
     if (previousDocument === undefined) delete globalThis.document;
     else globalThis.document = previousDocument;
+    await server.close();
+  }
+});
+
+test('destination pages retain card identities and prices, and banners escape page titles', async () => {
+  const server = await createServer({
+    configLoader: 'native',
+    resolve: { preserveSymlinks: true },
+    optimizeDeps: { noDiscovery: true },
+    server: { middlewareMode: true, ws: false },
+    appType: 'custom',
+  });
+  try {
+    const { DestinationPages, detailPlaces } = await server.ssrLoadModule(
+      '/src/components/DestinationPages.js',
+    );
+    const { PageBanner } = await server.ssrLoadModule('/src/components/PageBanner.js');
+    const html = DestinationPages();
+    assert.equal(detailPlaces.length, 11);
+    for (const place of detailPlaces) {
+      assert.ok(html.includes(`id="place-${place.id}"`));
+      assert.ok(
+        html.includes(`data-place-brief="${place.name.replaceAll('&', '&amp;')}"`),
+      );
+    }
+    assert.ok(html.includes('$1,850 / per person'));
+    assert.ok(html.includes('150K / per person'));
+    assert.ok(html.includes('No visit fee'));
+    assert.equal(
+      html.split('The page banner is illustrative of Tanzania.').length - 1,
+      2,
+    );
+    const banner = PageBanner({ title: '<script>Example</script>' });
+    assert.ok(banner.includes('&lt;script&gt;Example&lt;/script&gt;'));
+    assert.ok(banner.indexOf('<img') < banner.indexOf('<h1'));
+    assert.ok(banner.includes('tabindex="-1"'));
+    assert.ok(!banner.includes('<script>'));
+  } finally {
     await server.close();
   }
 });

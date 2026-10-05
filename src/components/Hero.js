@@ -21,17 +21,17 @@ function field(name, label, options, placeholder = '') {
 
 export function Hero() {
   return `
-    <section id="home" class="hero" aria-labelledby="hero-heading" data-backdrop-motion="paused">
+    <section id="home" class="hero" aria-labelledby="hero-heading" data-backdrop-motion="paused" data-hero-slideshow="true">
       <div class="hero__backdrop">
         <img class="hero__background is-active" data-hero-photo src="${teamPhoto}" alt="The Deaf Safaris team holding their banner at the Kilimanjaro summit sign." width="975" height="1280" fetchpriority="high" />
-        <img class="hero__background hero__background--mountain" data-hero-photo src="${mountainPhoto}" alt="Kilimanjaro’s snowy summit above the clouds." width="1280" height="853" aria-hidden="true" decoding="async" />
-        <img class="hero__background" data-hero-photo src="${plainsPhoto}" alt="An acacia tree on the golden Serengeti plains." width="1280" height="853" aria-hidden="true" decoding="async" />
+        <img class="hero__background hero__background--mountain" data-hero-photo src="${mountainPhoto}" alt="Kilimanjaro’s snowy summit above the clouds." width="1280" height="853" aria-hidden="true" loading="lazy" decoding="async" />
+        <img class="hero__background" data-hero-photo src="${plainsPhoto}" alt="An acacia tree on the golden Serengeti plains." width="1280" height="853" aria-hidden="true" loading="lazy" decoding="async" />
       </div>
       <div class="hero__shade" aria-hidden="true"></div>
       <div class="container hero__body">
         <div class="hero__intro">
-          <h1 id="hero-heading">Adventure for<br />Today &amp; Tomorrow</h1>
-          <p class="hero__description">From the heights of Kilimanjaro to the wilds of the Serengeti, discover Tanzania through shared experiences. Start a journey shaped around you.</p>
+          <h1 id="hero-heading" class="hero__slide-text"><span data-hero-copy="0" class="is-active">Adventure for<br />Today &amp; Tomorrow</span><span data-hero-copy="1" aria-hidden="true">Kilimanjaro.<br />A different perspective.</span><span data-hero-copy="2" aria-hidden="true">Serengeti.<br />Room to discover.</span></h1>
+          <p class="hero__description hero__slide-text"><span data-hero-copy="0" class="is-active">From the heights of Kilimanjaro to the wilds of the Serengeti, discover Tanzania through shared experiences. Start a journey shaped around you.</span><span data-hero-copy="1" aria-hidden="true">Discover mountain landscapes above the clouds. Plan your Kilimanjaro journey with a route, pace and communication preferences discussed around you.</span><span data-hero-copy="2" aria-hidden="true">Wide-open plains, acacia trees and moments to observe wildlife. Explore Serengeti safari ideas and shape a journey around what inspires you.</span></p>
         </div>
         <form id="hero-planner" class="hero__planner" aria-label="Plan your safari" aria-describedby="hero-planner-note">
           <div class="hero__planner-row">
@@ -97,10 +97,9 @@ export function Hero() {
           </div>
           <div class="hero__motion-controls">
             <a class="hero__scroll" href="#destinations"><span class="hero__mouse" aria-hidden="true"><span class="hero__mouse-wheel"></span></span><span>Scroll down</span></a>
-            <button class="hero__motion-toggle" type="button" data-backdrop-toggle aria-label="Pause hero animation" aria-pressed="false" hidden><span aria-hidden="true">Pause</span></button>
           </div>
           <div class="hero__review-link">
-            <div class="hero__review-previews" role="img" aria-label="Traveller story previews"><img src="${mountainPhoto}" alt="" width="32" height="32" /><img src="${plainsPhoto}" alt="" width="32" height="32" /><span class="hero__review-badge">${star}</span></div>
+            <div class="hero__review-previews" role="img" aria-label="Traveller story previews"><img src="${mountainPhoto}" alt="" width="32" height="32" loading="lazy" /><img src="${plainsPhoto}" alt="" width="32" height="32" loading="lazy" /><span class="hero__review-badge">${star}</span></div>
             <p>What visitors say<span>Preview traveller stories</span></p>
             <a class="button" href="#reviews">Visit our reviews</a>
             ${ContactPrompt()}

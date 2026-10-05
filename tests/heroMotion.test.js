@@ -56,7 +56,11 @@ test('explore grid filters destinations, expands and hands a choice to the plann
     );
     assert.match(DestinationListings(), /All Tours &amp; Destinations/);
     const { Header } = await server.ssrLoadModule('/src/components/Header.js');
-    assert.match(Header(), /href="#destinations">National Park/);
+    assert.match(Header(), /href="#traveller-destinations">National Park/);
+    assert.match(Header(), /href="#place-kilimanjaro"/);
+    assert.match(Header(), /href="#place-culture"/);
+    assert.match(Header(), /href="#about"/);
+    assert.match(Header(), /href="#photo-gallery"/);
     assert.doesNotMatch(Header(), /nav.nationalPark/);
     assert.doesNotMatch(DestinationListings(), /data-carousel-track/);
     const cards = [
@@ -339,6 +343,8 @@ test('reference hero retains labelled safari search fields without unverified cl
     assert.match(markup, /team-group\.jpeg/);
     assert.match(markup, /Adventure for<br \/>Today &amp; Tomorrow/);
     assert.match(markup, /hero__review-previews/);
+    assert.doesNotMatch(markup, /data-backdrop-toggle/);
+    assert.equal([...markup.matchAll(/data-hero-copy=/g)].length, 6);
     assert.match(markup, /class="hero__planner-row"/);
     assert.doesNotMatch(markup, /Furniture|420\+|100%|Nations welcomed|12\+ reviews/);
     for (const id of ['destinations', 'guides', 'about', 'reviews']) {
@@ -818,4 +824,59 @@ test('planner preserves visitor notes, updates its own summary, and retains grou
     globalThis.FormData = previousFormData;
     await server.close();
   }
+});
+
+test('hero without a motion control remains static and creates no animation work', () => {
+  const root = {
+    dataset: {},
+    querySelectorAll: () => [],
+    querySelector: () => null,
+  };
+  const dispose = initHeroBackdrop(root, { clock: {}, page: {} });
+  assert.equal(root.dataset.backdropMotion, 'paused');
+  assert.equal(typeof dispose, 'function');
+  dispose();
+});
+
+test('button-free Hero synchronizes photo and copy, wraps left and respects reduced motion', () => {
+  const env = motionEnvironment();
+  const photos = Array.from({ length: 3 }, () =>
+    Object.assign(element(), { complete: true, naturalWidth: 1280 }),
+  );
+  const copies = Array.from({ length: 6 }, (_, index) =>
+    Object.assign(element(), { dataset: { heroCopy: String(index % 3) } }),
+  );
+  const root = Object.assign(element(), {
+    dataset: { heroSlideshow: 'true' },
+    querySelector: () => null,
+    querySelectorAll: (selector) =>
+      selector === '[data-hero-photo]' ? photos : copies,
+    contains: () => false,
+  });
+  const dispose = initHeroBackdrop(root, env);
+  const tick = () => [...env.intervals.values()][0]();
+  assert.equal(env.intervals.size, 1);
+  for (const index of [1, 2, 0]) {
+    tick();
+    assert.equal(photos[index].getAttribute('aria-hidden'), 'false');
+    for (const copy of copies)
+      assert.equal(
+        copy.getAttribute('aria-hidden'),
+        String(Number(copy.dataset.heroCopy) !== index),
+      );
+  }
+  photos[1].naturalWidth = 0;
+  tick();
+  assert.equal(copies[2].getAttribute('aria-hidden'), 'false');
+  env.media.matches = true;
+  env.media.emit('change');
+  assert.equal(env.intervals.size, 0);
+  env.media.matches = false;
+  env.media.emit('change');
+  assert.equal(env.intervals.size, 1);
+  root.emit('keydown', { key: 'Escape' });
+  assert.equal(env.intervals.size, 0);
+  dispose();
+  assert.equal(root.listeners.size, 0);
+  assert.equal(env.disconnected(), true);
 });

@@ -1,10 +1,10 @@
 import { destinations } from '../data/destinations.js';
 import { TourCard } from './TourCard.js';
 import marketPhoto from '../assets/images/arusha-market.jpg';
-import zebras from '../assets/images/serval-wildlife/zebras.png';
+import zebras from '../assets/images/serval-wildlife/zebras.jpg';
 
 // Names follow the owner's requested order. Unconfirmed venues/photos remain drafts.
-const places = [
+export const places = [
   {
     ...destinations.find((place) => place.id === 'chemka'),
     name: 'Chemka Hot Spring',

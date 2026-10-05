@@ -36,7 +36,7 @@ const slides = [
 
 export function PromiseBanner() {
   return `<section class="reference-promise" aria-labelledby="promise-heading" aria-roledescription="carousel">
-    ${slides.map((slide, index) => `<img class="reference-promise__photo${index === 0 ? ' is-active' : ''}" src="${slide.image}" alt="" loading="lazy" aria-hidden="true" data-promise-photo />`).join('')}
+    ${slides.map((slide, index) => `<img class="reference-promise__photo${index === 0 ? ' is-active' : ''}" src="${slide.image}" alt="" width="1280" height="720" loading="lazy" aria-hidden="true" data-promise-photo />`).join('')}
     <div class="reference-promise__content" aria-live="polite" aria-atomic="true">
       <span class="reference-pill">OUR PROMISES</span>
       <h2 id="promise-heading">${slides[0].title}</h2>

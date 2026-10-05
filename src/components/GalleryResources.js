@@ -73,7 +73,7 @@ const slides = [
   },
 ];
 const photo = (item) =>
-  `<img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt)}" loading="lazy" decoding="async" />`;
+  `<img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt)}" width="640" height="480" loading="lazy" decoding="async" />`;
 
 export function GalleryResources() {
   return `<section class="tour-gallery" id="gallery" aria-labelledby="gallery-heading" aria-roledescription="carousel">

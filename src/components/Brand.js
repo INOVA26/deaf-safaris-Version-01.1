@@ -1,4 +1,4 @@
-import logoUrl from '../assets/images/deaf-safaris-logo-transparent.png';
+import logoUrl from '../assets/images/deaf-safaris-logo-512.png';
 
 export function Brand({ lazy = false } = {}) {
   return `

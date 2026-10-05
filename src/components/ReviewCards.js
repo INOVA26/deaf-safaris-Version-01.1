@@ -1,3 +1,4 @@
+import { ReviewText } from './ReviewText.js';
 import { destinations } from '../data/destinations.js';
 import fallbackImage from '../assets/images/savannah-sunset.jpg';
 import { escapeHtml } from '../utils/escapeHtml.js';
@@ -23,7 +24,7 @@ export function ReviewCards(reviews, { compact = false, sample = false } = {}) {
         <div class="review-card__meta"><p class="review-preview__rating" aria-label="${review.rating} out of 5 stars"><span aria-hidden="true">${'&#9733;'.repeat(review.rating)}${'&#9734;'.repeat(5 - review.rating)}</span></p><span class="review-card__source">${sample ? 'Sample review' : 'Local review'}</span></div>
         <p class="review-card__destination">${escapeHtml(review.destination)}</p>
         <h3>${escapeHtml(review.title)}</h3>
-        <blockquote>${escapeHtml(review.review)}</blockquote>
+        ${ReviewText(review.review)}
         <p class="review-preview__byline"><strong>${escapeHtml(review.name)}</strong>${date ? `<time datetime="${date.toISOString()}">${dateLabel}</time>` : `<span>${dateLabel}</span>`}</p>
       </div>
     </article>`;

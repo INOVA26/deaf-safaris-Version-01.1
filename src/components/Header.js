@@ -1,3 +1,4 @@
+import { createMobileMenu } from '../utils/mobileMenu.js';
 import { Brand } from './Brand.js';
 import { UtilityBar, initUtilityBar } from './UtilityBar.js';
 
@@ -14,10 +15,11 @@ export function Header() {
         <nav id="primary-navigation" class="site-navigation" aria-label="Primary navigation">
           <ul class="site-nav">
             <li><a href="#home" data-i18n="nav.home">Home</a></li>
-            <li><a href="#destinations">National Park</a></li>
-            <li><a href="#hero-planner" data-nav-destination="Kilimanjaro" data-i18n="nav.kilimanjaro">Kilimanjaro</a></li>
-            <li><a href="#hero-planner" data-nav-destination="Arusha Cultural Heritage Centre">Cultures</a></li>
-            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#traveller-destinations">National Park</a></li>
+            <li><a href="#place-kilimanjaro" data-i18n="nav.kilimanjaro">Kilimanjaro</a></li>
+            <li><a href="#place-culture">Cultures</a></li>
+            <li><a href="#about">About us</a></li>
+            <li><a href="#photo-gallery">Gallery</a></li>
             <li class="site-nav__mobile-action"><a class="button site-header__plan" href="#enquiries" data-i18n="nav.plan">Plan your Safari</a></li>
           </ul>
         </nav>
@@ -37,16 +39,17 @@ export function initHeader() {
   const utilityBar = header.querySelector('.utility-bar');
   const utilityPopovers = [...utilityBar.querySelectorAll('[popover]')];
   const disposeUtilityBar = initUtilityBar(utilityBar);
-  const desktop = window.matchMedia('(min-width: 56rem)');
+  const desktop = window.matchMedia('(min-width: 68rem)');
+  const menu = createMobileMenu(navigation);
   const events = new AbortController();
   const listen = (target, type, handler, options = {}) => {
     target.addEventListener(type, handler, { ...options, signal: events.signal });
   };
 
-  function setOpen(open) {
+  function setOpen(open, instant = false) {
     toggle.setAttribute('aria-expanded', String(open));
     label.textContent = open ? 'Close' : 'Menu';
-    navigation.hidden = !desktop.matches && !open;
+    menu.show(open, desktop.matches, instant);
   }
 
   function syncLayout() {
@@ -54,7 +57,7 @@ export function initHeader() {
     const focusOnToggle = document.activeElement === toggle;
     const focusOnDesktopAction = document.activeElement === desktopAction;
     toggle.hidden = desktop.matches;
-    setOpen(false);
+    setOpen(false, true);
     if (!desktop.matches && (focusInNavigation || focusOnDesktopAction)) toggle.focus();
     if (desktop.matches && focusOnToggle) navigation.querySelector('a').focus();
     if (desktop.matches && document.activeElement.closest('.site-nav__mobile-action'))
@@ -130,6 +133,7 @@ export function initHeader() {
   syncLayout();
   syncCurrentLink();
   return () => {
+    menu.dispose();
     events.abort();
     disposeUtilityBar();
   };

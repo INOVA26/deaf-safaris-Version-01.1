@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { initGalleryCarousel } from '../src/utils/galleryCarousel.js';
 
-function fixture(reduced = false, count = 3) {
+function fixture(reduced = false, count = 3, phone = false) {
   const element = (selector = '', dataset = {}) =>
     Object.assign(new EventTarget(), {
       dataset,
@@ -45,12 +45,13 @@ function fixture(reduced = false, count = 3) {
       selector === '[data-gallery-slide]' ? slides : dots,
   });
   const motion = Object.assign(element(), { matches: reduced });
+  const mobile = Object.assign(element(), { matches: phone });
   const timers = new Map();
   let nextId = 0;
   let observe;
   let disconnected = false;
   const clock = Object.assign(element(), {
-    matchMedia: () => motion,
+    matchMedia: (query) => (query.includes('reduced-motion') ? motion : mobile),
     setTimeout(callback, ms) {
       assert.equal(ms, 5000);
       timers.set(++nextId, callback);
@@ -84,6 +85,7 @@ function fixture(reduced = false, count = 3) {
     slides,
     dots,
     motion,
+    mobile,
     timers,
     fields,
     emit,
@@ -209,4 +211,24 @@ test('gallery cycles through four slides and wraps to the first', () => {
   assert.equal(f.active(), 3);
   assert.equal(f.dots[3].getAttribute('aria-pressed'), 'true');
   f.dispose();
+});
+
+test('phone gallery stays still while cards are read and resumes autoplay only on desktop', () => {
+  const f = fixture(false, 4, true);
+  f.visible(true);
+  assert.equal(f.timers.size, 0);
+  f.click(f.dots[2]);
+  assert.equal(f.active(), 2);
+  assert.equal(f.timers.size, 0);
+  f.mobile.matches = false;
+  f.emit(f.mobile, 'change');
+  f.tick();
+  assert.equal(f.active(), 3);
+  f.mobile.matches = true;
+  f.emit(f.mobile, 'change');
+  assert.equal(f.timers.size, 0);
+  f.dispose();
+  f.mobile.matches = false;
+  f.emit(f.mobile, 'change');
+  assert.equal(f.timers.size, 0);
 });

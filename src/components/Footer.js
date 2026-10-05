@@ -1,5 +1,6 @@
-import logoUrl from '../assets/images/deaf-safaris-logo-transparent.png';
+import logoUrl from '../assets/images/deaf-safaris-logo-512.png';
 import { PawTrail } from './PawTrail.js';
+import { ContactPrompt } from './ContactPrompt.js';
 
 export function Footer() {
   return `
@@ -34,6 +35,7 @@ export function Footer() {
               <button class="button" type="submit">Join</button>
             </form>
             <small>Opens an email draft for you to send.</small>
+            <div class="site-footer__mobile-contact">${ContactPrompt()}</div>
           </div>
         </div>
         <div class="site-footer__bottom">

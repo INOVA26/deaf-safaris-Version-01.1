@@ -77,7 +77,7 @@ export function AboutPage() {
 <section class="about-page" id="about" aria-labelledby="about-page-heading" hidden>
   <div class="about-page__hero-wrap">
     <div class="about-page__hero-bg">
-      <img src="${kilimanjaro}" alt="" aria-hidden="true" width="1400" height="933" loading="eager" decoding="async" />
+      <img src="${kilimanjaro}" alt="" aria-hidden="true" width="1400" height="933" loading="lazy" decoding="async" />
     </div>
     <div class="about-page__hero-overlay" aria-hidden="true"></div>
     <div class="about-page__africa-wrap" aria-hidden="true">${africaSvg}</div>
@@ -115,7 +115,7 @@ export function AboutPage() {
         <img src="${portrait}"
              data-i18n-alt="aboutPage.float.alt"
              alt="A smiling traveller in a blue jacket and red hat standing on snow near Kilimanjaro's glaciers."
-             width="420" height="600" loading="eager" decoding="async" />
+             width="420" height="600" loading="lazy" decoding="async" />
         <figcaption>
           <span class="about-page__card-label" ${text('aboutPage.float.label', 'Spirit of adventure')}</span>
           <strong ${html(
@@ -131,6 +131,11 @@ export function AboutPage() {
     </div>
   </div>
 
+  <nav class="container about-page__chapters" aria-label="About us sections">
+    <button type="button" class="button button--quiet" data-about-jump="about-story" aria-controls="about-story">01 / Our story</button>
+    <button type="button" class="button button--quiet" data-about-jump="about-values" aria-controls="about-values">02 / Our values</button>
+    <button type="button" class="button button--quiet" data-about-jump="about-guides" aria-controls="about-guides">03 / Our team</button>
+  </nav>
   <div class="about-page__manifesto">
     <ul class="container about-page__pillars" role="list">
       ${pillar(
@@ -157,7 +162,7 @@ export function AboutPage() {
     </ul>
   </div>
 
-  <div class="container about-page__story-section" data-about-reveal>
+  <div id="about-story" tabindex="-1" class="container about-page__story-section" data-about-reveal>
     <div class="about-page__story-text">
       ${eyebrow('aboutPage.story.eyebrow', 'Our purpose', true)}
       <h2 ${html('aboutPage.story.heading', 'Connection is part<br />of the journey.')}</h2>
@@ -189,7 +194,7 @@ export function AboutPage() {
     </div>
   </div>
 
-  <div class="about-page__values-wrap" data-about-reveal>
+  <div id="about-values" tabindex="-1" class="about-page__values-wrap" data-about-reveal>
     <div class="container">
       <div class="about-page__values-head">
         <div>
@@ -291,6 +296,20 @@ export function AboutPage() {
 export function initAboutPage(root = document.querySelector('#about')) {
   if (!root) return () => {};
   const disposers = [];
+  const jumpToChapter = (event) => {
+    const button = event.target.closest('[data-about-jump]');
+    if (!button) return;
+    const target = root.querySelector(`#${button.dataset.aboutJump}`);
+    target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+    target.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'instant'
+        : 'smooth',
+    });
+  };
+  root.addEventListener('click', jumpToChapter);
+  disposers.push(() => root.removeEventListener('click', jumpToChapter));
 
   if (typeof IntersectionObserver !== 'undefined') {
     const revealObserver = new IntersectionObserver(

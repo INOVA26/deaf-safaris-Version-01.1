@@ -67,7 +67,7 @@ export function ReviewPreview() {
   return `<section class="visitor-stories reference-reviews" id="latest-reviews" aria-labelledby="latest-reviews-heading">
     <img class="reference-reviews__background" src="${team}" alt="" loading="lazy" width="975" height="1280" />
     ${PawTrail()}
-    <header class="reference-heading"><p class="reference-eyebrow">What People Say</p><h2 id="latest-reviews-heading">What the people think about us</h2><p class="sr-only" data-review-total></p></header>
+    <header class="reference-heading"><p class="reference-eyebrow">What People Say</p><h2 id="latest-reviews-heading">What the people think about us</h2><p class="reference-reviews__total" data-review-total></p></header>
     <div class="reference-reviews__track" id="home-review-track" data-latest-reviews tabindex="0" role="region" aria-label="Recent traveller reviews"></div>
     <div class="reference-reviews__echo" data-review-echo aria-hidden="true" inert></div>
     <button class="reference-reviews__pause" type="button" data-review-pause aria-pressed="false">Pause review motion</button>
@@ -86,6 +86,7 @@ export function initReviewPreview(root = document.querySelector('#latest-reviews
   let frame;
   let previousTime = 0;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const compact = window.matchMedia('(max-width: 67.999rem)');
   const pauseButton = root.querySelector('[data-review-pause]');
   const track = root.querySelector('[data-latest-reviews]');
   const echo = root.querySelector('[data-review-echo]');
@@ -94,7 +95,7 @@ export function initReviewPreview(root = document.querySelector('#latest-reviews
     const sample = !reviews.length;
     const ordered = newestReviews(sample ? previewSamples : reviews);
     const track = root.querySelector('[data-latest-reviews]');
-    const cards = ordered.slice(0, 6).map((review) => reviewNote(review, sample));
+    const cards = ordered.map((review) => reviewNote(review, sample));
     track.innerHTML = cards.join('');
     const width = root.clientWidth || 1920;
     measuredWidth = width;
@@ -103,7 +104,11 @@ export function initReviewPreview(root = document.querySelector('#latest-reviews
     const gap = parseFloat(getComputedStyle(track).columnGap) || 16;
     // Include enough cards for the viewport plus the lower row's cropped lead-in.
     const count = Math.max(cards.length, Math.ceil(width / (cardWidth + gap)) + 2);
-    for (let index = cards.length; index < count && cards.length; index += 1) {
+    for (
+      let index = cards.length;
+      index < count && cards.length && !compact.matches;
+      index += 1
+    ) {
       track.insertAdjacentHTML(
         'beforeend',
         `<div class="reference-reviews__duplicate" aria-hidden="true" inert>${cards[index % cards.length]}</div>`,
@@ -111,15 +116,16 @@ export function initReviewPreview(root = document.querySelector('#latest-reviews
     }
     const echo = root.querySelector('[data-review-echo]');
     if (echo)
-      echo.innerHTML = cards.length
-        ? Array.from(
-            { length: count },
-            (_, index) => cards[(index + 2) % cards.length],
-          ).join('')
-        : '';
+      echo.innerHTML =
+        cards.length && !compact.matches
+          ? Array.from(
+              { length: count },
+              (_, index) => cards[(index + 2) % cards.length],
+            ).join('')
+          : '';
     cycleWidth = count * (cardWidth + gap);
     // Duplicate a full cycle so wrapping never exposes an empty edge.
-    if (cards.length) {
+    if (cards.length && !compact.matches) {
       track.insertAdjacentHTML(
         'beforeend',
         Array.from(
@@ -145,8 +151,14 @@ export function initReviewPreview(root = document.querySelector('#latest-reviews
   };
   render();
   const syncMotion = () => {
-    pauseButton.hidden = reducedMotion.matches;
+    // The compact layout shows every card in normal reading order, not a rail.
+    if (compact.matches) track.removeAttribute('tabindex');
+    else track.setAttribute('tabindex', '0');
+    pauseButton.hidden = reducedMotion.matches || compact.matches;
     previousTime = 0;
+    cancelAnimationFrame(frame);
+    if (!compact.matches && !reducedMotion.matches)
+      frame = requestAnimationFrame(animate);
   };
   const togglePause = () => {
     paused = !paused;
@@ -158,6 +170,7 @@ export function initReviewPreview(root = document.querySelector('#latest-reviews
     previousTime = time;
     if (
       !paused &&
+      !compact.matches &&
       !reducedMotion.matches &&
       !document.hidden &&
       root.offsetParent !== null &&
@@ -177,7 +190,11 @@ export function initReviewPreview(root = document.querySelector('#latest-reviews
   syncMotion();
   pauseButton.addEventListener('click', togglePause);
   reducedMotion.addEventListener('change', syncMotion);
-  frame = requestAnimationFrame(animate);
+  const onLayoutChange = () => {
+    render();
+    syncMotion();
+  };
+  compact.addEventListener('change', onLayoutChange);
   const onResize = () => {
     if (root.clientWidth && root.clientWidth !== measuredWidth) render();
   };
@@ -189,6 +206,7 @@ export function initReviewPreview(root = document.querySelector('#latest-reviews
   window.addEventListener('storage', onStorage);
   return () => {
     cancelAnimationFrame(frame);
+    compact.removeEventListener('change', onLayoutChange);
     pauseButton.removeEventListener('click', togglePause);
     reducedMotion.removeEventListener('change', syncMotion);
     observer?.disconnect();

@@ -1,3 +1,7 @@
+import { PageBanner } from './components/PageBanner.js';
+import { DestinationPages, detailPlaces } from './components/DestinationPages.js';
+import { galleryPhotos } from './data/galleryPhotos.js';
+import { initResponsiveRows } from './utils/responsiveRows.js';
 import { Footer, initFooter } from './components/Footer.js';
 import { Header, initHeader } from './components/Header.js';
 import { Chat, initChat } from './components/Chat.js';
@@ -36,6 +40,7 @@ app.innerHTML = `
   <div class="page-intro">
     ${Header()}
     <main id="main-content" tabindex="-1">
+      <div id="page-banner" hidden></div>
       ${Hero()}
       ${About()}
       ${TripCards()}
@@ -50,6 +55,7 @@ app.innerHTML = `
       ${Planning()}
       ${PhotoGallery()}
       ${DestinationListings()}
+      ${DestinationPages()}
       ${Reviews()}
       ${Enquiry()}
     </main>
@@ -58,6 +64,7 @@ app.innerHTML = `
   ${Chat()}
 `;
 
+const disposeResponsiveRows = initResponsiveRows();
 const disposeHeader = initHeader();
 const disposeTourDisclosure = initTourDisclosure();
 const disposeScrollReveal = initScrollReveal();
@@ -124,6 +131,7 @@ if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     disposeTourDisclosure();
     disposeScrollReveal();
+    disposeResponsiveRows();
     disposeHeader();
     disposeFooter();
     disposeChat();
@@ -140,6 +148,7 @@ if (import.meta.hot) {
     disposeDestinationListings();
     disposePlanning();
     results.dispose();
+    document.removeEventListener('click', preparePlaceEnquiry);
     window.removeEventListener('hashchange', syncPageView);
   });
 }
@@ -159,6 +168,7 @@ function syncPageView() {
     'planning',
     'photo-gallery',
     'traveller-destinations',
+    ...detailPlaces.map((place) => `place-${place.id}`),
   ];
   const extraPage = extraPages.find((id) => window.location.hash === `#${id}`);
   const wasExtraPage = document.body.classList.contains('detail-page');
@@ -170,16 +180,33 @@ function syncPageView() {
   visiblePage = activePage;
   document.body.classList.toggle('home-page', !activePage);
   for (const section of document.querySelector('#main-content').children) {
+    if (section.id === 'page-banner') continue;
     section.hidden = activePage
       ? section.id !== activePage
       : ['safaris', 'about', 'reviews', ...extraPages].includes(section.id);
   }
   const detailTitles = {
+    ...Object.fromEntries(
+      detailPlaces.map((place) => [`place-${place.id}`, place.name]),
+    ),
+    about: 'About us',
+    reviews: 'Traveller reviews',
     enquiries: 'Plan your safari',
     planning: 'Planning your journey',
     'photo-gallery': 'Photo gallery',
     'traveller-destinations': 'Explore Tanzania',
   };
+  const banner = document.querySelector('#page-banner');
+  const showBanner = Boolean(activePage && !safariPage);
+  banner.hidden = !showBanner;
+  document.body.classList.toggle('page-with-banner', showBanner);
+  if (showBanner && pageChanged) {
+    const place = detailPlaces.find((item) => `place-${item.id}` === activePage);
+    banner.innerHTML = PageBanner({
+      title: detailTitles[activePage],
+      photo: place?.photos?.[0] || (aboutPage ? galleryPhotos[0] : undefined),
+    });
+  }
   document.title = extraPage
     ? `${detailTitles[extraPage]} | Deaf Safaris`
     : aboutPage
@@ -218,7 +245,25 @@ function syncPageView() {
     target?.focus({ preventScroll: true });
     target?.scrollIntoView();
   }
+  if (showBanner && pageChanged) {
+    banner.querySelector('h1').focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
 }
+
+function preparePlaceEnquiry(event) {
+  const link = event.target.closest('[data-place-brief]');
+  if (!link) return;
+  const notes = document.querySelector('#preferences');
+  const brief = `Destination: ${link.dataset.placeBrief}`;
+  if (!notes.value.includes(brief) && notes.value.length + brief.length < 2000)
+    notes.value = `${brief}\n${notes.value}`;
+  document.querySelector('#enquiry-form').hidden = false;
+  document.querySelector('#brief-result').hidden = true;
+  document.querySelector('#brief-status').textContent =
+    `Planning a visit to ${link.dataset.placeBrief}. Your existing notes are preserved.`;
+}
+document.addEventListener('click', preparePlaceEnquiry);
 
 window.addEventListener('hashchange', syncPageView);
 syncPageView();

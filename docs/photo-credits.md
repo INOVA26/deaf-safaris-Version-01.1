@@ -47,3 +47,7 @@ These retain their reference filenames. Their original photographer and licensin
 ## Mike profile — 3 October 2026
 
 `src/assets/images/mike-profile.png` is the profile artwork supplied by the user for Mike. The team card displays its portrait using a circular CSS crop; the original attachment is retained unchanged. The user’s “Senior” label is combined with Mike’s existing Safari Guide role. The unrelated testimonial text in the artwork is not used as company copy.
+
+## Mobile delivery assets — 4 October 2026
+
+Original images remain unchanged. `serval-wildlife/zebras.jpg` is a same-dimension JPEG delivery copy of the approved PNG, exported at quality 85 with Windows System.Drawing (396,819 bytes versus 2,153,541). `deaf-safaris-logo-512.png` is the original transparent logo resized proportionally to 512 pixels wide with high-quality bicubic interpolation (49,318 bytes versus 471,608). These are encoding/resolution optimizations; no scene, branding or content was generated or replaced. Both delivery images were visually inspected as files, not in a rendered webpage.

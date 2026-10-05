@@ -1,4 +1,5 @@
 import { expeditions } from '../data/expeditions.js';
+import { scrollResponsiveRow } from '../utils/responsiveRows.js';
 import kilimanjaroBanner from '../assets/images/destinations/kilimanjaro-2.jpg';
 import {
   filterSafaris,
@@ -68,7 +69,7 @@ export function initSafariResults(
     });
     root.innerHTML = `
       <div class="safari-results__banner">
-        <img class="safari-results__landscape" src="${kilimanjaroBanner}" alt="An aerial view of Mount Kilimanjaro's snow-covered summit and surrounding clouds." />
+        <img class="safari-results__landscape" width="1280" height="853" loading="lazy" decoding="async" src="${kilimanjaroBanner}" alt="An aerial view of Mount Kilimanjaro's snow-covered summit and surrounding clouds." />
         <div class="container safari-results__banner-content">
           <a class="safari-results__back" href="#home">${icon('arrow_back')} Home</a>
           <h1 id="safari-results-heading" tabindex="-1">Deaf Safaris Tanzania</h1>
@@ -151,7 +152,7 @@ export function initSafariResults(
             </select></div>
           </div>
           <p class="safari-results__notice">Draft itineraries. Dates, prices and sign-language support need confirmation. Your preference: ${escape(search['sign-language'] || 'Discuss with our team')}.</p>
-          <div class="safari-results__grid">
+          <div class="safari-results__grid" tabindex="0" role="region" aria-label="Safari results — scroll to explore">
             ${results
               .map(
                 (tour) => `<article class="safari-result">
@@ -248,6 +249,23 @@ export function initSafariResults(
         return;
       } else return;
       render();
+    },
+    { signal: events.signal },
+  );
+  // Delegate to the stable section: filtering replaces the results row.
+  root.addEventListener(
+    'keydown',
+    (event) => {
+      if (
+        !event.target.matches('.safari-results__grid') ||
+        !window.matchMedia('(max-width: 47.999rem)').matches
+      )
+        return;
+      scrollResponsiveRow(
+        event,
+        event.target,
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      );
     },
     { signal: events.signal },
   );

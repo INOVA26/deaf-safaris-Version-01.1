@@ -1,4 +1,36 @@
 :root {
+  --hero-slide-duration: 900ms;
+  --hero-slide-easing: cubic-bezier(0.22, 1, 0.36, 1);
+  --page-banner-height: clamp(14rem, 28vw, 23rem);
+  --page-content-space: clamp(2.5rem, 6vw, 5rem);
+  --page-reading-width: 65ch;
+  --page-banner-shade: linear-gradient(90deg, rgb(0 0 0 / 70%), rgb(0 0 0 / 28%));
+  --mobile-gutter: clamp(1rem, 4vw, 2rem);
+  --mobile-body-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --mobile-caption-size: 0.75rem;
+  --mobile-section-space: clamp(4rem, 8vw, 5rem);
+  --mobile-card-width: 84%;
+  --mobile-card-gap: 1rem;
+  --mobile-motion: 200ms ease;
+  --mobile-card-radius: 1.5rem;
+  --mobile-card-padding: clamp(1rem, 5vw, 1.5rem);
+  --mobile-heading-size: clamp(1.75rem, 6.8vw, 2.5rem);
+  --mobile-hero-heading-size: clamp(2.25rem, 8vw, 2.75rem);
+  --mobile-reading-width: 38ch;
+  --mobile-panel-shadow: 0 1px 3px rgb(30 35 40 / 5%);
+  --mobile-hero-glass: rgb(220 225 230 / 22%);
+  --mobile-hero-glass-fallback: rgb(68 77 86 / 94%);
+  --mobile-header-glass: rgb(213 219 224 / 72%);
+  --mobile-hero-panel-radius: 1rem;
+  --mobile-hero-field-gap: 0.5rem;
+  --mobile-tour-card-width: 92%;
+  --mobile-welcome-gap: 0.75rem;
+  --mobile-review-row-gap: 1.25rem;
+  --team-portrait-size: clamp(6rem, 21vw, 11rem);
+  --team-stack-gap: clamp(5rem, 16vw, 8.5rem);
+  --team-card-radius: clamp(1rem, 3vw, 1.5rem);
+  --team-portrait-shadow: 0 1rem 2rem rgb(0 0 0 / 16%);
+  --touch-target: 2.75rem;
   /* Figma landing-page tokens. Existing detail-page themes remain independent. */
   --reference-paper: #f8f8f6;
   --reference-ink: #344450;
@@ -34,6 +66,7 @@
   --promise-banner-height: clamp(20rem, 31.8vw, 32rem);
   --promise-copy-width: 26rem;
   --promise-content-space: clamp(1rem, 2.6vw, 2.25rem);
+  --promise-dot-gap: 4px;
   --tour-card-radius: 0.75rem;
   --tour-card-border: #e0e0df;
   --tour-card-tag-background: #eee7ff;

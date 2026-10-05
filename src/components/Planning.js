@@ -8,7 +8,7 @@ function destinationTile(id, featured = false) {
       ? destination.photos[0]
       : destination.photos.find((item) => item.file === `${id}-1.jpg`);
 
-  return `<a class="planning__destination${featured ? ' planning__destination--featured' : ''}" href="#hero-planner" data-planning-destination="${escapeHtml(destination.name)}">
+  return `<a class="planning__destination${featured ? ' planning__destination--featured' : ''}" href="#place-${escapeHtml(destination.id)}">
     <img src="${photo.src}" alt="${escapeHtml(photo.alt)}" width="1280" height="850" loading="lazy" decoding="async" />
     <span class="planning__location"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Tanzania</span>
     <span class="planning__caption">

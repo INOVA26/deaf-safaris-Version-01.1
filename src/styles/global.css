@@ -8,7 +8,9 @@
   font-display: swap;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -30,6 +32,29 @@ body {
   font-feature-settings:
     'liga' 1,
     'calt' 1;
+}
+
+/* Replaced media must not impose their intrinsic width on narrow layouts. */
+img,
+video {
+  max-width: 100%;
+}
+#app,
+.page-intro,
+#main-content,
+#main-content > section {
+  min-width: 0;
+  width: 100%;
+}
+fieldset,
+form,
+.form-grid > *,
+.container > *,
+.reference-container > * {
+  min-width: 0;
+}
+:where(p, h1, h2, h3, h4, blockquote, figcaption) {
+  overflow-wrap: anywhere;
 }
 
 a {

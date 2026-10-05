@@ -11,7 +11,7 @@ export function FeaturedTrips() {
     ]
       .map((id) => {
         const place = destinations.find((item) => item.id === id);
-        return `<article class="reference-featured__card"><img src="${place.photos[0].src}" alt="${place.photos[0].alt}" loading="lazy" width="400" height="540" /><span class="reference-featured__tag">Tanzania · Travel inspiration</span><div><p>Explore Tanzania</p><h3>${place.name}</h3><footer><span>Your journey, your pace</span><a class="button" href="#hero-planner" data-trip-destination="${place.name}" aria-label="Explore ${place.name}">Explore trip</a></footer></div></article>`;
+        return `<article class="reference-featured__card"><img src="${place.photos[0].src}" alt="${place.photos[0].alt}" loading="lazy" width="400" height="540" /><span class="reference-featured__tag">Tanzania · Travel inspiration</span><div><p>Explore Tanzania</p><h3>${place.name}</h3><footer><span>Your journey, your pace</span><a class="button" href="#place-${place.id}" aria-label="Explore ${place.name}">Explore trip</a></footer></div></article>`;
       })
       .join('')}</div>
   </div></section>`;
